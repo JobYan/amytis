@@ -21,13 +21,16 @@ export function getAllPosts(): PostData[] {
       const fullPath = path.join(contentDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data, content } = matter(fileContents);
+      
+      // Remove the first H1 heading if present to avoid duplication with the page title
+      const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
 
       return {
         slug,
         title: data.title,
         date: data.date,
         excerpt: data.excerpt,
-        content,
+        content: contentWithoutH1,
       };
     });
 
@@ -40,12 +43,15 @@ export function getPostBySlug(slug: string): PostData | null {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
+    // Remove the first H1 heading if present to avoid duplication with the page title
+    const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
+
     return {
       slug,
       title: data.title,
       date: data.date,
       excerpt: data.excerpt,
-      content,
+      content: contentWithoutH1,
     };
   } catch (error) {
     return null;
