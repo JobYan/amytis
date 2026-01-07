@@ -1,0 +1,27 @@
+---
+title: "The Philosophy of Digital Gardening"
+date: "2026-01-08"
+excerpt: "Moving away from chronological feeds to contextual networks."
+---
+
+# The Philosophy of Digital Gardening
+
+Unlike a traditional blog, which is a reverse-chronological stream of finished "publications," a **digital garden** is a collection of evolving notes.
+
+## Gardening vs. Architecting
+
+- **Architecting** is about planning everything upfront.
+- **Gardening** is about planting seeds and seeing what grows.
+
+### Key Principles
+
+1. **Topography over Chronology:** Organize by topic and connection, not just by date.
+2. **Continuous Growth:** Notes are never "finished." They are tended to over time.
+3. **Imperfection:** It is okay to share "seedling" thoughts that aren't fully formed.
+
+> "A garden is never finished."
+
+In this garden, you will find a mix of:
+- **Seedlings:** Rough notes and initial thoughts.
+- **Saplings:** Growing ideas with some structure.
+- **Evergreens:** Well-developed concepts.
