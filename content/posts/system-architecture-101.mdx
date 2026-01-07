@@ -1,0 +1,38 @@
+---
+title: "System Architecture 101"
+date: "2026-01-10"
+excerpt: "Visualizing system design patterns using Mermaid charts."
+---
+
+When designing complex systems, visualization is key. Here is a simple 3-tier architecture example.
+
+## 3-Tier Architecture
+
+This pattern separates the presentation, application processing, and data management functions.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Client as Web Client
+    participant API as API Server
+    participant DB as Database
+
+    User->>Client: Enters URL
+    Client->>API: Request Data (GET /posts)
+    API->>DB: Query Posts
+    DB-->>API: Return Records
+    API-->>Client: Return JSON
+    Client-->>User: Render Page
+```
+
+## Microservices Configuration
+
+Often, services communicate via a message bus.
+
+```json
+{
+  "service": "order-service",
+  "dependencies": ["inventory", "payment"],
+  "eventBus": "kafka"
+}
+```
