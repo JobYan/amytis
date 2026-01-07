@@ -62,33 +62,37 @@ export default async function PostPage({
           dark:prose-invert">
           <ReactMarkdown
             components={{
+              pre: ({ children }) => <>{children}</>,
               code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || '');
                 const language = match ? match[1] : '';
                 
-                if (!inline && language === 'mermaid') {
-                  return <Mermaid chart={String(children).replace(/\n$/, '')} />;
+                if (!inline) {
+                  if (language === 'mermaid') {
+                    return <Mermaid chart={String(children).replace(/\n$/, '')} />;
+                  }
+                  return (
+                    <SyntaxHighlighter
+                      style={oneLight}
+                      language={language || 'text'}
+                      PreTag="div"
+                      customStyle={{
+                        background: 'var(--background)',
+                        border: '1px solid var(--muted)',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.9rem',
+                        lineHeight: '1.5',
+                        padding: '1.5rem',
+                        opacity: 0.9
+                      }}
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  );
                 }
 
-                return !inline && match ? (
-                  <SyntaxHighlighter
-                    style={oneLight}
-                    language={language}
-                    PreTag="div"
-                    customStyle={{
-                      background: 'var(--background)',
-                      border: '1px solid var(--muted)',
-                      borderRadius: '0.5rem',
-                      fontSize: '0.9rem',
-                      lineHeight: '1.5',
-                      padding: '1.5rem',
-                      opacity: 0.9
-                    }}
-                    {...props}
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
-                ) : (
+                return (
                   <code className={className} {...props}>
                     {children}
                   </code>
