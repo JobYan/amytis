@@ -9,6 +9,9 @@ export interface PostData {
   title: string;
   date: string;
   excerpt: string;
+  category: string;
+  tags: string[];
+  author: string;
   content: string;
 }
 
@@ -30,6 +33,9 @@ export function getAllPosts(): PostData[] {
         title: data.title,
         date: data.date,
         excerpt: data.excerpt,
+        category: data.category || 'Uncategorized',
+        tags: data.tags || [],
+        author: data.author || 'Amytis',
         content: contentWithoutH1,
       };
     });
@@ -51,6 +57,9 @@ export function getPostBySlug(slug: string): PostData | null {
       title: data.title,
       date: data.date,
       excerpt: data.excerpt,
+      category: data.category || 'Uncategorized',
+      tags: data.tags || [],
+      author: data.author || 'Amytis',
       content: contentWithoutH1,
     };
   } catch (error) {
