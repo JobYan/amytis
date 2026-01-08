@@ -5,7 +5,8 @@ export const siteConfig = {
   nav: [
     { name: "Garden", url: "/", weight: 1 },
     { name: "Archive", url: "/archive", weight: 2 },
-    { name: "About", url: "/about", weight: 3 },
+    { name: "Tags", url: "/tags", weight: 3 },
+    { name: "About", url: "/about", weight: 4 },
   ],
   pagination: {
     pageSize: 10,

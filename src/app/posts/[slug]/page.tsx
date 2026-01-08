@@ -51,6 +51,20 @@ export default async function PostPage({
               {post.excerpt}
             </p>
           )}
+
+          {post.tags && post.tags.length > 0 && (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {post.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/tags/${tag.toLowerCase()}`}
+                  className="text-sm font-medium text-muted hover:text-accent transition-colors duration-200"
+                >
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          )}
         </header>
 
         <div className="prose prose-lg max-w-none 

@@ -66,3 +66,29 @@ export function getPostBySlug(slug: string): PostData | null {
     return null;
   }
 }
+
+export function getPostsByTag(tag: string): PostData[] {
+  const allPosts = getAllPosts();
+  return allPosts.filter((post) => 
+    post.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
+  );
+}
+
+export function getAllTags(): Record<string, number> {
+  const allPosts = getAllPosts();
+  const tags: Record<string, number> = {};
+
+  allPosts.forEach((post) => {
+    post.tags.forEach((tag) => {
+      // Normalize tag to lowercase for consistent counting/URLs
+      const normalizedTag = tag.toLowerCase();
+      if (tags[normalizedTag]) {
+        tags[normalizedTag] += 1;
+      } else {
+        tags[normalizedTag] = 1;
+      }
+    });
+  });
+
+  return tags;
+}
