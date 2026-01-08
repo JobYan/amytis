@@ -7,6 +7,10 @@ import { notFound } from 'next/navigation';
 import Mermaid from '@/components/Mermaid';
 import { siteConfig } from '../../../../site.config';
 
+/**
+ * Generates the static paths for all blog posts at build time.
+ * This ensures fast page loads and SEO optimization.
+ */
 export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({
@@ -100,7 +104,9 @@ export default async function PostPage({
           dark:prose-invert">
           <ReactMarkdown
             components={{
+              // Unwrap 'pre' to handle block-level rendering manually in 'code'
               pre: ({ children }) => <>{children}</>,
+              // Custom code renderer: handles 'mermaid' blocks and syntax highlighting
               code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || '');
                 const language = match ? match[1] : '';

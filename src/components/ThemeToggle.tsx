@@ -3,15 +3,21 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+/**
+ * Toggles between light and dark themes using next-themes.
+ */
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // Prevent hydration mismatch by ensuring the component only renders after mounting on the client.
+  // This ensures the theme is known and consistent.
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
+    // Render a placeholder to avoid layout shift or hydration errors
     return (
       <button className="w-8 h-8 flex items-center justify-center text-muted/50">
         <span className="sr-only">Toggle theme</span>

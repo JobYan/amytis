@@ -8,6 +8,10 @@ export const metadata = {
 
 type GroupedPosts = Record<string, Record<string, PostData[]>>;
 
+/**
+ * Groups posts by Year and then by Month name.
+ * Returns a nested object structure: { "2024": { "January": [...] } }
+ */
 function groupPostsByDate(posts: PostData[]): GroupedPosts {
   const groups: GroupedPosts = {};
 
@@ -32,7 +36,7 @@ export default function ArchivePage() {
   const posts = getAllPosts();
   const groupedPosts = groupPostsByDate(posts);
   
-  // Sort years descending
+  // Sort years descending to show newest content first
   const years = Object.keys(groupedPosts).sort((a, b) => Number(b) - Number(a));
 
   return (
@@ -47,21 +51,14 @@ export default function ArchivePage() {
       <main>
         <div className="space-y-16">
           {years.map((year) => {
-            // Sort months descending? Usually for archives, yes. 
-            // But we have month names. We need to be careful with sorting months if we use names.
-            // Let's rely on the order they appear if the posts are already sorted by date?
-            // getAllPosts sorts by date descending. So iterating through the grouped structure might lose order if we iterate keys.
-            // A better approach is to keep the Month keys but maybe we need a custom sort or just rely on the fact that we process them in order?
-            // Actually, objects don't guarantee key order.
-            
-            // Let's re-sort months to be safe.
+            // Sort months within the year in descending order (December -> January)
             const months = Object.keys(groupedPosts[year]).sort((a, b) => {
                const dateA = new Date(`${a} 1, 2000`);
                const dateB = new Date(`${b} 1, 2000`);
                return dateB.getTime() - dateA.getTime();
             });
 
-            // Calculate total posts for the year
+            // Calculate total posts for the year for display next to the header
             const yearTotal = months.reduce((total, month) => total + groupedPosts[year][month].length, 0);
 
             return (

@@ -2,6 +2,14 @@ import Link from 'next/link';
 import { siteConfig } from '../../site.config';
 import ThemeToggle from './ThemeToggle';
 
+/**
+ * Global navigation bar.
+ * Features:
+ * - Fixed position with backdrop blur.
+ * - Configuration-driven menu items (from site.config.ts).
+ * - Supports internal routes and external links (with icons).
+ * - Integrated ThemeToggle.
+ */
 export default function Navbar() {
   const navItems = [...siteConfig.nav].sort((a, b) => a.weight - b.weight);
 
@@ -17,6 +25,7 @@ export default function Navbar() {
         
         <div className="flex items-center gap-6">
           {navItems.map((item) => {
+            // Check if the item is explicitly marked as external in the config
             const isExternal = 'external' in item && item.external;
             const Component = isExternal ? 'a' : Link;
             const props = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {};
@@ -29,6 +38,7 @@ export default function Navbar() {
                 className="text-sm font-sans font-medium text-muted hover:text-heading transition-colors duration-200 flex items-center gap-1"
               >
                 {item.name}
+                {/* Render an external link icon for clarity */}
                 {isExternal && (
                   <svg
                     width="12"

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
 
+// Initialize mermaid with custom theme variables to match the site's light/stone aesthetic.
 mermaid.initialize({
   startOnLoad: false,
   theme: "base",
@@ -24,6 +25,10 @@ interface MermaidProps {
   chart: string;
 }
 
+/**
+ * Client-side component for rendering Mermaid charts.
+ * Takes a mermaid chart definition string and renders it to SVG.
+ */
 const Mermaid: React.FC<MermaidProps> = ({ chart }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string>("");

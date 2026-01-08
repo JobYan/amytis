@@ -15,8 +15,12 @@ export interface PostData {
   content: string;
 }
 
+/**
+ * Generates a plain text excerpt from markdown content by stripping formatting.
+ * Used as a fallback when no excerpt is provided in the frontmatter.
+ */
 export function generateExcerpt(content: string): string {
-  // Remove headers
+  // Remove headers (e.g. # Header)
   let plain = content.replace(/^#+\s+/gm, '');
   // Remove code blocks
   plain = plain.replace(/```[\s\S]*?```/g, '');
@@ -41,6 +45,9 @@ export function generateExcerpt(content: string): string {
   return plain.slice(0, 160).trim() + '...';
 }
 
+/**
+ * Retrieves all MDX posts from the content directory, sorted by date (descending).
+ */
 export function getAllPosts(): PostData[] {
   const fileNames = fs.readdirSync(contentDirectory);
   const allPostsData = fileNames
@@ -80,6 +87,9 @@ export function getAllPosts(): PostData[] {
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+/**
+ * Retrieves a single post by its slug. Returns null if not found.
+ */
 export function getPostBySlug(slug: string): PostData | null {
   try {
     const fullPath = path.join(contentDirectory, `${slug}.mdx`);
@@ -115,6 +125,9 @@ export function getPostBySlug(slug: string): PostData | null {
   }
 }
 
+/**
+ * Filters posts by a specific tag (case-insensitive).
+ */
 export function getPostsByTag(tag: string): PostData[] {
   const allPosts = getAllPosts();
   return allPosts.filter((post) => 
@@ -122,6 +135,9 @@ export function getPostsByTag(tag: string): PostData[] {
   );
 }
 
+/**
+ * Returns a map of all tags and their occurrence counts.
+ */
 export function getAllTags(): Record<string, number> {
   const allPosts = getAllPosts();
   const tags: Record<string, number> = {};
@@ -141,6 +157,9 @@ export function getAllTags(): Record<string, number> {
   return tags;
 }
 
+/**
+ * Filters posts by a specific author (case-insensitive).
+ */
 export function getPostsByAuthor(author: string): PostData[] {
   const allPosts = getAllPosts();
   return allPosts.filter((post) => 
@@ -148,6 +167,9 @@ export function getPostsByAuthor(author: string): PostData[] {
   );
 }
 
+/**
+ * Returns a map of all authors and their post counts.
+ */
 export function getAllAuthors(): Record<string, number> {
   const allPosts = getAllPosts();
   const authors: Record<string, number> = {};
