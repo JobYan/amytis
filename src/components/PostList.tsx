@@ -16,6 +16,8 @@ export default function PostList({ posts }: PostListProps) {
                 {post.category}
               </span>
               <span className="w-1 h-1 rounded-full bg-muted/30" />
+              <span className="italic">{post.author}</span>
+              <span className="w-1 h-1 rounded-full bg-muted/30" />
               <time className="font-mono">{post.date}</time>
             </div>
             
