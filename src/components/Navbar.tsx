@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { siteConfig } from '../../site.config';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const navItems = [...siteConfig.nav].sort((a, b) => a.weight - b.weight);
@@ -46,6 +47,8 @@ export default function Navbar() {
               </Component>
             );
           })}
+          <div className="w-px h-4 bg-muted/20 mx-1"></div>
+          <ThemeToggle />
         </div>
       </div>
     </nav>

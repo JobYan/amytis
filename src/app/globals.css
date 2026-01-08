@@ -11,15 +11,13 @@
   --muted: #a8a29e; /* Stone 400 */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1c1917; /* Stone 900 */
-    --foreground: #d6d3d1; /* Stone 300 */
-    --heading: #fafaf9; /* Stone 50 */
-    --accent: #34d399; /* Emerald 400 */
-    --accent-hover: #10b981; /* Emerald 500 */
-    --muted: #57534e; /* Stone 600 */
-  }
+.dark {
+  --background: #1c1917; /* Stone 900 */
+  --foreground: #d6d3d1; /* Stone 300 */
+  --heading: #fafaf9; /* Stone 50 */
+  --accent: #34d399; /* Emerald 400 */
+  --accent-hover: #10b981; /* Emerald 500 */
+  --muted: #57534e; /* Stone 600 */
 }
 
 @theme inline {
