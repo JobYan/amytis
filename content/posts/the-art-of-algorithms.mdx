@@ -37,13 +37,13 @@ function quickSort(arr: number[]): number[] {
 
 ```mermaid
 graph TD
-    Start([Start]) --> Check{Length <= 1?}
-    Check -- Yes --> Return[Return Array]
-    Check -- No --> Pivot[Choose Pivot]
-    Pivot --> Partition[Partition Array]
-    Partition --> RecurseL[Recurse Left]
-    Partition --> RecurseR[Recurse Right]
-    RecurseL --> Combine[Combine Results]
+    Start([Start]) --> Check{"Length <= 1?"}
+    Check -- Yes --> Return["Return Array"]
+    Check -- No --> Pivot["Choose Pivot"]
+    Pivot --> Partition["Partition Array"]
+    Partition --> RecurseL["Recurse Left"]
+    Partition --> RecurseR["Recurse Right"]
+    RecurseL --> Combine["Combine Results"]
     RecurseR --> Combine
     Combine --> End([End])
 ```

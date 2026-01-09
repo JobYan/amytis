@@ -36,9 +36,14 @@ const Mermaid: React.FC<MermaidProps> = ({ chart }) => {
   useEffect(() => {
     if (ref.current && chart) {
       const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
-      mermaid.render(id, chart).then(({ svg }) => {
-        setSvg(svg);
-      });
+      mermaid.render(id, chart)
+        .then(({ svg }) => {
+          setSvg(svg);
+        })
+        .catch((error) => {
+          console.error("Mermaid rendering error:", error);
+          setSvg(`<div class="p-4 text-red-500 bg-red-50 border border-red-200 rounded text-sm font-mono">Failed to render diagram. Syntax error?</div>`);
+        });
     }
   }, [chart]);
 

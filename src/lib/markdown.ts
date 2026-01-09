@@ -71,11 +71,12 @@ export function getAllPosts(): PostData[] {
       }
 
       const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
+      const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
 
       return {
         slug,
         title: data.title,
-        date: data.date,
+        date: date,
         excerpt: excerpt,
         category: data.category || 'Uncategorized',
         tags: data.tags || [],
@@ -109,11 +110,12 @@ export function getPostBySlug(slug: string): PostData | null {
     }
 
     const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
+    const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
 
     return {
       slug,
       title: data.title,
-      date: data.date,
+      date: date,
       excerpt: excerpt,
       category: data.category || 'Uncategorized',
       tags: data.tags || [],

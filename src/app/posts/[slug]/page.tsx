@@ -104,8 +104,10 @@ export default async function PostPage({
           dark:prose-invert">
           <ReactMarkdown
             components={{
-              // Unwrap 'pre' to handle block-level rendering manually in 'code'
-              pre: ({ children }) => <>{children}</>,
+              // Use 'div' instead of 'p' to avoid hydration errors when block-level elements (like code blocks) are nested
+              p: ({ children }) => <div className="mb-4 leading-relaxed">{children}</div>,
+              // Render 'pre' as a 'div' to allow block-level children like SyntaxHighlighter and Mermaid
+              pre: ({ children }) => <div className="not-prose">{children}</div>,
               // Custom code renderer: handles 'mermaid' blocks and syntax highlighting
               code({ node, inline, className, children, ...props }: any) {
                 const match = /language-(\w+)/.exec(className || '');

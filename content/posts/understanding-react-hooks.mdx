@@ -38,10 +38,10 @@ function Counter() {
 
 ```mermaid
 flowchart TD
-    A[Component Renders] --> B{Has Dependencies?}
-    B -- No --> C[Run Effect Every Render]
-    B -- Yes --> D{Did Deps Change?}
-    D -- Yes --> E[Run Effect]
-    D -- No --> F[Skip Effect]
-    E --> G[Run Cleanup (if exists)]
+    A["Component Renders"] --> B{"Has Dependencies?"}
+    B -- No --> C["Run Effect Every Render"]
+    B -- Yes --> D{"Did Deps Change?"}
+    D -- Yes --> E["Run Effect"]
+    D -- No --> F["Skip Effect"]
+    E --> G["Run Cleanup (if exists)"]
 ```
