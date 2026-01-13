@@ -25,7 +25,7 @@ export default async function TagPage({
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12 md:py-20">
+    <div className="layout-container">
       <nav className="mb-16">
         <Link 
           href="/tags" 

@@ -20,6 +20,16 @@
   --muted: #57534e; /* Stone 600 */
 }
 
+@layer components {
+  .layout-container {
+    @apply max-w-4xl mx-auto px-6 py-12 md:py-20;
+  }
+  
+  .navbar-container {
+    @apply max-w-4xl mx-auto px-6 h-16 flex items-center justify-between;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
