@@ -49,41 +49,67 @@ export function generateExcerpt(content: string): string {
  * Retrieves all MDX posts from the content directory, sorted by date (descending).
  */
 export function getAllPosts(): PostData[] {
-  const fileNames = fs.readdirSync(contentDirectory);
-  const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx') || fileName.endsWith('.md'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx?$/, '');
-      const fullPath = path.join(contentDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data, content } = matter(fileContents);
-      
-      // Remove the first H1 heading if present to avoid duplication with the page title
-      const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
+  const items = fs.readdirSync(contentDirectory, { withFileTypes: true });
+  const allPostsData: PostData[] = [];
 
-      let authors: string[] = [];
-      if (data.authors && Array.isArray(data.authors)) {
-        authors = data.authors;
-      } else if (data.author) {
-        authors = [data.author];
+  items.forEach((item) => {
+    let fullPath = '';
+    let slug = '';
+
+    if (item.isFile()) {
+      if (item.name.endsWith('.mdx') || item.name.endsWith('.md')) {
+        slug = item.name.replace(/\.mdx?$/, '');
+        fullPath = path.join(contentDirectory, item.name);
       } else {
-        authors = ['Amytis'];
+        return; // Skip non-markdown files
       }
+    } else if (item.isDirectory()) {
+      // Check for index.mdx or index.md inside the directory
+      const indexPathMdx = path.join(contentDirectory, item.name, 'index.mdx');
+      const indexPathMd = path.join(contentDirectory, item.name, 'index.md');
 
-      const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
-      const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
+      if (fs.existsSync(indexPathMdx)) {
+        slug = item.name;
+        fullPath = indexPathMdx;
+      } else if (fs.existsSync(indexPathMd)) {
+        slug = item.name;
+        fullPath = indexPathMd;
+      } else {
+        return; // No index file found
+      }
+    } else {
+      return;
+    }
 
-      return {
-        slug,
-        title: data.title,
-        date: date,
-        excerpt: excerpt,
-        category: data.category || 'Uncategorized',
-        tags: data.tags || [],
-        authors: authors,
-        content: contentWithoutH1,
-      };
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const { data, content } = matter(fileContents);
+    
+    // Remove the first H1 heading if present to avoid duplication with the page title
+    const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
+
+    let authors: string[] = [];
+    if (data.authors && Array.isArray(data.authors)) {
+      authors = data.authors;
+    } else if (data.author) {
+      authors = [data.author];
+    } else {
+      authors = ['Amytis'];
+    }
+
+    const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
+    const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
+
+    allPostsData.push({
+      slug,
+      title: data.title,
+      date: date,
+      excerpt: excerpt,
+      category: data.category || 'Uncategorized',
+      tags: data.tags || [],
+      authors: authors,
+      content: contentWithoutH1,
     });
+  });
 
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
@@ -94,8 +120,17 @@ export function getAllPosts(): PostData[] {
 export function getPostBySlug(slug: string): PostData | null {
   try {
     let fullPath = path.join(contentDirectory, `${slug}.mdx`);
+    
     if (!fs.existsSync(fullPath)) {
       fullPath = path.join(contentDirectory, `${slug}.md`);
+    }
+    
+    // Check for directory-based posts
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(contentDirectory, slug, 'index.mdx');
+    }
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(contentDirectory, slug, 'index.md');
     }
     
     if (!fs.existsSync(fullPath)) {
