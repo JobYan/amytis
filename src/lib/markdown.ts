@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const contentDirectory = path.join(process.cwd(), 'content', 'posts');
+const pagesDirectory = path.join(process.cwd(), 'content');
 
 export interface PostData {
   slug: string;
@@ -26,9 +27,9 @@ export function generateExcerpt(content: string): string {
   // Remove code blocks
   plain = plain.replace(/```[\s\S]*?```/g, '');
   // Remove images
-  plain = plain.replace(/!\[[^\]]*\]\([^\)]+\)/g, '');
+  plain = plain.replace(/!\[[^]]*\]\([^)]+\)/g, '');
   // Remove links (keep text)
-  plain = plain.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  plain = plain.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
   // Remove bold/italic
   plain = plain.replace(/(\*\*|__|\*|_)/g, '');
   // Remove inline code
@@ -47,6 +48,41 @@ export function generateExcerpt(content: string): string {
 }
 
 /**
+ * Common logic to parse markdown file content and frontmatter.
+ */
+function parseMarkdownFile(fullPath: string, slug: string): PostData {
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const { data, content } = matter(fileContents);
+  
+  // Remove the first H1 heading if present to avoid duplication with the page title
+  const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
+
+  let authors: string[] = [];
+  if (data.authors && Array.isArray(data.authors)) {
+    authors = data.authors;
+  } else if (data.author) {
+    authors = [data.author];
+  } else {
+    authors = ['Amytis'];
+  }
+
+  const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
+  const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : (data.date || '');
+
+  return {
+    slug,
+    title: data.title,
+    date: date,
+    excerpt: excerpt,
+    category: data.category || 'Uncategorized',
+    tags: data.tags || [],
+    authors: authors,
+    layout: data.layout || 'post',
+    content: contentWithoutH1,
+  };
+}
+
+/**
  * Retrieves all MDX posts from the content directory, sorted by date (descending).
  */
 export function getAllPosts(): PostData[] {
@@ -62,10 +98,9 @@ export function getAllPosts(): PostData[] {
         slug = item.name.replace(/\.mdx?$/, '');
         fullPath = path.join(contentDirectory, item.name);
       } else {
-        return; // Skip non-markdown files
+        return;
       }
     } else if (item.isDirectory()) {
-      // Check for index.mdx or index.md inside the directory
       const indexPathMdx = path.join(contentDirectory, item.name, 'index.mdx');
       const indexPathMd = path.join(contentDirectory, item.name, 'index.md');
 
@@ -76,41 +111,13 @@ export function getAllPosts(): PostData[] {
         slug = item.name;
         fullPath = indexPathMd;
       } else {
-        return; // No index file found
+        return;
       }
     } else {
       return;
     }
 
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
-    
-    // Remove the first H1 heading if present to avoid duplication with the page title
-    const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
-
-    let authors: string[] = [];
-    if (data.authors && Array.isArray(data.authors)) {
-      authors = data.authors;
-    } else if (data.author) {
-      authors = [data.author];
-    } else {
-      authors = ['Amytis'];
-    }
-
-    const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
-    const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
-
-    allPostsData.push({
-      slug,
-      title: data.title,
-      date: date,
-      excerpt: excerpt,
-      category: data.category || 'Uncategorized',
-      tags: data.tags || [],
-      authors: authors,
-      layout: data.layout || 'post',
-      content: contentWithoutH1,
-    });
+    allPostsData.push(parseMarkdownFile(fullPath, slug));
   });
 
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -127,7 +134,6 @@ export function getPostBySlug(slug: string): PostData | null {
       fullPath = path.join(contentDirectory, `${slug}.md`);
     }
     
-    // Check for directory-based posts
     if (!fs.existsSync(fullPath)) {
       fullPath = path.join(contentDirectory, slug, 'index.mdx');
     }
@@ -139,38 +145,44 @@ export function getPostBySlug(slug: string): PostData | null {
       return null;
     }
 
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
-
-    // Remove the first H1 heading if present to avoid duplication with the page title
-    const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
-
-    let authors: string[] = [];
-    if (data.authors && Array.isArray(data.authors)) {
-      authors = data.authors;
-    } else if (data.author) {
-      authors = [data.author];
-    } else {
-      authors = ['Amytis'];
-    }
-
-    const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
-    const date = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
-
-    return {
-      slug,
-      title: data.title,
-      date: date,
-      excerpt: excerpt,
-      category: data.category || 'Uncategorized',
-      tags: data.tags || [],
-      authors: authors,
-      layout: data.layout || 'post',
-      content: contentWithoutH1,
-    };
+    return parseMarkdownFile(fullPath, slug);
   } catch (error) {
     return null;
   }
+}
+
+/**
+ * Retrieves a single page by its slug from the root content directory.
+ */
+export function getPageBySlug(slug: string): PostData | null {
+  try {
+    let fullPath = path.join(pagesDirectory, `${slug}.mdx`);
+    if (!fs.existsSync(fullPath)) {
+      fullPath = path.join(pagesDirectory, `${slug}.md`);
+    }
+    
+    if (!fs.existsSync(fullPath)) {
+      return null;
+    }
+
+    return parseMarkdownFile(fullPath, slug);
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
+ * Retrieves all top-level markdown files in the content directory (pages).
+ */
+export function getAllPages(): PostData[] {
+  const items = fs.readdirSync(pagesDirectory, { withFileTypes: true });
+  return items
+    .filter(item => item.isFile() && (item.name.endsWith('.mdx') || item.name.endsWith('.md')))
+    .map(item => {
+      const slug = item.name.replace(/\.mdx?$/, '');
+      const fullPath = path.join(pagesDirectory, item.name);
+      return parseMarkdownFile(fullPath, slug);
+    });
 }
 
 /**
