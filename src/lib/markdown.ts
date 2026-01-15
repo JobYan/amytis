@@ -18,14 +18,11 @@ export interface PostData {
   content: string;
 }
 
-/**
- * Generates a plain text excerpt from markdown content by stripping formatting.
- */
 export function generateExcerpt(content: string): string {
   let plain = content.replace(/^#+\s+/gm, '');
   plain = plain.replace(/```[\s\S]*?```/g, '');
-  plain = plain.replace(/![[^]]*\]\([^)]+\)/g, '');
-  plain = plain.replace(/[[^]]+\]\([^)]+\)/g, '$1');
+  plain = plain.replace(/!\\[[^\\]*\]\([^)]+\)/g, '');
+  plain = plain.replace(/\\[^\\]+\]\([^)]+\)/g, '$1');
   plain = plain.replace(/(\*\*|__|\*|_)/g, '');
   plain = plain.replace(/`[^`]*`/g, '');
   plain = plain.replace(/^>\s+/gm, '');
@@ -54,23 +51,19 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
 
   const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
   
-  // Priority: Frontmatter Date > Filename Date
+  // Date priority: Frontmatter > Filename > Default
   let date = data.date;
-  if (!date && dateFromFileName) {
-    date = dateFromFileName;
-  }
-  
-  // Normalize date
-  date = date instanceof Date ? date.toISOString().split('T')[0] : (date || '');
+  if (!date && dateFromFileName) date = dateFromFileName;
+  date = date instanceof Date ? date.toISOString().split('T')[0] : (date || new Date().toISOString().split('T')[0]);
 
   return {
     slug,
     title: data.title,
-    date: date,
-    excerpt: excerpt,
+    date,
+    excerpt,
     category: data.category || 'Uncategorized',
     tags: data.tags || [],
-    authors: authors,
+    authors,
     layout: data.layout || 'post',
     content: contentWithoutH1,
   };
@@ -86,53 +79,29 @@ export function getAllPosts(): PostData[] {
     let dateFromFileName = undefined;
 
     const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
+    const rawName = item.name.replace(/\.mdx?$/, '');
+    const match = rawName.match(dateRegex);
+    
+    if (match) {
+      dateFromFileName = match[1];
+      if (siteConfig.includeDateInUrl) {
+        slug = rawName;
+      } else {
+        slug = match[2];
+      }
+    } else {
+      slug = rawName;
+    }
 
     if (item.isFile()) {
-      if (item.name.endsWith('.mdx') || item.name.endsWith('.md')) {
-        const fileNameNoExt = item.name.replace(/\.mdx?$/, '');
-        const match = fileNameNoExt.match(dateRegex);
-        
-        if (match) {
-          dateFromFileName = match[1];
-          if (siteConfig.includeDateInUrl) {
-            slug = fileNameNoExt;
-          } else {
-            slug = match[2];
-          }
-        } else {
-          slug = fileNameNoExt;
-        }
-        
-        fullPath = path.join(contentDirectory, item.name);
-      } else {
-        return;
-      }
+      if (!item.name.endsWith('.mdx') && !item.name.endsWith('.md')) return;
+      fullPath = path.join(contentDirectory, item.name);
     } else if (item.isDirectory()) {
-      // Directory handling (nested posts)
-      // Check if directory name has date? Assuming directory name = slug
-      // If directory is '2026-01-12-post', handle same logic.
-      const match = item.name.match(dateRegex);
-      if (match) {
-        dateFromFileName = match[1];
-        if (siteConfig.includeDateInUrl) {
-          slug = item.name;
-        } else {
-          slug = match[2];
-        }
-      } else {
-        slug = item.name;
-      }
-
       const indexPathMdx = path.join(contentDirectory, item.name, 'index.mdx');
       const indexPathMd = path.join(contentDirectory, item.name, 'index.md');
-
-      if (fs.existsSync(indexPathMdx)) {
-        fullPath = indexPathMdx;
-      } else if (fs.existsSync(indexPathMd)) {
-        fullPath = indexPathMd;
-      } else {
-        return;
-      }
+      if (fs.existsSync(indexPathMdx)) fullPath = indexPathMdx;
+      else if (fs.existsSync(indexPathMd)) fullPath = indexPathMd;
+      else return;
     } else {
       return;
     }
@@ -141,64 +110,80 @@ export function getAllPosts(): PostData[] {
   });
 
   return allPostsData
-    .filter(post => post.category !== 'Page')
+    .filter(post => {
+      if (post.category === 'Page') return false;
+      if (!siteConfig.showFuturePosts) {
+        const postDate = new Date(post.date);
+        const now = new Date();
+        if (postDate > now) return false;
+      }
+      return true;
+    })
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export function getPostBySlug(slug: string): PostData | null {
-  // If includeDateInUrl is true, slug includes date, standard lookup works.
-  // If false, slug is just title. We need to find the file/dir.
-  
-  if (siteConfig.includeDateInUrl) {
-    // Standard lookup
-    return findPostFile(slug);
-  } else {
-    // Try standard lookup first (non-dated file)
-    let post = findPostFile(slug);
-    if (post) return post;
-
-    // Scan directory for dated file matching slug
-    const items = fs.readdirSync(contentDirectory);
-    for (const item of items) {
-      const fileNameNoExt = item.replace(/\.mdx?$/, '');
-      const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
-      const match = fileNameNoExt.match(dateRegex);
-      
-      if (match && match[2] === slug) {
-        // Found matching dated file/dir
-        return findPostFile(fileNameNoExt); // Pass the full name to findPostFile
-      }
-    }
-    return null;
-  }
-}
-
 // Helper to find file based on full name (with or without extension)
-function findPostFile(name: string): PostData | null {
-  // Try file direct (name + .mdx/.md)
+function findPostFile(name: string, targetSlug: string): PostData | null {
   let fullPath = path.join(contentDirectory, `${name}.mdx`);
-  if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, getSlugFromName(name));
+  if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug);
   
   fullPath = path.join(contentDirectory, `${name}.md`);
-  if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, getSlugFromName(name));
+  if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug);
 
   // Try directory
   if (fs.existsSync(path.join(contentDirectory, name))) {
     fullPath = path.join(contentDirectory, name, 'index.mdx');
-    if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, getSlugFromName(name));
+    if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug);
     
     fullPath = path.join(contentDirectory, name, 'index.md');
-    if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, getSlugFromName(name));
+    if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug);
   }
 
   return null;
 }
 
-function getSlugFromName(name: string): string {
-  if (siteConfig.includeDateInUrl) return name;
-  const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
-  const match = name.match(dateRegex);
-  return match ? match[2] : name;
+export function getPostBySlug(slug: string): PostData | null {
+  // If includeDateInUrl is true, slug includes date, standard lookup works.
+  if (siteConfig.includeDateInUrl) {
+    const post = findPostFile(slug, slug);
+    if (!post) return null;
+    
+    // Check visibility
+    if (!siteConfig.showFuturePosts) {
+        const postDate = new Date(post.date);
+        const now = new Date();
+        if (postDate > now) return null;
+    }
+    return post;
+  } else {
+    // Try standard lookup first (non-dated file)
+    let post = findPostFile(slug, slug);
+    
+    // If not found, scan directory for dated file matching slug
+    if (!post) {
+        const items = fs.readdirSync(contentDirectory);
+        for (const item of items) {
+          const rawName = item.replace(/\.mdx?$/, '');
+          const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
+          const match = rawName.match(dateRegex);
+          
+          if (match && match[2] === slug) {
+            post = findPostFile(rawName, slug);
+            break;
+          }
+        }
+    }
+
+    if (!post) return null;
+
+    // Check visibility
+    if (!siteConfig.showFuturePosts) {
+        const postDate = new Date(post.date);
+        const now = new Date();
+        if (postDate > now) return null;
+    }
+    return post;
+  }
 }
 
 export function getPageBySlug(slug: string): PostData | null {

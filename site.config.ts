@@ -13,4 +13,5 @@ export const siteConfig = {
     pageSize: 10,
   },
   includeDateInUrl: false,
+  showFuturePosts: false,
 };
