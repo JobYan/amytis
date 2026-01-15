@@ -35,7 +35,21 @@ export async function GET(
   const postsDirectory = path.join(process.cwd(), 'content', 'posts');
   
   // Check if the post is a directory
-  const nestedPostDir = path.join(postsDirectory, slug);
+  let nestedPostDir = path.join(postsDirectory, slug);
+
+  // If direct match doesn't exist, scan for date-prefixed directory
+  if (!fs.existsSync(nestedPostDir)) {
+    const items = fs.readdirSync(postsDirectory);
+    for (const item of items) {
+      const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
+      const match = item.match(dateRegex);
+      if (match && match[2] === slug) {
+        nestedPostDir = path.join(postsDirectory, item);
+        break;
+      }
+    }
+  }
+
   const assetPath = path.join(nestedPostDir, relativePath);
 
   if (!fs.existsSync(assetPath)) {
