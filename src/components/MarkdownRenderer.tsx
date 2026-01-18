@@ -23,6 +23,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           p: ({ children }) => <div className="mb-4 leading-relaxed">{children}</div>,
           // Render 'pre' as a 'div' to allow block-level children
           pre: ({ children }) => <div className="not-prose">{children}</div>,
+          // Custom code renderer: handles 'mermaid' blocks and syntax highlighting
           code({ node, inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
@@ -58,6 +59,8 @@ export default function MarkdownRenderer({ content }: { content: string }) {
               </code>
             );
           },
+          // Ensure images are responsive and styled
+          img: (props) => <img {...props} className="max-w-full h-auto rounded-lg my-4" />,
         }}
       >
         {content}
