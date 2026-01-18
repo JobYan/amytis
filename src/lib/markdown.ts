@@ -16,14 +16,15 @@ export interface PostData {
   authors: string[];
   layout?: string;
   draft?: boolean;
+  latex?: boolean;
   content: string;
 }
 
 export function generateExcerpt(content: string): string {
   let plain = content.replace(/^#+\s+/gm, '');
   plain = plain.replace(/```[\s\S]*?```/g, '');
-  plain = plain.replace(/!\[[^\]]*\]\([^\]]+\)/g, '');
-  plain = plain.replace(/\*\[[^\]]+\]\([^\]]+\)/g, '$1');
+  plain = plain.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
+  plain = plain.replace(/\{([^]]+)\}\[[^\]]*\]\([^)]+\)/g, '$1');
   plain = plain.replace(/(\$\*\*|__|\*|_)/g, '');
   plain = plain.replace(/`[^`]*`/g, '');
   plain = plain.replace(/^>\s+/gm, '');
@@ -34,6 +35,8 @@ export function generateExcerpt(content: string): string {
   }
   return plain.slice(0, 160).trim() + '...';
 }
+
+
 
 function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: string): PostData {
   const fileContents = fs.readFileSync(fullPath, 'utf8');
@@ -66,6 +69,7 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
     authors,
     layout: data.layout || 'post',
     draft: data.draft || false,
+    latex: data.latex || false,
     content: contentWithoutH1,
   };
 }
@@ -79,7 +83,7 @@ export function getAllPosts(): PostData[] {
     let slug = '';
     let dateFromFileName = undefined;
 
-    const dateRegex = /^(\d{4}-\d{2}-\d{2)-(.*)$/;
+    const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
     const rawName = item.name.replace(/\.mdx?$/, '');
     const match = rawName.match(dateRegex);
     
@@ -128,6 +132,7 @@ export function getAllPosts(): PostData[] {
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+// Helper to find file based on full name (with or without extension)
 function findPostFile(name: string, targetSlug: string): PostData | null {
   let fullPath = path.join(contentDirectory, `${name}.mdx`);
   if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug);
@@ -157,7 +162,7 @@ export function getPostBySlug(slug: string): PostData | null {
         const items = fs.readdirSync(contentDirectory);
         for (const item of items) {
           const rawName = item.replace(/\.mdx?$/, '');
-          const dateRegex = /^(\d{4}-\d{2}-\d{2)-(.*)$/;
+          const dateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
           const match = rawName.match(dateRegex);
           
           if (match && match[2] === slug) {

@@ -79,7 +79,7 @@ export default function PostLayout({ post }: PostLayoutProps) {
           )}
         </header>
 
-        <MarkdownRenderer content={post.content} />
+        <MarkdownRenderer content={post.content} latex={post.latex} />
 
         <footer className="mt-24 pt-8 border-t border-muted/20 flex justify-between items-center">
           <Link 

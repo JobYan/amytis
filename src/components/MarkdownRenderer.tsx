@@ -4,8 +4,23 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Mermaid from '@/components/Mermaid';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
-export default function MarkdownRenderer({ content }: { content: string }) {
+interface MarkdownRendererProps {
+  content: string;
+  latex?: boolean;
+}
+
+export default function MarkdownRenderer({ content, latex = false }: MarkdownRendererProps) {
+  const remarkPlugins: any[] = [remarkGfm];
+  const rehypePlugins: any[] = [rehypeRaw];
+
+  if (latex) {
+    remarkPlugins.push(remarkMath);
+    rehypePlugins.push(rehypeKatex);
+  }
+
   return (
     <div className="prose prose-lg max-w-none 
           prose-headings:font-serif prose-headings:text-heading 
@@ -16,8 +31,8 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           prose-blockquote:border-l-accent prose-blockquote:text-muted prose-blockquote:italic
           dark:prose-invert">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={remarkPlugins}
+        rehypePlugins={rehypePlugins}
         components={{
           // Use 'div' instead of 'p' to avoid hydration errors
           p: ({ children }) => <div className="mb-4 leading-relaxed">{children}</div>,
