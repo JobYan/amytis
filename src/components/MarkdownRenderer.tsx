@@ -3,6 +3,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Mermaid from '@/components/Mermaid';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 export default function MarkdownRenderer({ content }: { content: string }) {
   return (
@@ -16,6 +17,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           dark:prose-invert">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={{
           // Use 'div' instead of 'p' to avoid hydration errors
           p: ({ children }) => <div className="mb-4 leading-relaxed">{children}</div>,
