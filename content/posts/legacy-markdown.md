@@ -24,6 +24,19 @@ console.log("Hello from .md file!");
 - Item 1
 - Item 2
 
+## References
+
+This is a [link to markdown guide][md-guide].
+
+Internal links: [Home](/) and [Archives](/archive).
+
+## More Reference Links
+
+Reference links test: [Markdown Guide][guide], [CommonMark][commonmark].
+
+[guide]: https://www.markdownguide.org
+[commonmark]: https://commonmark.org
+
 ### markdown table
 
 | Feature | Sum | Notes |

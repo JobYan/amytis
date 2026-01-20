@@ -25,7 +25,6 @@ export default function MarkdownRenderer({ content, latex = false }: MarkdownRen
     <div className="prose prose-lg max-w-none 
           prose-headings:font-serif prose-headings:text-heading 
           prose-p:text-foreground prose-p:leading-loose
-          prose-a:text-accent prose-a:no-underline hover:prose-a:underline
           prose-strong:text-heading prose-strong:font-semibold
           prose-code:text-accent prose-code:bg-muted/10 prose-code:px-1 prose-code:rounded
           prose-code:before:content-none prose-code:after:content-none
@@ -39,6 +38,8 @@ export default function MarkdownRenderer({ content, latex = false }: MarkdownRen
           p: ({ children }) => <div className="mb-4 leading-relaxed">{children}</div>,
           // Render 'pre' as a 'div' to allow block-level children
           pre: ({ children }) => <div className="not-prose">{children}</div>,
+          // Style links individually to avoid hover-all issue
+          a: (props) => <a {...props} className="text-accent no-underline hover:underline transition-colors duration-200" />,
           // Custom code renderer: handles 'mermaid' blocks and syntax highlighting
           code({ node, inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
