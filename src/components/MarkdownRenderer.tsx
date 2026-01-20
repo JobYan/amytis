@@ -28,6 +28,7 @@ export default function MarkdownRenderer({ content, latex = false }: MarkdownRen
           prose-a:text-accent prose-a:no-underline hover:prose-a:underline
           prose-strong:text-heading prose-strong:font-semibold
           prose-code:text-accent prose-code:bg-muted/10 prose-code:px-1 prose-code:rounded
+          prose-code:before:content-none prose-code:after:content-none
           prose-blockquote:border-l-accent prose-blockquote:text-muted prose-blockquote:italic
           dark:prose-invert">
       <ReactMarkdown
@@ -42,8 +43,9 @@ export default function MarkdownRenderer({ content, latex = false }: MarkdownRen
           code({ node, inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
+            const isMultiLine = String(children).includes('\n');
             
-            if (!inline) {
+            if (!inline && (match || isMultiLine)) {
               if (language === 'mermaid') {
                 return <Mermaid chart={String(children).replace(/\n$/, '')} />;
               }

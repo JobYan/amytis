@@ -23,3 +23,12 @@ console.log("Hello from .md file!");
 
 - Item 1
 - Item 2
+
+### markdown table
+
+| Feature | Sum | Notes |
+| :--- | :---: | :--- |
+| Tables | `>` 10 | Requires remark-gfm |
+| Task Lists | 5 | Checkboxes |
+| Strikethrough | 1 | ~~Deleted~~ |
+
