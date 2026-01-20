@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "bun scripts/copy-assets.ts && next build",
+    "clean": "rm -rf .next out public/posts",
     "start": "next start",
     "lint": "eslint",
     "test": "bun test",

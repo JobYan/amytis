@@ -23,8 +23,21 @@ function copyRecursive(src: string, dest: string) {
     } else {
       // Copy all files except markdown source
       if (!entry.name.endsWith('.md') && !entry.name.endsWith('.mdx')) {
-        fs.copyFileSync(srcPath, destPath);
-        console.log(`Copied: ${entry.name} -> ${destPath}`);
+        let shouldCopy = true;
+        if (fs.existsSync(destPath)) {
+          const srcStat = fs.statSync(srcPath);
+          const destStat = fs.statSync(destPath);
+          if (srcStat.mtimeMs <= destStat.mtimeMs) {
+            shouldCopy = false;
+          }
+        }
+
+        if (shouldCopy) {
+          fs.copyFileSync(srcPath, destPath);
+          console.log(`Copied: ${entry.name} -> ${destPath}`);
+        } else {
+          // console.log(`Skipped (up to date): ${entry.name}`);
+        }
       }
     }
   }
