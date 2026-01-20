@@ -50,3 +50,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Ensure anchor links are not hidden behind the fixed navbar */
+[id] {
+  scroll-margin-top: 5rem;
+}
