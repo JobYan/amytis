@@ -22,20 +22,28 @@ export default function MarkdownRenderer({ content, latex = false }: MarkdownRen
   }
 
   return (
-    <div className="prose prose-lg max-w-none 
+    <div className="prose prose-lg max-w-none text-foreground
           prose-headings:font-serif prose-headings:text-heading 
           prose-p:text-foreground prose-p:leading-loose
+          prose-a:text-accent prose-a:no-underline hover:prose-a:underline
           prose-strong:text-heading prose-strong:font-semibold
           prose-code:text-accent prose-code:bg-muted/10 prose-code:px-1 prose-code:rounded
           prose-code:before:content-none prose-code:after:content-none
-          prose-blockquote:border-l-accent prose-blockquote:text-muted prose-blockquote:italic
+          prose-blockquote:italic
+          prose-th:text-heading prose-td:text-foreground
           dark:prose-invert">
       <ReactMarkdown
         remarkPlugins={remarkPlugins}
         rehypePlugins={rehypePlugins}
         components={{
           // Use 'div' instead of 'p' to avoid hydration errors
-          p: ({ children }) => <div className="mb-4 leading-relaxed">{children}</div>,
+          p: ({ children }) => <div className="mb-4 leading-relaxed text-foreground">{children}</div>,
+          // Explicitly style lists to ensure contrast
+          li: ({ children }) => <li className="text-foreground">{children}</li>,
+          // Explicitly style blockquotes
+          blockquote: ({ children }) => <blockquote className="text-foreground border-l-accent italic">{children}</blockquote>,
+          // Explicitly style bold text
+          strong: ({ children }) => <strong className="text-heading font-semibold">{children}</strong>,
           // Render 'pre' as a 'div' to allow block-level children
           pre: ({ children }) => <div className="not-prose">{children}</div>,
           // Style links individually to avoid hover-all issue
