@@ -59,7 +59,7 @@ export default function PostLayout({ post }: PostLayoutProps) {
           </div>
 
           {post.excerpt && (
-            <p className="text-xl text-foreground/80 font-serif italic leading-relaxed mb-8">
+            <p className="text-xl text-foreground font-serif italic leading-relaxed mb-8">
               {post.excerpt}
             </p>
           )}

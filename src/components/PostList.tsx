@@ -43,7 +43,7 @@ export default function PostList({ posts }: PostListProps) {
             </h2>
           </Link>
           
-          <p className="text-foreground/70 leading-relaxed line-clamp-2 mb-4 font-serif">
+          <p className="text-foreground/90 leading-relaxed line-clamp-2 mb-4 font-serif">
             {post.excerpt}
           </p>
 

@@ -14,11 +14,11 @@
 
 .dark {
   --background: #1c1917; /* Stone 900 */
-  --foreground: #d6d3d1; /* Stone 300 */
+  --foreground: #f5f5f4; /* Stone 100 */
   --heading: #fafaf9; /* Stone 50 */
   --accent: #34d399; /* Emerald 400 */
   --accent-hover: #10b981; /* Emerald 500 */
-  --muted: #57534e; /* Stone 600 */
+  --muted: #a8a29e; /* Stone 400 */
 }
 
 @layer components {
@@ -38,6 +38,12 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-muted: var(--muted);
+  
+  /* Map Typography colors to our variables for consistency */
+  --color-prose-body: var(--foreground);
+  --color-prose-headings: var(--heading);
+  --color-prose-invert-body: var(--foreground);
+  --color-prose-invert-headings: var(--heading);
   
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-baskerville), ui-serif, Georgia, serif;
