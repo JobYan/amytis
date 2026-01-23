@@ -49,10 +49,9 @@ export default function Navbar() {
                 key={item.url}
                 href={item.url}
                 {...props}
-                className="text-sm font-sans font-medium text-muted hover:text-heading transition-colors duration-200 flex items-center gap-1"
+                className="text-sm font-sans font-medium text-foreground/80 hover:text-heading transition-colors duration-200 flex items-center gap-1"
               >
                 {item.name}
-                {/* Render an external link icon for clarity */}
                 {isExternal && (
                   <svg
                     width="12"
