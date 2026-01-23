@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import Mermaid from '@/components/Mermaid';
+import CodeBlock from '@/components/CodeBlock';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math';
@@ -58,14 +58,9 @@ export default function MarkdownRenderer({ content, latex = false }: MarkdownRen
                 return <Mermaid chart={String(children).replace(/\n$/, '')} />;
               }
               return (
-                <SyntaxHighlighter
-                  language={language || 'text'}
-                  PreTag="div"
-                  useInlineStyles={false}
-                  {...props}
-                >
+                <CodeBlock language={language} {...props}>
                   {String(children).replace(/\n$/, '')}
-                </SyntaxHighlighter>
+                </CodeBlock>
               );
             }
 
