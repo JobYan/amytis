@@ -1,7 +1,26 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx';
+import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
+import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
+import markdown from 'react-syntax-highlighter/dist/esm/languages/prism/markdown';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
+
+SyntaxHighlighter.registerLanguage('tsx', tsx);
+SyntaxHighlighter.registerLanguage('typescript', typescript);
+SyntaxHighlighter.registerLanguage('javascript', javascript);
+SyntaxHighlighter.registerLanguage('js', javascript);
+SyntaxHighlighter.registerLanguage('bash', bash);
+SyntaxHighlighter.registerLanguage('sh', bash);
+SyntaxHighlighter.registerLanguage('shell', bash);
+SyntaxHighlighter.registerLanguage('markdown', markdown);
+SyntaxHighlighter.registerLanguage('md', markdown);
+SyntaxHighlighter.registerLanguage('json', json);
+SyntaxHighlighter.registerLanguage('css', css);
 
 interface CodeBlockProps {
   language: string;
