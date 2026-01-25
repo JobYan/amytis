@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { siteConfig } from '../../site.config';
 import ThemeToggle from './ThemeToggle';
+import Search from '@/components/Search';
 
 /**
  * Global navigation bar.
@@ -15,7 +16,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 border-b border-muted/10 bg-background/80 backdrop-blur-md transition-all duration-300">
-      <div className="navbar-container">
+      <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link 
           href="/" 
           className="flex items-center gap-3 text-xl font-serif font-bold text-heading hover:text-accent transition-colors duration-200"
@@ -52,6 +53,7 @@ export default function Navbar() {
                 className="text-sm font-sans font-medium text-foreground/80 hover:text-heading transition-colors duration-200 flex items-center gap-1"
               >
                 {item.name}
+                {/* Render an external link icon for clarity */}
                 {isExternal && (
                   <svg
                     width="12"
@@ -71,6 +73,7 @@ export default function Navbar() {
             );
           })}
           <div className="w-px h-4 bg-muted/20 mx-1"></div>
+          <Search />
           <ThemeToggle />
         </div>
       </div>
