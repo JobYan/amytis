@@ -1,6 +1,7 @@
 export const siteConfig = {
   title: "Amytis",
   description: "A minimalist digital garden for growing thoughts and sharing knowledge.",
+  baseUrl: "https://example.com", // Replace with your actual domain
   footerText: `© ${new Date().getFullYear()} Amytis. All rights reserved.`,
   nav: [
     { name: "Garden", url: "/", weight: 1 },
