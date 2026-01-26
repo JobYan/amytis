@@ -5,7 +5,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
   if (headings.length === 0) return null;
 
   return (
-    <nav className="hidden lg:block sticky top-32 self-start max-h-[calc(100vh-8rem)] overflow-y-auto w-64 pl-8 border-l border-muted/10">
+    <nav className="hidden lg:block sticky top-32 self-start w-64 pl-8 border-l border-muted/10">
       <h2 className="text-xs font-sans font-bold uppercase tracking-widest text-muted mb-6">
         On this page
       </h2>
