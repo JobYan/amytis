@@ -7,6 +7,8 @@
 ## Features
 
 - 🌿 **Digital Garden Philosophy:** Non-linear navigation, tags, and chronological archives.
+- 🔍 **Fuzzy Search:** Instant, client-side search across all posts (Command+K).
+- 📋 **Table of Contents:** Sticky, multilingual-aware TOC automatically generated for every post.
 - 📝 **Rich MDX Content:**
   - **Standard Markdown:** GFM support (Tables, Task Lists, Strikethrough).
   - **Code:** Syntax highlighting and Mermaid diagrams.
@@ -14,17 +16,17 @@
   - **Components:** Embed React components directly in content.
   - **Raw HTML:** Support for raw HTML tags for custom layouts.
 - 🎨 **Elegant Design:**
-  - Minimalist aesthetic.
+  - Minimalist aesthetic with high-contrast typography.
   - **Light/Dark Mode:** Automatic system detection with manual toggle.
-  - **Responsive Layout:** Optimized for reading.
+  - **Responsive Layout:** Optimized for reading with horizontal scrolling for wide tables.
 - 📂 **Flexible Content Structure:**
   - **Flat or Nested:** Support for `post.mdx` or `post/index.mdx`.
   - **Co-located Assets:** Keep images inside post folders (`./images/pic.png`).
   - **Date-prefixed Filenames:** `2026-01-01-my-post.mdx` support.
-- ⚙️ **Configurable:**
-  - **Drafts:** Hide content marked `draft: true` in production.
-  - **Future Posts:** Automatically hide future-dated posts (configurable).
-  - **Permalinks:** Configurable URL structure.
+- ⚡ **Performance & SEO:**
+  - **Static Image Optimization:** Automated optimization for static exports.
+  - **SEO Ready:** Native sitemap and RSS feed generation.
+  - **Reading Time:** Estimated reading time for every article.
 - ⚡ **Modern Stack:** Built on Next.js 15, React 19, Tailwind v4, and Bun.
 
 ## Quick Start
@@ -46,6 +48,21 @@
     ```
     The static site will be generated in the `out/` directory.
 
+## CLI Commands
+
+Amytis includes a helper script for creating new content:
+
+```bash
+# Create a new post
+bun run new "My New Post"
+
+# Create a post with a prefix (e.g., for a newsletter)
+bun run new "Update 1" --prefix weekly
+
+# Create a post as a folder with an index.mdx file
+bun run new "Photography" --folder
+```
+
 ## Configuration
 
 Customize the site via `site.config.ts`:
@@ -57,7 +74,7 @@ export const siteConfig = {
   footerText: "...", // Footer content
   nav: [ // Navigation menu items
     { name: "Garden", url: "/", weight: 1 },
-    { name: "GitHub", url: "...", weight: 5, external: true } // External link support
+    { name: "GitHub", url: "...", weight: 5, external: true }
   ],
   pagination: {
     pageSize: 10,
@@ -84,6 +101,7 @@ authors: ["Your Name"]
 layout: "post" # or 'simple' for pages
 draft: false # Set to true to hide in production
 latex: false # Set to true to enable Math/KaTeX
+toc: true # Set to false to hide the Table of Contents
 ---
 ```
 
