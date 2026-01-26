@@ -47,6 +47,14 @@ export default function MarkdownRenderer({ content, latex = false, slug }: Markd
           blockquote: ({ children }) => <blockquote className="text-foreground border-l-accent italic">{children}</blockquote>,
           // Explicitly style bold text
           strong: ({ children }) => <strong className="text-heading font-semibold">{children}</strong>,
+          // Wrap tables in a scrollable container
+          table: ({ children, ...props }) => (
+            <div className="overflow-x-auto my-8 border border-muted/20 rounded-lg">
+              <table {...props} className="min-w-full text-left text-sm">
+                {children}
+              </table>
+            </div>
+          ),
           // Render 'pre' as a 'div' to allow block-level children
           pre: ({ children }) => <div className="not-prose">{children}</div>,
           // Style links individually to avoid hover-all issue

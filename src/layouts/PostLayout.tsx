@@ -24,7 +24,7 @@ export default function PostLayout({ post }: PostLayoutProps) {
       </nav>
 
       <div className={`grid grid-cols-1 ${showToc ? 'lg:grid-cols-[1fr_250px]' : ''} gap-12 items-start`}>
-        <article>
+        <article className="min-w-0">
           <header className="mb-16 border-b border-muted/10 pb-12">
             {post.draft && (
               <div className="mb-4">
