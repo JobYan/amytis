@@ -147,6 +147,28 @@ pre[class*="language-"] {
   .navbar-container {
     @apply max-w-4xl mx-auto px-6 h-16 flex items-center justify-between;
   }
+
+  .scrollbar-hide-default {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+  .scrollbar-hide-default::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Webkit */
+  }
+  
+  .scrollbar-hide-default:hover {
+    scrollbar-width: thin;
+  }
+  .scrollbar-hide-default:hover::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+  .scrollbar-hide-default:hover::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-hide-default:hover::-webkit-scrollbar-thumb {
+    @apply bg-muted/30 rounded-full;
+  }
 }
 
 @theme inline {
