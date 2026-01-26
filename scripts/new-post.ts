@@ -2,15 +2,17 @@ import fs from 'fs';
 import path from 'path';
 
 const args = process.argv.slice(2);
-const title = args.filter(arg => !arg.startsWith('--'))[0];
+const title = args.filter(arg => !arg.startsWith('--') && args[args.indexOf(arg) - 1] !== '--template' && args[args.indexOf(arg) - 1] !== '--prefix')[0];
 const templateArgIndex = args.indexOf('--template');
 const templateName = templateArgIndex > -1 ? args[templateArgIndex + 1] : 'default';
+const prefixArgIndex = args.indexOf('--prefix');
+const prefix = prefixArgIndex > -1 ? args[prefixArgIndex + 1] : '';
 const useFolder = args.includes('--folder');
 const useMd = args.includes('--md');
 
 if (!title) {
   console.error('Please provide a post title.');
-  console.error('Usage: bun new <title> [--template <name>] [--folder] [--md]');
+  console.error('Usage: bun new <title> [--template <name>] [--prefix <name>] [--folder] [--md]');
   process.exit(1);
 }
 
@@ -21,17 +23,18 @@ const slug = title
 
 const date = new Date().toISOString().split('T')[0];
 const ext = useMd ? '.md' : '.mdx';
+const prefixedSlug = prefix ? `${prefix}-${slug}` : slug;
 let targetPath = '';
 
 if (useFolder) {
-  const dirName = `${date}-${slug}`;
+  const dirName = `${date}-${prefixedSlug}`;
   const dirPath = path.join(process.cwd(), 'content', 'posts', dirName);
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
   targetPath = path.join(dirPath, `index${ext}`);
 } else {
-  const filename = `${date}-${slug}${ext}`;
+  const filename = `${date}-${prefixedSlug}${ext}`;
   targetPath = path.join(process.cwd(), 'content', 'posts', filename);
 }
 
