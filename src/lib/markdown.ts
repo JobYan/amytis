@@ -42,9 +42,9 @@ function calculateReadingTime(content: string): string {
 export function generateExcerpt(content: string): string {
   let plain = content.replace(/^#+\s+/gm, '');
   plain = plain.replace(/```[\s\S]*?```/g, '');
-  plain = plain.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
-  plain = plain.replace(/\*\[([^\]]+)\*\]\([^)]+\)/g, '$1');
-  plain = plain.replace(/(\$\*\*|__|\*|_)/g, '');
+  plain = plain.replace(/!\[[^\]]*\]\([^\)]+\)/g, '');
+  plain = plain.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  plain = plain.replace(/(\*\*|__|\*|_)/g, '');
   plain = plain.replace(/`[^`]*`/g, '');
   plain = plain.replace(/^>\s+/gm, '');
   plain = plain.replace(/\s+/g, ' ').trim();
