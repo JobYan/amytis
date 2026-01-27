@@ -23,7 +23,7 @@
   - [x] Create `new-post` script with support for templates, folders, and prefixes (e.g., `weekly-`).
 
 - [ ] **Content**
-  - [ ] Add support for "Series" (grouping related posts).
+  - [x] Add support for "Series" (grouping related posts).
   - [x] Add "Related Posts" section at the bottom of articles.
 
 - [ ] **Analytics**

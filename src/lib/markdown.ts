@@ -22,6 +22,7 @@ export interface PostData {
   tags: string[];
   authors: string[];
   layout?: string;
+  series?: string;
   draft?: boolean;
   latex?: boolean;
   toc?: boolean;
@@ -104,6 +105,7 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
     tags: data.tags || [],
     authors,
     layout: data.layout || 'post',
+    series: data.series,
     draft: data.draft || false,
     latex: data.latex || false,
     toc: data.toc !== false,
@@ -328,4 +330,11 @@ export function getRelatedPosts(currentSlug: string, limit: number = 3): PostDat
     .map(item => item.post);
 
   return related;
+}
+
+export function getSeriesPosts(seriesName: string): PostData[] {
+  const allPosts = getAllPosts();
+  return allPosts
+    .filter(post => post.series === seriesName)
+    .sort((a, b) => (a.date > b.date ? 1 : -1)); // Chronological order (oldest first)
 }

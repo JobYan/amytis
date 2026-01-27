@@ -3,14 +3,16 @@ import { PostData } from '@/lib/markdown';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import TableOfContents from '@/components/TableOfContents';
 import RelatedPosts from '@/components/RelatedPosts';
+import SeriesList from '@/components/SeriesList';
 import { siteConfig } from '../../site.config';
 
 interface PostLayoutProps {
   post: PostData;
   relatedPosts?: PostData[];
+  seriesPosts?: PostData[];
 }
 
-export default function PostLayout({ post, relatedPosts }: PostLayoutProps) {
+export default function PostLayout({ post, relatedPosts, seriesPosts }: PostLayoutProps) {
   const showToc = siteConfig.toc !== false && post.toc !== false && post.headings && post.headings.length > 0;
 
   return (
@@ -86,6 +88,10 @@ export default function PostLayout({ post, relatedPosts }: PostLayoutProps) {
               </div>
             )}
           </header>
+
+          {post.series && seriesPosts && (
+            <SeriesList seriesName={post.series} posts={seriesPosts} currentSlug={post.slug} />
+          )}
 
           <MarkdownRenderer content={post.content} latex={post.latex} slug={post.slug} />
 
