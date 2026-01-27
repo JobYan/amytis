@@ -1,6 +1,26 @@
 # Future Roadmap
 
-## High Priority
+## 🚀 High Priority (Next Steps)
+
+- [ ] **User Experience (UX)**
+  - [ ] **Code Blocks**: Add a "Copy to Clipboard" button.
+  - [ ] **Images**: Implement a Lightbox or Zoom-on-click feature.
+  - [ ] **Navigation**: Add Breadcrumbs (e.g., `Home > Category > Post`).
+  - [ ] **Navigation**: Add Previous/Next post links at the bottom of articles.
+
+- [ ] **Engagement**
+  - [ ] **Comments**: Integrate Giscus (GitHub Discussions) for comments.
+
+## 🔮 Future Enhancements
+
+- [ ] **Visuals**
+  - [ ] **Dynamic OG Images**: Generate custom social cards with post title using `@vercel/og` (Satori).
+
+- [ ] **Engineering**
+  - [ ] **Validation**: Add Zod schema validation for content frontmatter to prevent build errors.
+  - [ ] **Testing**: Add E2E tests for the new search and navigation features.
+
+## ✅ Completed
 
 - [x] **SEO & Discovery**
   - [x] Generate `sitemap.xml` for search engines.
@@ -8,23 +28,19 @@
   - [x] Add Open Graph (OG) meta tags for social sharing.
 
 - [x] **Navigation & UX**
-  - [x] Implement a client-side fuzzy Search bar (Command+K) using Fuse.js.
+  - [x] Implement a client-side fuzzy Search bar (Command+K).
   - [x] Add a sticky Table of Contents (TOC) with Unicode/Multilingual support.
   - [x] Add "Reading Time" estimate to post headers.
-  - [x] Refine link styling (no underline by default, underline on hover in content).
+  - [x] Refine link styling (clean default, underline on hover).
 
-## Enhancements
+- [x] **Content & Architecture**
+  - [x] **Series**: Support for grouping related posts.
+  - [x] **Related Posts**: Auto-suggest relevant articles.
+  - [x] **Analytics**: Privacy-friendly configuration (Umami/Plausible/Google).
 
 - [x] **Performance**
-  - [x] Re-enable image optimization for static export using `next-image-export-optimizer`.
-  - [x] Automated image dimension injection for Markdown images.
+  - [x] Static Image Optimization (`next-image-export-optimizer`).
+  - [x] Automated image dimension injection.
 
 - [x] **CLI Tools**
-  - [x] Create `new-post` script with support for templates, folders, and prefixes (e.g., `weekly-`).
-
-- [ ] **Content**
-  - [x] Add support for "Series" (grouping related posts).
-  - [x] Add "Related Posts" section at the bottom of articles.
-
-- [x] **Analytics**
-  - [x] Integrate a privacy-friendly analytics tool (e.g., Plausible, Fathom) or a simple script.
+  - [x] `bun run new` script for scaffolding posts.
