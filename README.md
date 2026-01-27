@@ -101,6 +101,7 @@ category: "Thoughts"
 tags: ["garden", "meta"]
 authors: ["Your Name"]
 layout: "post" # or 'simple' for pages
+series: "My Series Name" # Group posts into a chronological series
 draft: false # Set to true to hide in production
 latex: false # Set to true to enable Math/KaTeX
 toc: true # Set to false to hide the Table of Contents

@@ -17,6 +17,7 @@ Amytis is a static site generator built with **Next.js 15+ (App Router)**, desig
 3.  **Rendering:**
     *   **Lists:** `getAllPosts()` reads all files and returns an array of metadata. This is used in `src/app/page.tsx` (Home), `src/app/archive/page.tsx`, etc.
     *   **Single Post:** `getPostBySlug(slug)` reads a specific file. This is used in `src/app/posts/[slug]/page.tsx`.
+    *   **Relationships:** `getRelatedPosts` (tag/category based) and `getSeriesPosts` (series grouping) fetch contextual links for individual posts.
     *   **Static Generation:** `generateStaticParams` is implemented in dynamic routes (`[slug]`, `[page]`, `[tag]`, `[author]`) to pre-render all possible pages at build time.
 
 ## Component Structure
@@ -31,6 +32,8 @@ Amytis is a static site generator built with **Next.js 15+ (App Router)**, desig
     - `Pagination`: Previous/Next controls.
     - `Mermaid`: Client-side Mermaid chart rendering.
     - `ThemeToggle`: Light/Dark mode switcher.
+    - `RelatedPosts`: Displays related content at the bottom of posts.
+    - `SeriesList`: Displays navigation for multi-part post series.
 - **`src/lib`**: Utilities.
     - `markdown.ts`: The data access layer.
 
