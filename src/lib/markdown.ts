@@ -23,6 +23,7 @@ export interface PostData {
   authors: string[];
   layout?: string;
   series?: string;
+  coverImage?: string;
   draft?: boolean;
   latex?: boolean;
   toc?: boolean;
@@ -106,6 +107,7 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
     authors,
     layout: data.layout || 'post',
     series: data.series,
+    coverImage: data.coverImage,
     draft: data.draft || false,
     latex: data.latex || false,
     toc: data.toc !== false,
@@ -337,4 +339,25 @@ export function getSeriesPosts(seriesName: string): PostData[] {
   return allPosts
     .filter(post => post.series === seriesName)
     .sort((a, b) => (a.date > b.date ? 1 : -1)); // Chronological order (oldest first)
+}
+
+export function getAllSeries(): Record<string, PostData[]> {
+  const allPosts = getAllPosts();
+  const series: Record<string, PostData[]> = {};
+
+  allPosts.forEach((post) => {
+    if (post.series) {
+      if (!series[post.series]) {
+        series[post.series] = [];
+      }
+      series[post.series].push(post);
+    }
+  });
+
+  // Sort posts within series
+  Object.keys(series).forEach(key => {
+    series[key].sort((a, b) => (a.date > b.date ? 1 : -1));
+  });
+
+  return series;
 }
