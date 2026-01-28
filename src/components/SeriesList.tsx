@@ -12,8 +12,10 @@ export default function SeriesList({ seriesName, posts, currentSlug }: SeriesLis
 
   return (
     <div className="my-8 p-6 bg-muted/5 rounded-lg border border-muted/20">
-      <h3 className="text-sm font-sans font-bold uppercase tracking-widest text-muted mb-4">
-        Series: {seriesName}
+      <h3 className="text-xs font-sans font-bold uppercase tracking-widest text-muted mb-4">
+        <Link href={`/series/${seriesName.toLowerCase().replace(/ /g, '-')}`} className="hover:text-accent transition-colors no-underline">
+          Series: {seriesName}
+        </Link>
       </h3>
       <ol className="list-decimal list-inside space-y-2">
         {posts.map((post) => (

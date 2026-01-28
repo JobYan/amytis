@@ -1,4 +1,4 @@
-import { getAllPosts, getAllSeries } from '@/lib/markdown';
+import { getAllPosts, getAllSeries, getSeriesData } from '@/lib/markdown';
 import { siteConfig } from '../../site.config';
 import PostCard from '@/components/PostCard';
 import Pagination from '@/components/Pagination';
@@ -34,22 +34,30 @@ export default function Home() {
         <section className="mb-24">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-serif font-bold text-heading">Curated Series</h2>
+            <Link href="/series" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline">
+              All Series →
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {seriesNames.slice(0, 4).map(name => {
               const seriesPosts = allSeries[name];
+              const seriesData = getSeriesData(name.toLowerCase().replace(/ /g, '-'));
+              const title = seriesData?.title || name;
+              const seriesUrl = `/series/${name.toLowerCase().replace(/ /g, '-')}`;
               
               return (
                 <div key={name} className="group relative overflow-hidden rounded-2xl border border-muted/20 bg-muted/5 p-8 transition-all hover:border-accent/30">
                   <div className="relative z-10">
                     <span className="mb-4 inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-accent">
-                      Series
+                      {seriesPosts.length} Articles
                     </span>
                     <h3 className="mb-4 font-serif text-3xl font-bold text-heading group-hover:text-accent transition-colors">
-                      {name}
+                      <Link href={seriesUrl} className="no-underline hover:underline transition-all">
+                        {title}
+                      </Link>
                     </h3>
-                    <p className="mb-6 text-muted font-serif italic">
-                      {seriesPosts.length} Articles &middot; Growing collection
+                    <p className="mb-6 text-muted font-serif italic line-clamp-2">
+                      {seriesData?.excerpt || "A growing collection of related thoughts."}
                     </p>
                     <div className="flex flex-col gap-2">
                       {seriesPosts.slice(0, 3).map(p => (
