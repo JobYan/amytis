@@ -15,15 +15,15 @@ export default function PostCard({ post }: { post: PostData }) {
   const imageUrl = post.coverImage || PLACEHOLDER_IMAGES[imageIndex];
   
   const isTextCover = imageUrl.startsWith('text:');
-  const coverText = isTextCover ? imageUrl.replace('text:', '') : '';
+  const coverText = isTextCover ? imageUrl.replace('text:', '').trim() : '';
 
   // Deterministic gradient
   const gradients = [
-    'from-emerald-50 to-emerald-200 dark:from-emerald-900/50 dark:to-emerald-800/50 text-emerald-800 dark:text-emerald-100',
-    'from-amber-50 to-amber-200 dark:from-amber-900/50 dark:to-amber-800/50 text-amber-800 dark:text-amber-100',
-    'from-rose-50 to-rose-200 dark:from-rose-900/50 dark:to-rose-800/50 text-rose-800 dark:text-rose-100',
-    'from-sky-50 to-sky-200 dark:from-sky-900/50 dark:to-sky-800/50 text-sky-800 dark:text-sky-100',
-    'from-violet-50 to-violet-200 dark:from-violet-900/50 dark:to-violet-800/50 text-violet-800 dark:text-violet-100',
+    'bg-gradient-to-br from-emerald-50 to-emerald-200 dark:from-emerald-950 dark:to-emerald-900 text-emerald-900 dark:text-emerald-100',
+    'bg-gradient-to-br from-amber-50 to-amber-200 dark:from-amber-950 dark:to-amber-900 text-amber-900 dark:text-amber-100',
+    'bg-gradient-to-br from-rose-50 to-rose-200 dark:from-rose-950 dark:to-rose-900 text-rose-900 dark:text-rose-100',
+    'bg-gradient-to-br from-sky-50 to-sky-200 dark:from-sky-950 dark:to-sky-900 text-sky-900 dark:text-sky-100',
+    'bg-gradient-to-br from-violet-50 to-violet-200 dark:from-violet-950 dark:to-violet-900 text-violet-900 dark:text-violet-100',
   ];
   const gradientClass = gradients[post.slug.length % gradients.length];
 
@@ -32,8 +32,8 @@ export default function PostCard({ post }: { post: PostData }) {
       <div className="flex flex-col h-full overflow-hidden rounded-xl border border-muted/20 bg-background transition-all duration-300 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5">
         <div className="relative h-48 w-full overflow-hidden bg-muted/10">
           {isTextCover ? (
-            <div className={`h-full w-full bg-gradient-to-br ${gradientClass} flex items-center justify-center p-4 transition-transform duration-500 group-hover:scale-105`}>
-              <span className="font-serif text-4xl font-bold tracking-tight opacity-90">
+            <div className={`relative z-10 h-full w-full ${gradientClass} flex items-center justify-center p-4 transition-transform duration-500 group-hover:scale-105`}>
+              <span className="font-serif text-4xl font-bold tracking-tight opacity-90 break-words text-center">
                 {coverText}
               </span>
             </div>
