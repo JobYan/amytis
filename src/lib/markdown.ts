@@ -98,6 +98,12 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
 
   const headings = getHeadings(content);
 
+  let coverImage = data.coverImage;
+  if (coverImage && !coverImage.startsWith('http') && !coverImage.startsWith('/')) {
+    const cleanPath = coverImage.replace(/^\.\//, '');
+    coverImage = `/posts/${slug}/${cleanPath}`;
+  }
+
   return {
     slug,
     title: data.title,
@@ -108,7 +114,7 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
     authors,
     layout: data.layout || 'post',
     series: data.series || seriesName,
-    coverImage: data.coverImage,
+    coverImage,
     draft: data.draft || false,
     latex: data.latex || false,
     toc: data.toc !== false,
