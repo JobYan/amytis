@@ -8,19 +8,32 @@
   - [ ] **Navigation**: Add Breadcrumbs (e.g., `Home > Category > Post`).
   - [ ] **Navigation**: Add Previous/Next post links at the bottom of articles.
 
-- [ ] **Engagement**
-  - [x] **Comments**: Integrate Giscus (GitHub Discussions) for comments.
+## 🌿 Digital Garden Features
+
+- [ ] **Knowledge Graph**:
+  - [ ] **Backlinks**: Show "Pages that link here" at the bottom of posts.
+  - [ ] **Wiki-links**: Support `[[Internal Link]]` syntax.
 
 ## 🔮 Future Enhancements
+
+- [ ] **Performance & App**
+  - [ ] **PWA**: Add `manifest.json` and service workers for offline support.
+  - [ ] **Search Optimization**: Optimize search index for large gardens (e.g. content segmentation).
 
 - [ ] **Visuals**
   - [ ] **Dynamic OG Images**: Generate custom social cards with post title using `@vercel/og` (Satori).
 
+- [ ] **CLI Enhancements**
+  - [ ] **Interactive Mode**: Use prompts to select series, tags, and layouts when creating new posts.
+
+## ✅ Completed
+
+- [x] **Engagement**
+  - [x] **Comments**: Integrate Giscus (GitHub Discussions) for comments.
+
 - [x] **Engineering**
   - [x] **Validation**: Add Zod schema validation for content frontmatter to prevent build errors.
   - [x] **Testing**: Add E2E tests for the new search and navigation features.
-
-## ✅ Completed
 
 - [x] **SEO & Discovery**
   - [x] Generate `sitemap.xml` for search engines.
@@ -32,10 +45,12 @@
   - [x] Add a sticky Table of Contents (TOC) with Unicode/Multilingual support.
   - [x] Add "Reading Time" estimate to post headers.
   - [x] Refine link styling (clean default, underline on hover).
+  - [x] **Hero Section**: Configurable, collapsible welcome mat.
 
 - [x] **Content & Architecture**
-  - [x] **Series**: Support for grouping related posts.
+  - [x] **Series**: Support for grouping related posts (folders & metadata).
   - [x] **Related Posts**: Auto-suggest relevant articles.
+  - [x] **Cover Images**: Support local paths, external URLs, and generated text covers.
   - [x] **Analytics**: Privacy-friendly configuration (Umami/Plausible/Google).
 
 - [x] **Performance**
