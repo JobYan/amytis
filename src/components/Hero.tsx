@@ -50,12 +50,12 @@ export default function Hero({ title, subtitle }: HeroProps) {
   if (!isVisible) {
     return (
       <div 
-        className={`sticky top-16 z-10 w-full cursor-pointer border-b border-muted/10 bg-background/80 backdrop-blur transition-all duration-500 ease-in-out hover:bg-muted/5 ${
+        className={`sticky top-16 z-10 w-full cursor-pointer border-b border-muted/10 bg-background/80 backdrop-blur transition-all duration-500 ease-in-out hover:bg-muted/5 mb-12 ${
           showTrigger ? 'opacity-100 translate-y-0 py-4' : 'opacity-0 -translate-y-full pointer-events-none py-0 border-none'
         }`}
         onClick={handleExpand}
       >
-        <div className="text-center">
+        <div className="max-w-4xl mx-auto px-6 text-center">
           <button 
             className="text-xs font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors"
           >
@@ -67,7 +67,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
   }
 
   return (
-    <header className="relative py-24 md:py-40 flex flex-col items-center justify-center text-center max-w-4xl mx-auto min-h-[60vh]">
+    <header className="relative py-24 md:py-40 flex flex-col items-center justify-center text-center max-w-4xl mx-auto min-h-[60vh] px-6">
       <div className="mb-8 flex items-center justify-center animate-fade-in">
          <span className="h-px w-12 bg-accent/30 mr-4"></span>
          <span className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-accent/80">Digital Garden</span>
