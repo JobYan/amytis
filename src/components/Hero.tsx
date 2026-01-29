@@ -9,37 +9,65 @@ interface HeroProps {
 
 export default function Hero({ title, subtitle }: HeroProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [showTrigger, setShowTrigger] = useState(true);
 
   useEffect(() => {
+    // Check local storage on mount
+    const savedState = localStorage.getItem('amytis-hero-visible');
+    if (savedState === 'false') {
+      setIsVisible(false);
+    }
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (scrollPosition > 200) {
-        setHasScrolled(true);
-      }
       
       // If we've scrolled past the hero significantly, collapse it so it doesn't show on scroll up
       if (scrollPosition > 400 && isVisible) {
         setIsVisible(false);
+        localStorage.setItem('amytis-hero-visible', 'false');
       }
+
+      // Only show the trigger bar when near the top
+      setShowTrigger(scrollPosition < 100);
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isVisible]);
 
+  const handleExpand = () => {
+    setIsVisible(true);
+    localStorage.setItem('amytis-hero-visible', 'true');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCollapse = () => {
+    setIsVisible(false);
+    localStorage.setItem('amytis-hero-visible', 'false');
+  };
+
   if (!isVisible) {
     return (
-      <div className="py-6 text-center border-b border-muted/10 animate-fade-in">
-        <button 
-          onClick={() => {
-            setIsVisible(true);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className="text-xs font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors"
-        >
-          Show Intro ↓
-        </button>
+      <div 
+        className={`sticky top-16 z-10 w-full cursor-pointer border-b border-muted/10 bg-background/80 backdrop-blur transition-all duration-500 ease-in-out hover:bg-muted/5 ${
+          showTrigger ? 'opacity-100 translate-y-0 py-3' : 'opacity-0 -translate-y-full pointer-events-none py-0 border-none'
+        }`}
+        onClick={handleExpand}
+      >
+        <div className="max-w-4xl mx-auto px-6 flex items-center justify-between overflow-hidden">
+          <span className="font-serif text-sm font-medium text-heading truncate pr-4">
+            {title}
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted group-hover:text-accent transition-colors shrink-0">
+              Show Intro
+            </span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
+              <path d="M7 13l5 5 5-5"/>
+            </svg>
+          </div>
+        </div>
       </div>
     );
   }
@@ -62,7 +90,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
 
       {/* Manual Close */}
       <button 
-        onClick={() => setIsVisible(false)}
+        onClick={handleCollapse}
         className="absolute top-4 right-4 text-muted/30 hover:text-accent transition-colors p-2"
         aria-label="Collapse Hero"
       >
