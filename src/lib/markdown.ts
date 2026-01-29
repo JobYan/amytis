@@ -3,10 +3,27 @@ import path from 'path';
 import matter from 'gray-matter';
 import { siteConfig } from '../../site.config';
 import GithubSlugger from 'github-slugger';
+import { z } from 'zod';
 
 const contentDirectory = path.join(process.cwd(), 'content', 'posts');
 const pagesDirectory = path.join(process.cwd(), 'content');
 const seriesDirectory = path.join(process.cwd(), 'content', 'series');
+
+const PostSchema = z.object({
+  title: z.string(),
+  date: z.union([z.string(), z.date()]).transform(val => new Date(val).toISOString().split('T')[0]).optional(),
+  excerpt: z.string().optional(),
+  category: z.string().optional().default('Uncategorized'),
+  tags: z.array(z.string()).optional().default([]),
+  authors: z.array(z.string()).optional(),
+  author: z.string().optional(),
+  layout: z.string().optional().default('post'),
+  series: z.string().optional(),
+  coverImage: z.string().optional(),
+  draft: z.boolean().optional().default(false),
+  latex: z.boolean().optional().default(false),
+  toc: z.boolean().optional().default(true),
+});
 
 export interface Heading {
   id: string;
@@ -36,7 +53,7 @@ export interface PostData {
 function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200;
   // Strip tags and special chars roughly for word count
-  const text = content.replace(/<\/?[^>]+(>|$)/g, "").replace(/[#*`~[\\\]()]/g, "");
+  const text = content.replace(/<\/?[^>]+(>|$)/g, "").replace(/[#*`~[\]()]/g, "");
   const wordCount = text.split(/\s+/).length;
   const minutes = Math.ceil(wordCount / wordsPerMinute);
   return `${minutes} min read`;
@@ -45,7 +62,7 @@ function calculateReadingTime(content: string): string {
 export function generateExcerpt(content: string): string {
   let plain = content.replace(/^#+\s+/gm, '');
   plain = plain.replace(/```[\s\S]*?```/g, '');
-  plain = plain.replace(/!\[[^]]*\]\([^)]+\)/g, '');
+  plain = plain.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
   plain = plain.replace(/\*\[([^\]]+)\*\]\([^)]+\)/g, '$1');
   plain = plain.replace(/(\$\*\*|__|\*|_)/g, '');
   plain = plain.replace(/`[^`]*`/g, '');
@@ -76,8 +93,15 @@ function getHeadings(content: string): Heading[] {
 
 function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: string, seriesName?: string): PostData {
   const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+  const { data: rawData, content } = matter(fileContents);
   
+  const parsed = PostSchema.safeParse(rawData);
+  if (!parsed.success) {
+    console.error(`Invalid frontmatter in ${fullPath}:`, parsed.error.format());
+    throw new Error(`Invalid frontmatter in ${fullPath}`);
+  }
+  const data = parsed.data;
+
   const contentWithoutH1 = content.replace(/^\s*#\s+[^\n]+/, '').trim();
 
   let authors: string[] = [];
@@ -94,7 +118,7 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
   
   let date = data.date;
   if (!date && dateFromFileName) date = dateFromFileName;
-  date = date instanceof Date ? date.toISOString().split('T')[0] : (date || new Date().toISOString().split('T')[0]);
+  if (!date) date = new Date().toISOString().split('T')[0]; // Fallback
 
   const headings = getHeadings(content);
 
@@ -109,15 +133,15 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
     title: data.title,
     date,
     excerpt,
-    category: data.category || 'Uncategorized',
-    tags: data.tags || [],
+    category: data.category,
+    tags: data.tags,
     authors,
-    layout: data.layout || 'post',
+    layout: data.layout,
     series: data.series || seriesName,
     coverImage,
-    draft: data.draft || false,
-    latex: data.latex || false,
-    toc: data.toc !== false,
+    draft: data.draft,
+    latex: data.latex,
+    toc: data.toc,
     readingTime,
     content: contentWithoutH1,
     headings,

@@ -16,9 +16,9 @@
 - [ ] **Visuals**
   - [ ] **Dynamic OG Images**: Generate custom social cards with post title using `@vercel/og` (Satori).
 
-- [ ] **Engineering**
-  - [ ] **Validation**: Add Zod schema validation for content frontmatter to prevent build errors.
-  - [ ] **Testing**: Add E2E tests for the new search and navigation features.
+- [x] **Engineering**
+  - [x] **Validation**: Add Zod schema validation for content frontmatter to prevent build errors.
+  - [x] **Testing**: Add E2E tests for the new search and navigation features.
 
 ## ✅ Completed
 
