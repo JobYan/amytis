@@ -1,5 +1,5 @@
 import { getAllTags, getPostsByTag } from '@/lib/markdown';
-import PostList from '@/components/PostList';
+import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -16,7 +16,6 @@ export default async function TagPage({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
-  // Decode the tag in case it contains spaces or special characters
   const decodedTag = decodeURIComponent(tag);
   const posts = getPostsByTag(decodedTag);
 
@@ -26,29 +25,29 @@ export default async function TagPage({
 
   return (
     <div className="layout-container">
-      <nav className="mb-16">
+      <nav className="mb-12 flex justify-center">
         <Link 
           href="/tags" 
-          className="text-muted hover:text-accent transition-colors duration-200 font-sans text-sm flex items-center gap-1 group"
+          className="text-xs font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline"
         >
-          <span className="group-hover:-translate-x-1 transition-transform">←</span>
-          <span>All Tags</span>
+          ← All Tags
         </Link>
       </nav>
 
-      <header className="mb-16">
-        <h1 className="text-4xl font-serif font-bold text-heading mb-4">
-          <span className="text-muted font-light mr-2">#</span>
-          {decodedTag}
+      <header className="mb-20 text-center">
+        <h1 className="text-4xl md:text-6xl font-serif font-bold text-heading mb-6 capitalize">
+          <span className="text-accent/50 mr-2">#</span>{decodedTag}
         </h1>
         <p className="text-lg text-muted font-serif italic">
-          {posts.length} {posts.length === 1 ? 'entry' : 'entries'} tagged with "{decodedTag}".
+          {posts.length} {posts.length === 1 ? 'post' : 'posts'} found.
         </p>
       </header>
 
-      <main>
-        <PostList posts={posts} />
-      </main>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map(post => (
+          <PostCard key={post.slug} post={post} />
+        ))}
+      </div>
     </div>
   );
 }

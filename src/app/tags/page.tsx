@@ -12,23 +12,25 @@ export default function TagsPage() {
 
   return (
     <div className="layout-container">
-      <header className="mb-16">
-        <h1 className="text-4xl font-serif font-bold text-heading mb-4">Tags</h1>
+      <header className="mb-20 text-center max-w-2xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-heading mb-6">Tags</h1>
         <p className="text-lg text-muted font-serif italic">
-          Topics cultivated in this garden.
+          Explore the topics cultivated in this garden.
         </p>
       </header>
 
       <main>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
           {sortedTags.map((tag) => (
             <Link
               key={tag}
               href={`/tags/${tag}`}
-              className="inline-flex items-center px-4 py-2 rounded-full border border-muted/30 bg-background text-foreground hover:border-accent hover:text-accent transition-colors duration-200 text-sm font-medium"
+              className="group relative inline-flex items-center px-5 py-2.5 rounded-xl border border-muted/20 bg-muted/5 hover:bg-background hover:border-accent hover:shadow-md hover:shadow-accent/5 transition-all duration-300 no-underline"
             >
-              <span>{tag}</span>
-              <span className="ml-2 text-xs text-muted bg-muted/10 px-1.5 py-0.5 rounded-full">
+              <span className="font-sans font-medium text-foreground group-hover:text-accent transition-colors text-sm md:text-base">
+                #{tag}
+              </span>
+              <span className="ml-3 text-xs font-mono text-muted/60 group-hover:text-accent/60">
                 {tags[tag]}
               </span>
             </Link>
