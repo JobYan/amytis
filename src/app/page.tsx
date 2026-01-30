@@ -87,15 +87,13 @@ export default function Home() {
             {posts.map(post => (
               <PostCard key={post.slug} post={post} />
             ))}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="mt-16 flex justify-center">
-              <Pagination currentPage={page} totalPages={totalPages} />
-            </div>
-          )}
-        </section>
-      </div>
-    </div>
-  );
-}
+                  </div>
+          
+                  {totalPages > 1 && (
+                    <Pagination currentPage={page} totalPages={totalPages} />
+                  )}
+                  </section>
+                </div>
+              </div>
+            );
+          }
