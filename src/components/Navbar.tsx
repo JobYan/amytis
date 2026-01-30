@@ -66,7 +66,7 @@ export default function Navbar() {
                   className="text-sm font-sans font-medium text-foreground/80 hover:text-heading no-underline transition-colors duration-200 flex items-center gap-1"
                 >
                   {getLabel(item.name)}
-                  {isExternal && (
+                  {isExternal ? (
                     <svg
                       width="12"
                       height="12"
@@ -80,7 +80,7 @@ export default function Navbar() {
                     >
                       <path d="M7 17l9.2-9.2M17 17V7H7" />
                     </svg>
-                  )}
+                  ) : null}
                 </Component>
               );
             })}

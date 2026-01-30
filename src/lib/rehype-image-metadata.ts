@@ -7,12 +7,33 @@ interface Options {
   slug?: string;
 }
 
+// Pre-compute the public directory path at module load time
+// This helps Turbopack with static analysis
+const PUBLIC_DIR = path.resolve(process.cwd(), 'public');
+const POSTS_DIR = path.resolve(PUBLIC_DIR, 'posts');
+
+function getImageDimensions(imagePath: string): { width: number; height: number } | null {
+  try {
+    if (!fs.existsSync(imagePath)) {
+      return null;
+    }
+    const buffer = fs.readFileSync(imagePath);
+    const dimensions = sizeOf(buffer);
+    if (dimensions && dimensions.width && dimensions.height) {
+      return { width: dimensions.width, height: dimensions.height };
+    }
+  } catch {
+    // Silently fail - image dimensions are optional
+  }
+  return null;
+}
+
 export default function rehypeImageMetadata(options: Options) {
   return (tree: any) => {
     visit(tree, 'element', (node: any) => {
       if (node.tagName === 'img' && node.properties && typeof node.properties.src === 'string') {
         const src = node.properties.src as string;
-        
+
         if (src.startsWith('http')) return;
 
         let imagePath = '';
@@ -21,30 +42,22 @@ export default function rehypeImageMetadata(options: Options) {
         if (src.startsWith('./') && options.slug) {
           // Relative path in post
           // e.g. ./assets/image.svg -> public/posts/slug/assets/image.svg
-          // Remove ./
           const relative = src.substring(2);
-          imagePath = path.join(process.cwd(), 'public', 'posts', options.slug, relative);
+          imagePath = path.resolve(POSTS_DIR, options.slug, relative);
           publicPath = `/posts/${options.slug}/${relative}`;
         } else if (src.startsWith('/')) {
           // Absolute path from public
-          imagePath = path.join(process.cwd(), 'public', src);
+          imagePath = path.resolve(PUBLIC_DIR, src.substring(1));
           publicPath = src;
         } else {
           return;
         }
 
-        try {
-          if (fs.existsSync(imagePath)) {
-            const buffer = fs.readFileSync(imagePath);
-            const dimensions = sizeOf(buffer);
-            if (dimensions) {
-              node.properties.width = dimensions.width;
-              node.properties.height = dimensions.height;
-              node.properties.src = publicPath; // Rewrite to public URL
-            }
-          }
-        } catch (e) {
-          console.warn(`Failed to get dimensions for ${imagePath}`, e);
+        const dimensions = getImageDimensions(imagePath);
+        if (dimensions) {
+          node.properties.width = dimensions.width;
+          node.properties.height = dimensions.height;
+          node.properties.src = publicPath;
         }
       }
     });
