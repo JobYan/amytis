@@ -6,6 +6,7 @@ import Analytics from "@/components/Analytics";
 import { siteConfig } from "../../site.config";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
+import { getAllSeries } from "@/lib/markdown";
 import "./globals.css";
 
 const inter = localFont({
@@ -59,6 +60,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const allSeries = getAllSeries();
+  const seriesList = Object.keys(allSeries).sort().map(slug => ({
+    name: allSeries[slug][0]?.series || slug,
+    slug,
+  }));
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -68,7 +75,7 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <div className="selection:bg-accent/20 selection:text-accent dark:selection:bg-accent/30 dark:selection:text-accent min-h-screen flex flex-col">
-              <Navbar />
+              <Navbar seriesList={seriesList} />
               <main className="pt-16 flex-grow">
                 {children}
               </main>

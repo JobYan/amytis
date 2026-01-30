@@ -5,6 +5,7 @@ export const siteConfig = {
   footerText: `© ${new Date().getFullYear()} Amytis. All rights reserved.`,
   nav: [
     { name: "Garden", url: "/", weight: 1 },
+    { name: "Series", url: "/series", weight: 1.5 },
     { name: "Archive", url: "/archive", weight: 2 },
     { name: "Tags", url: "/tags", weight: 3 },
     { name: "About", url: "/about", weight: 4 },
