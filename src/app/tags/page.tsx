@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function TagsPage() {
   const tags = getAllTags();
-  const sortedTags = Object.keys(tags).sort();
+  const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a]);
 
   return (
     <div className="layout-container">
@@ -28,7 +28,7 @@ export default function TagsPage() {
               className="group relative inline-flex items-center px-5 py-2.5 rounded-xl border border-muted/20 bg-muted/5 hover:bg-background hover:border-accent hover:shadow-md hover:shadow-accent/5 transition-all duration-300 no-underline"
             >
               <span className="font-sans font-medium text-foreground group-hover:text-accent transition-colors text-sm md:text-base">
-                #{tag}
+                {tag}
               </span>
               <span className="ml-3 text-xs font-mono text-muted/60 group-hover:text-accent/60">
                 {tags[tag]}
