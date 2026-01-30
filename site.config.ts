@@ -10,6 +10,12 @@ export const siteConfig = {
     { name: "About", url: "/about", weight: 4 },
     { name: "GitHub", url: "https://github.com/vercel/next.js", weight: 5, external: true },
   ],
+  social: {
+    github: "https://github.com/vercel/next.js",
+    twitter: "https://twitter.com/vercel",
+    linkedin: "https://linkedin.com",
+    email: "mailto:hello@example.com",
+  },
   pagination: {
     pageSize: 10,
   },

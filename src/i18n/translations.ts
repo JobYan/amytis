@@ -21,6 +21,8 @@ export const translations = {
     related_posts: "Related Posts",
     articles: "Articles",
     posts: "Posts",
+    explore: "Explore",
+    connect: "Connect",
   },
   zh: {
     garden: "花园",
@@ -44,6 +46,8 @@ export const translations = {
     related_posts: "相关文章",
     articles: "文章",
     posts: "文章",
+    explore: "探索",
+    connect: "连接",
   },
 };
 
