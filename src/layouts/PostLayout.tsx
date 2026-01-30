@@ -29,16 +29,6 @@ export default function PostLayout({ post, relatedPosts, seriesPosts }: PostLayo
 
   return (
     <div className={`layout-container ${showToc || hasSeries ? 'lg:max-w-[90rem]' : 'lg:max-w-6xl'}`}>
-      <nav className="mb-12">
-        <Link 
-          href="/" 
-          className="text-muted hover:text-accent no-underline transition-colors duration-200 font-sans text-sm flex items-center gap-1 group"
-        >
-          <span className="group-hover:-translate-x-1 transition-transform">←</span>
-          <span>Index</span>
-        </Link>
-      </nav>
-
       <div className={gridClass}>
         {hasSeries && (
           <SeriesSidebar 
