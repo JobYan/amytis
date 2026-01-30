@@ -37,7 +37,7 @@ export default async function PaginatedPage({
   const posts = allPosts.slice(startIndex, endIndex);
 
   return (
-    <div className="layout-container">
+    <div className="layout-container pb-12 md:pb-16">
       <header className="mb-16 text-center">
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-heading mb-4">
           Latest Writing

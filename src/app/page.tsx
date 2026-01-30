@@ -24,7 +24,7 @@ export default function Home() {
         subtitle={siteConfig.hero.subtitle} 
       />
 
-      <div className="layout-container pt-0 md:pt-0">
+      <div className="layout-container pt-0 md:pt-0 pb-12 md:pb-16">
         {/* Series Section (if any) */}
         {seriesNames.length > 0 && (
           <section className="mb-24">
