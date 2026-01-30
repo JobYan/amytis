@@ -62,7 +62,7 @@ export default function ArchivePage() {
             const yearTotal = months.reduce((total, month) => total + groupedPosts[year][month].length, 0);
 
             return (
-              <section key={year} className="relative grid grid-cols-1 md:grid-cols-[120px_1fr] gap-8 md:gap-16">
+              <section key={year} className="relative grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16">
                 {/* Year Marker */}
                 <div className="relative">
                   <div className="sticky top-32 text-left md:text-right">
