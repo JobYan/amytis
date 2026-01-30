@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useLanguage } from './LanguageProvider';
 
 interface PaginationProps {
   currentPage: number;
@@ -6,42 +9,104 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages }: PaginationProps) {
-  const prevPage = currentPage - 1;
-  const nextPage = currentPage + 1;
+  const { t } = useLanguage();
+  
+  if (totalPages <= 1) return null;
+
+  const getPages = () => {
+    const pages: (number | string)[] = [];
+    const delta = 2; // Show 2 pages around current
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        pages.push(i);
+      } else if (
+        (i === currentPage - delta - 1 && i > 1) ||
+        (i === currentPage + delta + 1 && i < totalPages)
+      ) {
+        pages.push('...');
+      }
+    }
+    // Filter duplicates (like multiple ...)
+    return pages.filter((item, index) => pages.indexOf(item) === index);
+  };
+
+  const pages = getPages();
 
   return (
-    <div className="flex justify-between items-center mt-12 border-t border-muted/20 pt-8">
-      {prevPage >= 1 ? (
+    <nav className="flex justify-center items-center gap-2 mt-16 border-t border-muted/10 pt-12" aria-label="Pagination">
+      {/* Previous */}
+      {currentPage > 1 ? (
         <Link
-          href={prevPage === 1 ? '/' : `/page/${prevPage}`}
-          className="text-muted hover:text-accent transition-colors duration-200 font-sans text-sm flex items-center gap-1 group"
+          href={currentPage - 1 === 1 ? '/' : `/page/${currentPage - 1}`}
+          className="p-2 text-muted hover:text-accent transition-colors group no-underline"
+          title={t('prev_page')}
         >
-          <span className="group-hover:-translate-x-1 transition-transform">←</span>
-          <span>Previous</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </Link>
       ) : (
-        <span className="text-muted/40 font-sans text-sm cursor-not-allowed">
-          ← Previous
+        <span className="p-2 text-muted/20 cursor-not-allowed">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </span>
       )}
 
-      <span className="text-sm font-mono text-muted">
-        Page {currentPage} of {totalPages}
-      </span>
+      {/* Page Numbers */}
+      <div className="flex items-center gap-1">
+        {pages.map((page, index) => {
+          if (page === '...') {
+            return (
+              <span key={`dots-${index}`} className="px-3 py-2 text-muted font-mono text-sm select-none">
+                ...
+              </span>
+            );
+          }
 
-      {nextPage <= totalPages ? (
+          const isCurrent = page === currentPage;
+          const href = page === 1 ? '/' : `/page/${page}`;
+
+          return (
+            <Link
+              key={page}
+              href={href}
+              className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg text-sm font-sans font-medium transition-all no-underline ${
+                isCurrent
+                  ? 'bg-accent text-white shadow-md shadow-accent/20'
+                  : 'text-muted hover:bg-muted/10 hover:text-accent'
+              }`}
+              aria-current={isCurrent ? 'page' : undefined}
+            >
+              {page}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Next */}
+      {currentPage < totalPages ? (
         <Link
-          href={`/page/${nextPage}`}
-          className="text-muted hover:text-accent transition-colors duration-200 font-sans text-sm flex items-center gap-1 group"
+          href={`/page/${currentPage + 1}`}
+          className="p-2 text-muted hover:text-accent transition-colors group no-underline"
+          title={t('next_page')}
         >
-          <span>Next</span>
-          <span className="group-hover:translate-x-1 transition-transform">→</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
         </Link>
       ) : (
-        <span className="text-muted/40 font-sans text-sm cursor-not-allowed">
-          Next →
+        <span className="p-2 text-muted/20 cursor-not-allowed">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
         </span>
       )}
-    </div>
+    </nav>
   );
 }
