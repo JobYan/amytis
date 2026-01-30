@@ -18,24 +18,28 @@ export default function PostLayout({ post, relatedPosts, seriesPosts }: PostLayo
   const showToc = siteConfig.toc !== false && post.toc !== false && post.headings && post.headings.length > 0;
   const hasSeries = !!(post.series && seriesPosts && seriesPosts.length > 0);
 
-  let gridClass = 'grid grid-cols-1 gap-12 items-start';
-  if (showToc && hasSeries) {
-    gridClass = 'grid grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_250px] gap-8 items-start';
-  } else if (showToc) {
-    gridClass = 'grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12 items-start';
-  } else if (hasSeries) {
-    gridClass = 'grid grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)] gap-12 items-start';
-  }
+  // Use a consistent 3-column grid layout if there's a sidebar (series) or TOC
+  // This keeps the main content centered in the same way for all posts.
+  const useWideLayout = showToc || hasSeries;
+  
+  const gridClass = useWideLayout 
+    ? 'grid grid-cols-1 lg:grid-cols-[250px_minmax(0,1fr)_250px] gap-8 items-start'
+    : 'max-w-4xl mx-auto';
 
   return (
-    <div className={`layout-container ${showToc || hasSeries ? 'lg:max-w-[90rem]' : 'lg:max-w-6xl'}`}>
+    <div className={`layout-container ${useWideLayout ? 'lg:max-w-[90rem]' : 'lg:max-w-4xl'}`}>
       <div className={gridClass}>
-        {hasSeries && (
-          <SeriesSidebar 
-            seriesName={post.series!} 
-            posts={seriesPosts!} 
-            currentSlug={post.slug} 
-          />
+        {/* Left Column: Series Sidebar or Spacer */}
+        {useWideLayout && (
+          hasSeries ? (
+            <SeriesSidebar 
+              seriesName={post.series!} 
+              posts={seriesPosts!} 
+              currentSlug={post.slug} 
+            />
+          ) : (
+            <div className="hidden lg:block w-64" aria-hidden="true" />
+          )
         )}
 
         <article className="min-w-0">
