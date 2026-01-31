@@ -46,9 +46,12 @@
   - [x] Add "Reading Time" estimate to post headers.
   - [x] Refine link styling (clean default, underline on hover).
   - [x] **Hero Section**: Configurable, collapsible welcome mat.
+  - [x] **Themes**: Configurable color palettes (default, blue, rose, amber).
+  - [x] **i18n**: Client-side language switcher infrastructure.
 
 - [x] **Content & Architecture**
-  - [x] **Series**: Support for grouping related posts (folders & metadata).
+  - [x] **Series**: Robust support for grouping related posts (file-based & folder-based).
+  - [x] **Series**: Manual sorting and cross-referencing capabilities.
   - [x] **Related Posts**: Auto-suggest relevant articles.
   - [x] **Cover Images**: Support local paths, external URLs, and generated text covers.
   - [x] **Analytics**: Privacy-friendly configuration (Umami/Plausible/Google).
@@ -59,3 +62,4 @@
 
 - [x] **CLI Tools**
   - [x] `bun run new` script for scaffolding posts.
+  - [x] `bun run new-series` script for scaffolding series.
