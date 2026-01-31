@@ -18,6 +18,9 @@ export const siteConfig = {
   series: {
     navbar: ["advanced-markdown"], // Slugs of series to show in navbar
   },
+  archive: {
+    showAuthors: true,
+  },
   pagination: {
     pageSize: 10,
   },

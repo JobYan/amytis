@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getAllPosts, PostData } from '@/lib/markdown';
+import { siteConfig } from '../../../site.config';
 
 export const metadata = {
   title: 'Archive | Amytis',
@@ -35,6 +36,7 @@ function groupPostsByDate(posts: PostData[]): GroupedPosts {
 export default function ArchivePage() {
   const posts = getAllPosts();
   const groupedPosts = groupPostsByDate(posts);
+  const showAuthors = siteConfig.archive?.showAuthors;
   
   // Sort years descending to show newest content first
   const years = Object.keys(groupedPosts).sort((a, b) => Number(b) - Number(a));
@@ -88,7 +90,7 @@ export default function ArchivePage() {
                           {month}
                         </h3>
                         
-                        <ul className="space-y-8">
+                        <ul className="space-y-6">
                           {monthPosts.map((post) => {
                             const dateObj = new Date(post.date);
                             const day = dateObj.getDate().toString().padStart(2, '0');
@@ -96,20 +98,20 @@ export default function ArchivePage() {
                             return (
                               <li key={post.slug} className="group">
                                 <Link href={`/posts/${post.slug}`} className="block no-underline">
-                                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
-                                    <span className="font-mono text-base text-muted shrink-0 w-8">
-                                      {day}
-                                    </span>
-                                    <div>
+                                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-6">
+                                    <div className="flex items-baseline gap-6">
+                                      <span className="font-mono text-base text-muted shrink-0 w-8">
+                                        {day}
+                                      </span>
                                       <h4 className="text-2xl font-serif font-medium text-heading group-hover:text-accent transition-colors duration-200">
                                         {post.title}
                                       </h4>
-                                      {post.excerpt && (
-                                        <p className="mt-2 text-base text-muted/80 line-clamp-2 leading-relaxed">
-                                          {post.excerpt}
-                                        </p>
-                                      )}
                                     </div>
+                                    {showAuthors && post.authors.length > 0 && (
+                                      <span className="text-sm font-sans italic text-muted/60 shrink-0 hidden sm:block">
+                                        {post.authors.join(', ')}
+                                      </span>
+                                    )}
                                   </div>
                                 </Link>
                               </li>
