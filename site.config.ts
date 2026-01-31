@@ -9,13 +9,11 @@ export const siteConfig = {
     { name: "Archive", url: "/archive", weight: 2 },
     { name: "Tags", url: "/tags", weight: 3 },
     { name: "About", url: "/about", weight: 4 },
-    { name: "GitHub", url: "https://github.com/vercel/next.js", weight: 5, external: true },
   ],
   social: {
-    github: "https://github.com/vercel/next.js",
-    twitter: "https://twitter.com/vercel",
-    linkedin: "https://linkedin.com",
-    email: "mailto:hello@example.com",
+    github: "https://github.com/hutusi/amytis",
+    twitter: "https://twitter.com/hutusi",
+    email: "mailto:huziyong@gmail.com",
   },
   series: {
     navbar: ["advanced-markdown"], // Slugs of series to show in navbar
@@ -52,7 +50,7 @@ export const siteConfig = {
   comments: {
     provider: null, // 'giscus' | 'disqus' | null
     giscus: {
-      repo: 'vercel/next.js', // username/repo
+      repo: 'hutusi/amytis', // username/repo
       repoId: '',
       category: 'General',
       categoryId: '',
