@@ -3,41 +3,40 @@ import { notFound } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 import Pagination from '@/components/Pagination';
 import { Metadata } from 'next';
-import { siteConfig } from '../../../../site.config';
+import { siteConfig } from '../../../../../../site.config';
 
 const PAGE_SIZE = 1;
 
 export async function generateStaticParams() {
   const allSeries = getAllSeries();
-  return Object.keys(allSeries).map((slug) => ({
-    slug,
-  }));
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const seriesData = getSeriesData(slug);
+  const params: { slug: string; page: string }[] = [];
   
-  if (!seriesData) {
-    // If no explicit series metadata, try to infer from posts or return default
-    const posts = getSeriesPosts(slug);
-    if (posts.length > 0) {
-        return {
-            title: `${slug} - Series | ${siteConfig.title}`,
-            description: `A collection of ${posts.length} posts about ${slug}.`,
+  Object.keys(allSeries).forEach(slug => {
+    const posts = allSeries[slug];
+    const totalPages = Math.ceil(posts.length / PAGE_SIZE);
+    if (totalPages > 1) {
+        for (let i = 2; i <= totalPages; i++) {
+            params.push({ slug, page: i.toString() });
         }
     }
-    return { title: 'Series Not Found' };
-  }
+  });
+  return params;
+}
 
+export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; page: string }> }): Promise<Metadata> {
+  const { slug, page } = await params;
+  const seriesData = getSeriesData(slug);
+  const title = seriesData?.title || slug;
   return {
-    title: `${seriesData.title} - Series | ${siteConfig.title}`,
-    description: seriesData.excerpt,
+    title: `${title} - Page ${page} | ${siteConfig.title}`,
   };
 }
 
-export default async function SeriesPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function SeriesPage({ params }: { params: Promise<{ slug: string; page: string }> }) {
+  const { slug, page: pageStr } = await params;
+  const page = parseInt(pageStr);
   const seriesData = getSeriesData(slug);
   const allPosts = getSeriesPosts(slug);
 
@@ -45,11 +44,13 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
     notFound();
   }
 
-  const page = 1;
   const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
-  const posts = allPosts.slice(0, PAGE_SIZE);
+  
+  const start = (page - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const posts = allPosts.slice(start, end);
 
-  // Fallback title if seriesData not found (e.g. no index.md but posts exist via frontmatter)
+  // Fallback title
   const title = seriesData?.title || slug.charAt(0).toUpperCase() + slug.slice(1);
   const description = seriesData?.excerpt;
   const coverImage = seriesData?.coverImage;
@@ -70,7 +71,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
           Series
         </span>
         <h1 className="page-title">
-          {title}
+          {title} <span className="text-muted/50 font-sans text-2xl ml-2">Page {page}</span>
         </h1>
         {description && (
           <p className="page-subtitle">
@@ -85,9 +86,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <Pagination currentPage={page} totalPages={totalPages} basePath={`/series/${slug}`} />
-      )}
+      <Pagination currentPage={page} totalPages={totalPages} basePath={`/series/${slug}`} />
     </div>
   );
 }

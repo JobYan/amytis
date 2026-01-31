@@ -6,12 +6,20 @@ import { useLanguage } from './LanguageProvider';
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  basePath?: string;
 }
 
-export default function Pagination({ currentPage, totalPages }: PaginationProps) {
+export default function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
   const { t } = useLanguage();
   
   if (totalPages <= 1) return null;
+
+  const getHref = (page: number) => {
+    if (basePath) {
+      return page === 1 ? basePath : `${basePath}/page/${page}`;
+    }
+    return page === 1 ? '/' : `/page/${page}`;
+  };
 
   const getPages = () => {
     const pages: (number | string)[] = [];
@@ -42,7 +50,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {/* Previous */}
       {currentPage > 1 ? (
         <Link
-          href={currentPage - 1 === 1 ? '/' : `/page/${currentPage - 1}`}
+          href={getHref(currentPage - 1)}
           className="p-2 text-muted hover:text-accent transition-colors group no-underline"
           title={t('prev_page')}
         >
@@ -70,7 +78,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
           }
 
           const isCurrent = page === currentPage;
-          const href = page === 1 ? '/' : `/page/${page}`;
+          const href = getHref(page as number);
 
           return (
             <Link
@@ -92,7 +100,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {/* Next */}
       {currentPage < totalPages ? (
         <Link
-          href={`/page/${currentPage + 1}`}
+          href={getHref(currentPage + 1)}
           className="p-2 text-muted hover:text-accent transition-colors group no-underline"
           title={t('next_page')}
         >
