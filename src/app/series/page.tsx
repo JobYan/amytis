@@ -32,16 +32,25 @@ export default function SeriesIndexPage() {
 
           return (
             <Link key={slug} href={`/series/${slug}`} className="group block no-underline">
-              <div className="card-base h-full group">
-                <span className="badge-accent">
-                  {posts.length} Posts
-                </span>
-                <h2 className="mb-4 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors">
-                  {title}
-                </h2>
-                <p className="text-muted font-serif italic leading-relaxed line-clamp-3">
-                  {description}
-                </p>
+              <div className="card-base h-full group flex flex-col p-0 overflow-hidden">
+                <div className="relative h-48 w-full overflow-hidden bg-muted/10">
+                  <img 
+                    src={seriesData?.coverImage || `https://images.unsplash.com/photo-1579783902614-a3fb39279c23?auto=format&fit=crop&w=800&q=80`} 
+                    alt={title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-8">
+                  <span className="badge-accent">
+                    {posts.length} Posts
+                  </span>
+                  <h2 className="mb-4 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors">
+                    {title}
+                  </h2>
+                  <p className="text-muted font-serif italic leading-relaxed line-clamp-3">
+                    {description}
+                  </p>
+                </div>
               </div>
             </Link>
           );

@@ -45,10 +45,20 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
   // Fallback title if seriesData not found (e.g. no index.md but posts exist via frontmatter)
   const title = seriesData?.title || slug.charAt(0).toUpperCase() + slug.slice(1);
   const description = seriesData?.excerpt;
+  const coverImage = seriesData?.coverImage;
 
   return (
     <div className="layout-main">
       <header className="page-header">
+        {coverImage && (
+          <div className="relative w-full h-64 md:h-96 mb-12 rounded-3xl overflow-hidden shadow-xl shadow-accent/5">
+            <img 
+              src={coverImage} 
+              alt={title} 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
         <span className="badge-accent">
           Series
         </span>

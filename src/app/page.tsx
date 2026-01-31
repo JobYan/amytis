@@ -41,33 +41,75 @@ export default function Home() {
                 const title = seriesData?.title || name;
                 const seriesUrl = `/series/${name.toLowerCase().replace(/ /g, '-')}`;
                 
-                              return (
-                                <div key={name} className="card-base group">
-                                  <div className="relative z-10">
-                                    <span className="badge-accent">                        {seriesPosts.length} Articles
-                      </span>
-                      <h3 className="mb-4 font-serif text-3xl font-bold text-heading group-hover:text-accent transition-colors">
-                        <Link href={seriesUrl} className="no-underline hover:underline transition-all">
-                          {title}
-                        </Link>
-                      </h3>
-                      <p className="mb-6 text-muted font-serif italic line-clamp-2">
-                        {seriesData?.excerpt || "A growing collection of related thoughts."}
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {seriesPosts.slice(0, 3).map(p => (
-                          <Link 
-                            key={p.slug} 
-                            href={`/posts/${p.slug}`}
-                            className="text-sm text-foreground/80 hover:text-accent hover:underline transition-colors no-underline truncate"
-                          >
-                            {p.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )
+                                              return (
+                
+                                                <div key={name} className="card-base group flex flex-col p-0 overflow-hidden">
+                
+                                                  <div className="relative h-48 w-full overflow-hidden bg-muted/10">
+                
+                                                    <img 
+                
+                                                      src={seriesData?.coverImage || `https://images.unsplash.com/photo-1579783902614-a3fb39279c23?auto=format&fit=crop&w=800&q=80`} 
+                
+                                                      alt={title}
+                
+                                                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                
+                                                    />
+                
+                                                  </div>
+                
+                                                  <div className="p-8 relative z-10">
+                
+                                                    <span className="badge-accent">
+                
+                                                      {seriesPosts.length} Articles
+                
+                                                    </span>
+                
+                                                    <h3 className="mb-4 font-serif text-3xl font-bold text-heading group-hover:text-accent transition-colors">
+                
+                                                      <Link href={seriesUrl} className="no-underline hover:underline transition-all">
+                
+                                                        {title}
+                
+                                                      </Link>
+                
+                                                    </h3>
+                
+                                                    <p className="mb-6 text-muted font-serif italic line-clamp-2">
+                
+                                                      {seriesData?.excerpt || "A growing collection of related thoughts."}
+                
+                                                    </p>
+                
+                                                    <div className="flex flex-col gap-2">
+                
+                                                      {seriesPosts.slice(0, 3).map(p => (
+                
+                                                        <Link 
+                
+                                                          key={p.slug} 
+                
+                                                          href={`/posts/${p.slug}`}
+                
+                                                          className="text-sm text-foreground/80 hover:text-accent hover:underline transition-colors no-underline truncate"
+                
+                                                        >
+                
+                                                          {p.title}
+                
+                                                        </Link>
+                
+                                                      ))}
+                
+                                                    </div>
+                
+                                                  </div>
+                
+                                                </div>
+                
+                                              )
               })}
             </div>
           </section>

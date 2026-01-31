@@ -80,15 +80,21 @@ function processSeries() {
       const seriesPath = path.join(seriesSrcDir, seriesEntry.name);
       const items = fs.readdirSync(seriesPath, { withFileTypes: true });
 
-      // Identify posts and assets
-      const posts = items.filter(i => i.isFile() && (i.name.endsWith('.md') || i.name.endsWith('.mdx')) && !i.name.startsWith('index.'));
+      // Identify posts and assets (including index for series metadata)
+      const posts = items.filter(i => i.isFile() && (i.name.endsWith('.md') || i.name.endsWith('.mdx')));
       
       // For each post in the series, copy ALL siblings (assets) to its public folder
       posts.forEach(post => {
-        const targetSlug = getSlugFromFilename(post.name);
+        let targetSlug = getSlugFromFilename(post.name);
+        
+        // If it's the index file, the slug is the series folder name
+        if (post.name.startsWith('index.')) {
+            targetSlug = seriesEntry.name;
+        }
+
         const destPostDir = path.join(destDir, targetSlug);
         
-        console.log(`Processing Series Post: ${seriesEntry.name}/${post.name} -> ${targetSlug}`);
+        console.log(`Processing Series Post/Index: ${seriesEntry.name}/${post.name} -> ${targetSlug}`);
         
         // Copy everything from series folder EXCEPT markdown files
         // effectively copying "shared" assets
