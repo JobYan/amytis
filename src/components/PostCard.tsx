@@ -30,10 +30,10 @@ export default function PostCard({ post }: { post: PostData }) {
   return (
     <Link href={`/posts/${post.slug}`} className="group block h-full no-underline">
       <div className="flex flex-col h-full overflow-hidden rounded-xl border border-muted/20 bg-background transition-all duration-300 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5">
-        <div className="relative h-48 w-full overflow-hidden bg-muted/10">
+        <div className="relative h-32 w-full overflow-hidden bg-muted/10">
           {isTextCover ? (
             <div className={`relative z-10 h-full w-full ${gradientClass} flex items-center justify-center p-4 transition-transform duration-500 group-hover:scale-105`}>
-              <span className="font-serif text-4xl font-bold tracking-tight opacity-90 break-words text-center">
+              <span className="font-serif text-3xl font-bold tracking-tight opacity-90 break-words text-center">
                 {coverText}
               </span>
             </div>
@@ -52,12 +52,9 @@ export default function PostCard({ post }: { post: PostData }) {
             <span className="h-1 w-1 rounded-full bg-muted/30" />
             <span className="uppercase tracking-widest">{post.category}</span>
           </div>
-          <h3 className="mb-3 font-serif text-xl font-bold text-heading leading-tight transition-colors group-hover:text-accent">
+          <h3 className="mb-1 font-serif text-xl font-bold text-heading leading-tight transition-colors group-hover:text-accent">
             {post.title}
           </h3>
-          <p className="line-clamp-3 text-sm text-foreground/70 font-serif leading-relaxed">
-            {post.excerpt}
-          </p>
         </div>
       </div>
     </Link>
