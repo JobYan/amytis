@@ -1,6 +1,7 @@
 import { getAllPosts } from '@/lib/markdown';
 import PostCard from '@/components/PostCard';
 import Pagination from '@/components/Pagination';
+import { siteConfig } from '../../../site.config';
 
 export const metadata = {
   title: 'All Posts',
@@ -10,7 +11,7 @@ export const metadata = {
 export default function AllPostsPage() {
   const allPosts = getAllPosts();
   const page = 1;
-  const pageSize = 5; 
+  const pageSize = siteConfig.pagination.posts; 
   const totalPages = Math.ceil(allPosts.length / pageSize);
   const posts = allPosts.slice(0, pageSize);
 

@@ -22,7 +22,8 @@ export const siteConfig = {
     showAuthors: true,
   },
   pagination: {
-    pageSize: 10,
+    posts: 5,
+    series: 1,
   },
   includeDateInUrl: false,
   showFuturePosts: false,

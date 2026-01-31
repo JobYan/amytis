@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
   const allPosts = getAllPosts();
-  const pageSize = siteConfig.pagination.pageSize;
+  const pageSize = siteConfig.pagination.posts;
   const totalPages = Math.ceil(allPosts.length / pageSize);
 
   // Generate params for pages 2 to totalPages
@@ -25,7 +25,7 @@ export default async function PaginatedPage({
   const { page } = await params;
   const currentPage = parseInt(page, 10);
   const allPosts = getAllPosts();
-  const pageSize = siteConfig.pagination.pageSize;
+  const pageSize = siteConfig.pagination.posts;
   const totalPages = Math.ceil(allPosts.length / pageSize);
 
   if (isNaN(currentPage) || currentPage < 2 || currentPage > totalPages) {

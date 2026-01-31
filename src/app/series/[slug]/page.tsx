@@ -5,7 +5,7 @@ import Pagination from '@/components/Pagination';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
 
-const PAGE_SIZE = 1;
+const PAGE_SIZE = siteConfig.pagination.series;
 
 export async function generateStaticParams() {
   const allSeries = getAllSeries();

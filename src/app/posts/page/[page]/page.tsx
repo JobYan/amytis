@@ -1,8 +1,9 @@
 import { getAllPosts } from '@/lib/markdown';
 import PostCard from '@/components/PostCard';
 import Pagination from '@/components/Pagination';
+import { siteConfig } from '../../../../../site.config';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = siteConfig.pagination.posts;
 
 export function generateStaticParams() {
   const allPosts = getAllPosts();

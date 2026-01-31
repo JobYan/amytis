@@ -11,7 +11,7 @@ export default function Home() {
   const featuredPosts = getFeaturedPosts();
   
   const page = 1;
-  const pageSize = 9; 
+  const pageSize = siteConfig.pagination.posts; 
   const totalPages = Math.ceil(allPosts.length / pageSize);
   const posts = allPosts.slice(0, pageSize);
 
