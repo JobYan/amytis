@@ -1,4 +1,4 @@
-import { getAllPosts, getAllSeries, getSeriesData } from '@/lib/markdown';
+import { getAllPosts, getAllSeries, getSeriesData, getFeaturedPosts } from '@/lib/markdown';
 import { siteConfig } from '../../site.config';
 import PostCard from '@/components/PostCard';
 import Pagination from '@/components/Pagination';
@@ -8,6 +8,7 @@ import Hero from '@/components/Hero';
 export default function Home() {
   const allPosts = getAllPosts();
   const allSeries = getAllSeries();
+  const featuredPosts = getFeaturedPosts();
   
   const page = 1;
   const pageSize = 9; 
@@ -25,6 +26,20 @@ export default function Home() {
       />
 
       <div className="layout-main pt-0 md:pt-0">
+        {/* Featured Posts Section (if any) */}
+        {featuredPosts.length > 0 && (
+          <section className="mb-24">
+            <div className="flex items-center justify-between mb-12">
+              <h2 className="text-3xl font-serif font-bold text-heading">Featured Posts</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredPosts.map(post => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Series Section (if any) */}
         {seriesNames.length > 0 && (
           <section className="mb-24">

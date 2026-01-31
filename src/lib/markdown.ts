@@ -22,6 +22,7 @@ const PostSchema = z.object({
   coverImage: z.string().optional(),
   sort: z.enum(['date-desc', 'date-asc', 'manual']).optional().default('date-desc'),
   posts: z.array(z.string()).optional(),
+  featured: z.boolean().optional().default(false),
   draft: z.boolean().optional().default(false),
   latex: z.boolean().optional().default(false),
   toc: z.boolean().optional().default(true),
@@ -46,6 +47,7 @@ export interface PostData {
   coverImage?: string;
   sort?: 'date-desc' | 'date-asc' | 'manual';
   posts?: string[];
+  featured?: boolean;
   draft?: boolean;
   latex?: boolean;
   toc?: boolean;
@@ -145,6 +147,7 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
     coverImage,
     sort: data.sort,
     posts: data.posts,
+    featured: data.featured,
     draft: data.draft,
     latex: data.latex,
     toc: data.toc,
@@ -549,6 +552,25 @@ export function getAllSeries(): Record<string, PostData[]> {
   });
 
   return series;
+}
+
+export function getFeaturedPosts(): PostData[] {
+  const allPosts = getAllPosts();
+  return allPosts.filter(post => post.featured);
+}
+
+export function getFeaturedSeries(): Record<string, PostData[]> {
+  const allSeries = getAllSeries();
+  const featuredSeries: Record<string, PostData[]> = {};
+  
+  Object.keys(allSeries).forEach(slug => {
+    const seriesData = getSeriesData(slug);
+    if (seriesData?.featured) {
+      featuredSeries[slug] = allSeries[slug];
+    }
+  });
+  
+  return featuredSeries;
 }
 
 export function getSeriesData(slug: string): PostData | null {
