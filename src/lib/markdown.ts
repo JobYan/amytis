@@ -53,7 +53,7 @@ export interface PostData {
 function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200;
   // Strip tags and special chars roughly for word count
-  const text = content.replace(/<\/?[^>]+(>|$)/g, "").replace(/[#*`~[\]()]/g, "");
+  const text = content.replace(/<\/?[^>]+(>|$)/g, "").replace(/[#*`~[\\\]()]/g, "");
   const wordCount = text.split(/\s+/).length;
   const minutes = Math.ceil(wordCount / wordsPerMinute);
   return `${minutes} min read`;
@@ -62,7 +62,7 @@ function calculateReadingTime(content: string): string {
 export function generateExcerpt(content: string): string {
   let plain = content.replace(/^#+\s+/gm, '');
   plain = plain.replace(/```[\s\S]*?```/g, '');
-  plain = plain.replace(/!\[[^\]]*\]\([^)]+\)/g, '');
+  plain = plain.replace(/!\[[^]]*\]\([^)]+\)/g, '');
   plain = plain.replace(/\*\[([^\]]+)\*\]\([^)]+\)/g, '$1');
   plain = plain.replace(/(\$\*\*|__|\*|_)/g, '');
   plain = plain.replace(/`[^`]*`/g, '');
@@ -180,35 +180,59 @@ export function getAllPosts(): PostData[] {
       // Handle Series Directory logic
       if (isSeriesDir) {
         if (item.isDirectory()) {
-           const seriesSlug = item.name;
+           const seriesSlug = item.name; // Folder name is series slug
            const seriesPath = path.join(dir, item.name);
            const seriesItems = fs.readdirSync(seriesPath, { withFileTypes: true });
            
            seriesItems.forEach(sItem => {
+             // Skip series metadata file itself
              if (sItem.name === 'index.md' || sItem.name === 'index.mdx') return;
-             if (!sItem.isFile() || (!sItem.name.endsWith('.md') && !sItem.name.endsWith('.mdx'))) return;
 
-             const sRawName = sItem.name.replace(/\.mdx?$/, '');
-             const sMatch = sRawName.match(dateRegex);
-             let sSlug = sRawName;
-             let sDate = undefined;
-             if (sMatch) {
-               sDate = sMatch[1];
-               sSlug = siteConfig.includeDateInUrl ? sRawName : sMatch[2];
+             // 1. File-based posts: series/slug/post.mdx
+             if (sItem.isFile() && (sItem.name.endsWith('.md') || sItem.name.endsWith('.mdx'))) {
+               const sRawName = sItem.name.replace(/\.mdx?$/, '');
+               const sMatch = sRawName.match(dateRegex);
+               let sSlug = sRawName;
+               let sDate = undefined;
+               if (sMatch) {
+                 sDate = sMatch[1];
+                 sSlug = siteConfig.includeDateInUrl ? sRawName : sMatch[2];
+               }
+               
+               allPostsData.push(parseMarkdownFile(
+                 path.join(seriesPath, sItem.name), 
+                 sSlug, 
+                 sDate, 
+                 seriesSlug 
+               ));
+             } 
+             // 2. Folder-based posts: series/slug/post-folder/index.mdx
+             else if (sItem.isDirectory()) {
+                 const postFolder = path.join(seriesPath, sItem.name);
+                 const postIndexMdx = path.join(postFolder, 'index.mdx');
+                 const postIndexMd = path.join(postFolder, 'index.md');
+                 let postFullPath = '';
+                 
+                 if (fs.existsSync(postIndexMdx)) postFullPath = postIndexMdx;
+                 else if (fs.existsSync(postIndexMd)) postFullPath = postIndexMd;
+                 
+                 if (postFullPath) {
+                     // Post Slug is the folder name
+                     const sSlug = sItem.name;
+                     allPostsData.push(parseMarkdownFile(
+                       postFullPath, 
+                       sSlug, 
+                       undefined, 
+                       seriesSlug 
+                     ));
+                 }
              }
-             
-             allPostsData.push(parseMarkdownFile(
-               path.join(seriesPath, sItem.name), 
-               sSlug, 
-               sDate, 
-               seriesSlug 
-             ));
            });
-           return;
+           return; // Processed this series folder
         }
       }
 
-      // Standard Posts logic
+      // Standard Posts logic (outside series)
       if (item.isFile()) {
         if (!item.name.endsWith('.mdx') && !item.name.endsWith('.md')) return;
         fullPath = path.join(dir, item.name);
@@ -269,11 +293,22 @@ function findPostFile(name: string, targetSlug: string): PostData | null {
       const folderPath = path.join(seriesDirectory, folder);
       if (!fs.statSync(folderPath).isDirectory()) continue;
 
+      // Check file-based
       fullPath = path.join(folderPath, `${name}.mdx`);
       if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug, undefined, folder);
 
       fullPath = path.join(folderPath, `${name}.md`);
       if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug, undefined, folder);
+
+      // Check folder-based
+      const postFolderPath = path.join(folderPath, name);
+      if (fs.existsSync(postFolderPath) && fs.statSync(postFolderPath).isDirectory()) {
+         fullPath = path.join(postFolderPath, 'index.mdx');
+         if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug, undefined, folder);
+         
+         fullPath = path.join(postFolderPath, 'index.md');
+         if (fs.existsSync(fullPath)) return parseMarkdownFile(fullPath, targetSlug, undefined, folder);
+      }
     }
   }
 
@@ -311,6 +346,7 @@ export function getPostBySlug(slug: string): PostData | null {
              const sItems = fs.readdirSync(folderPath);
              for (const sItem of sItems) {
                 const sRawName = sItem.replace(/\.mdx?$/, '');
+                // Also check folders
                 const sDateRegex = /^(\d{4}-\d{2}-\d{2})-(.*)$/;
                 const sMatch = sRawName.match(sDateRegex);
                 
