@@ -80,38 +80,45 @@ function processSeries() {
       const seriesPath = path.join(seriesSrcDir, seriesEntry.name);
       const items = fs.readdirSync(seriesPath, { withFileTypes: true });
 
-      // Identify posts and assets (including index for series metadata)
-      const posts = items.filter(i => i.isFile() && (i.name.endsWith('.md') || i.name.endsWith('.mdx')));
-      
-      // For each post in the series, copy ALL siblings (assets) to its public folder
-      posts.forEach(post => {
-        let targetSlug = getSlugFromFilename(post.name);
-        
-        // If it's the index file, the slug is the series folder name
-        if (post.name.startsWith('index.')) {
-            targetSlug = seriesEntry.name;
+      // Process items in series folder
+      items.forEach(item => {
+        let targetSlug = '';
+        let itemSrcPath = '';
+
+        if (item.isFile() && (item.name.endsWith('.md') || item.name.endsWith('.mdx'))) {
+          // File-based post or series index
+          targetSlug = item.name.startsWith('index.') ? seriesEntry.name : getSlugFromFilename(item.name);
+          itemSrcPath = seriesPath; // Assets are siblings in the series folder
+        } else if (item.isDirectory()) {
+          // Check if this is a folder-based post
+          const postIndexMdx = path.join(seriesPath, item.name, 'index.mdx');
+          const postIndexMd = path.join(seriesPath, item.name, 'index.md');
+          if (fs.existsSync(postIndexMdx) || fs.existsSync(postIndexMd)) {
+            targetSlug = item.name;
+            itemSrcPath = path.join(seriesPath, item.name); // Assets are siblings in the post folder
+          }
         }
 
-        const destPostDir = path.join(destDir, targetSlug);
-        
-        console.log(`Processing Series Post/Index: ${seriesEntry.name}/${post.name} -> ${targetSlug}`);
-        
-        // Copy everything from series folder EXCEPT markdown files
-        // effectively copying "shared" assets
-        items.forEach(item => {
-           const srcItemPath = path.join(seriesPath, item.name);
-           const destItemPath = path.join(destPostDir, item.name);
-           
-           if (item.isDirectory()) {
-             copyRecursive(srcItemPath, destItemPath);
-           } else if (!item.name.endsWith('.md') && !item.name.endsWith('.mdx')) {
-             // Copy file
-             if (!fs.existsSync(destPostDir)) {
+        if (targetSlug && itemSrcPath) {
+          const destPostDir = path.join(destDir, targetSlug);
+          console.log(`Processing Series Post Asset Map: ${item.name} -> ${targetSlug}`);
+          
+          // Copy everything from the item source folder EXCEPT markdown files
+          const subItems = fs.readdirSync(itemSrcPath, { withFileTypes: true });
+          subItems.forEach(sub => {
+            const srcPath = path.join(itemSrcPath, sub.name);
+            const destPath = path.join(destPostDir, sub.name);
+            
+            if (sub.isDirectory()) {
+              copyRecursive(srcPath, destPath);
+            } else if (!sub.name.endsWith('.md') && !sub.name.endsWith('.mdx')) {
+              if (!fs.existsSync(destPostDir)) {
                 fs.mkdirSync(destPostDir, { recursive: true });
-             }
-             fs.copyFileSync(srcItemPath, destItemPath);
-           }
-        });
+              }
+              fs.copyFileSync(srcPath, destPath);
+            }
+          });
+        }
       });
     }
   });
