@@ -84,6 +84,8 @@ Key configuration options:
 - `themeColor` - 'default' | 'blue' | 'rose' | 'amber'
 - `hero` - Homepage hero title and subtitle
 - `i18n` - Default locale and supported locales
+- `featured.series` - Scrollable series: `scrollThreshold` (default: 2), `maxItems` (default: 6)
+- `featured.stories` - Scrollable stories: `scrollThreshold` (default: 1), `maxItems` (default: 5)
 - `analytics.provider` - 'umami' | 'plausible' | 'google' | null
 - `comments.provider` - 'giscus' | 'disqus' | null
 
@@ -127,6 +129,7 @@ posts: ["post-1", "post-2"] # Manual post ordering (optional)
 
 - `PostLayout` / `SimpleLayout` - Post page layouts with TOC, series sidebar, comments
 - `Hero` - Configurable homepage hero section
+- `HorizontalScroll` - Scrollable container with navigation arrows for featured content
 - `Search` - Client-side fuzzy search (Cmd/Ctrl+K) using Fuse.js
 - `TableOfContents` - Sticky TOC extracted from H2-H3 headings
 - `SeriesSidebar` - Series navigation with current post indicator
