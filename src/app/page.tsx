@@ -94,14 +94,14 @@ export default function Home() {
 
         {/* Featured Posts Section */}
         {featuredPosts.length > 0 && (
-          <section className="mb-24">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-3xl font-serif font-bold text-heading">Featured Posts</h2>
+          <section className="mb-32">
+            <div className="flex items-center justify-between mb-16">
+              <h2 className="text-3xl font-serif font-bold text-heading">Featured Stories</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-16">
               {featuredPosts.map(post => (
-                <div key={post.slug} className="card-base group flex flex-col p-0 overflow-hidden h-full">
-                  <Link href={`/posts/${post.slug}`} className="relative h-64 w-full overflow-hidden bg-muted/10 block">
+                <div key={post.slug} className="group grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                  <Link href={`/posts/${post.slug}`} className="md:col-span-7 relative aspect-[16/9] overflow-hidden rounded-2xl bg-muted/10 block">
                     <img 
                       src={post.coverImage || `https://images.unsplash.com/photo-1493612276216-9c59019558f7?auto=format&fit=crop&w=800&q=80`} 
                       alt={post.title}
@@ -109,27 +109,26 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
                   </Link>
-                  <div className="p-8 flex flex-col flex-1 relative z-10">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="badge-accent">
-                        {post.category}
-                      </span>
-                      <span className="text-xs font-mono text-muted">
-                        {post.readingTime}
-                      </span>
+                  <div className="md:col-span-5 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 text-xs font-mono text-muted mb-6">
+                      <span className="text-accent uppercase tracking-wider">{post.category}</span>
+                      <span>•</span>
+                      <span>{post.readingTime}</span>
                     </div>
-                    <h3 className="mb-3 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors">
+                    <h3 className="text-3xl md:text-4xl font-serif font-bold text-heading mb-6 leading-tight group-hover:text-accent transition-colors">
                       <Link href={`/posts/${post.slug}`} className="no-underline">
                         {post.title}
                       </Link>
                     </h3>
-                    <p className="mb-6 text-muted font-serif italic line-clamp-3 text-base">
+                    <p className="text-muted text-lg leading-relaxed mb-8 line-clamp-3">
                       {post.excerpt}
                     </p>
-                    <div className="mt-auto pt-6 border-t border-muted/10 flex items-center justify-between">
-                      <span className="text-xs font-mono text-muted">{post.date}</span>
-                      <Link href={`/posts/${post.slug}`} className="text-sm font-bold uppercase tracking-widest text-accent hover:underline">
-                        Read Article
+                    <div className="flex items-center gap-4">
+                      <Link 
+                        href={`/posts/${post.slug}`} 
+                        className="text-sm font-bold uppercase tracking-widest text-heading hover:text-accent underline decoration-1 underline-offset-4 decoration-muted/30 hover:decoration-accent transition-all"
+                      >
+                        Read Story
                       </Link>
                     </div>
                   </div>
@@ -144,18 +143,42 @@ export default function Home() {
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-serif font-bold text-heading">Latest Writing</h2>
             <Link href="/posts" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline">
-              View All →
+              View Archive →
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-col border-t border-muted/10">
             {posts.map(post => (
-              <PostCard key={post.slug} post={post} />
+              <div key={post.slug} className="group py-8 border-b border-muted/10 flex flex-col md:flex-row gap-6 md:items-baseline transition-colors hover:bg-muted/5 -mx-4 px-4 rounded-xl">
+                <div className="md:w-32 shrink-0 font-mono text-sm text-muted/60 pt-1">
+                  {post.date}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-serif font-medium text-heading mb-3 group-hover:text-accent transition-colors">
+                    <Link href={`/posts/${post.slug}`} className="no-underline">
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="text-muted text-sm leading-relaxed line-clamp-2 max-w-3xl">
+                    {post.excerpt}
+                  </p>
+                  <div className="mt-3 flex items-center gap-3 text-xs font-mono text-muted/40">
+                    <span className="uppercase tracking-wider">{post.category}</span>
+                    <span>•</span>
+                    <span>{post.readingTime}</span>
+                  </div>
+                </div>
+                <div className="md:w-24 shrink-0 flex justify-end items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <Link href={`/posts/${post.slug}`} className="text-xs font-bold uppercase tracking-widest text-accent no-underline flex items-center gap-1">
+                    Read <span className="text-lg leading-none">→</span>
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
           
           {totalPages > 1 && (
-            <div className="mt-12 flex justify-center">
+            <div className="mt-16 flex justify-center">
                <Link href="/posts/page/2" className="btn-secondary">
                  Older Posts →
                </Link>
