@@ -143,36 +143,38 @@ export default function Home() {
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-serif font-bold text-heading">Latest Writing</h2>
             <Link href="/posts" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline">
-              View Archive →
+              View All →
             </Link>
           </div>
           
           <div className="flex flex-col border-t border-muted/10">
             {posts.map(post => (
-              <div key={post.slug} className="group py-8 border-b border-muted/10 flex flex-col md:flex-row gap-6 md:items-baseline transition-colors hover:bg-muted/5 -mx-4 px-4 rounded-xl">
-                <div className="md:w-32 shrink-0 font-mono text-sm text-muted/60 pt-1">
-                  {post.date}
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-serif font-medium text-heading mb-3 group-hover:text-accent transition-colors">
+              <div key={post.slug} className="group py-8 border-b border-muted/10 flex flex-col md:flex-row gap-8 items-start transition-colors hover:bg-muted/5 -mx-4 px-4 rounded-xl">
+                <div className="flex-1 flex flex-col h-full">
+                  <div className="font-mono text-xs text-muted/60 mb-2">
+                    {post.date}
+                  </div>
+                  <h3 className="text-xl font-serif font-bold text-heading mb-3 group-hover:text-accent transition-colors leading-tight">
                     <Link href={`/posts/${post.slug}`} className="no-underline">
                       {post.title}
                     </Link>
                   </h3>
-                  <p className="text-muted text-sm leading-relaxed line-clamp-2 max-w-3xl">
+                  <p className="text-muted text-sm leading-relaxed line-clamp-2 mb-4">
                     {post.excerpt}
                   </p>
-                  <div className="mt-3 flex items-center gap-3 text-xs font-mono text-muted/40">
+                  <div className="mt-auto flex items-center gap-3 text-xs font-mono text-muted/40">
                     <span className="uppercase tracking-wider">{post.category}</span>
                     <span>•</span>
                     <span>{post.readingTime}</span>
                   </div>
                 </div>
-                <div className="md:w-24 shrink-0 flex justify-end items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Link href={`/posts/${post.slug}`} className="text-xs font-bold uppercase tracking-widest text-accent no-underline flex items-center gap-1">
-                    Read <span className="text-lg leading-none">→</span>
-                  </Link>
-                </div>
+                <Link href={`/posts/${post.slug}`} className="w-full md:w-48 aspect-[3/2] md:aspect-[4/3] shrink-0 rounded-xl overflow-hidden bg-muted/10 block order-first md:order-last">
+                  <img 
+                    src={post.coverImage || `https://images.unsplash.com/photo-1493612276216-9c59019558f7?auto=format&fit=crop&w=800&q=80`} 
+                    alt={post.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </Link>
               </div>
             ))}
           </div>
