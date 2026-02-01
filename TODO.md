@@ -8,6 +8,30 @@
   - [ ] **Navigation**: Add Breadcrumbs (e.g., `Home > Category > Post`).
   - [ ] **Navigation**: Add Previous/Next post links at the bottom of articles.
 
+## 🎨 UI Polish & Improvements
+
+### High Priority
+- [x] **Animations**: Define missing animation classes (`animate-fade-in`, `animate-slide-up`, `animation-delay-*`) in `globals.css`
+- [x] **Color Contrast**: Improve `--muted` color contrast ratio for WCAG compliance
+- [x] **Focus States**: Add visible focus rings to all interactive elements (links, buttons, cards)
+- [x] **Section Spacing**: Standardize homepage section margins (`mb-24` vs `mb-32`)
+
+### Medium Priority
+- [ ] **Responsive Grids**: Use `lg:` breakpoints consistently for sidebar layouts
+- [ ] **Archive Timeline**: Replace magic number positioning with proper CSS utilities
+- [ ] **Footer Layout**: Change to `lg:grid-cols-4` for better tablet display
+- [ ] **Tag Component**: Create unified tag styling component for consistency
+- [ ] **HorizontalScroll**: Add keyboard navigation (arrow keys) and improve disabled state visibility
+- [ ] **Series Dropdown**: Fix positioning to prevent cutoff on small screens
+
+### Polish & Enhancements
+- [ ] **Thumbnails**: Increase Latest Writing thumbnail size on mobile (`w-24 h-24`)
+- [ ] **Loading States**: Add skeleton loaders for images and cards
+- [ ] **Typography**: Standardize line heights across headings
+- [ ] **Hover Transitions**: Ensure all transitions have consistent duration (`duration-300`)
+- [ ] **Skip Navigation**: Add "Skip to main content" link for accessibility
+- [ ] **Image Alt Text**: Make alt text more descriptive (e.g., `{title} cover image`)
+
 ## 🌿 Digital Garden Features
 
 - [ ] **Knowledge Graph**:

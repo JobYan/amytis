@@ -32,7 +32,7 @@ export default function Home() {
           <section className="mb-24">
             <div className="flex items-center justify-between mb-12">
               <h2 className="text-3xl font-serif font-bold text-heading">Curated Series</h2>
-              <Link href="/series" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline">
+              <Link href="/series" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline focus:outline-none focus:text-accent">
                 All Series →
               </Link>
             </div>
@@ -56,10 +56,10 @@ export default function Home() {
                           : 'flex-1'
                       }`}
                     >
-                      <Link href={seriesUrl} className="relative h-56 w-full overflow-hidden bg-muted/10 block">
+                      <Link href={seriesUrl} className="relative h-56 w-full overflow-hidden bg-muted/10 block focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-inset">
                         <img
                           src={seriesData?.coverImage || `https://images.unsplash.com/photo-1579783902614-a3fb39279c23?auto=format&fit=crop&w=800&q=80`}
-                          alt={title}
+                          alt={`${title} series cover`}
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
@@ -71,7 +71,7 @@ export default function Home() {
                           </span>
                         </div>
                         <h3 className="mb-3 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors">
-                          <Link href={seriesUrl} className="no-underline">
+                          <Link href={seriesUrl} className="no-underline focus:outline-none focus:text-accent">
                             {title}
                           </Link>
                         </h3>
@@ -107,8 +107,8 @@ export default function Home() {
 
         {/* Featured Posts Section */}
         {displayedFeatured.length > 0 && (
-          <section className="mb-32">
-            <div className="flex items-center justify-between mb-16">
+          <section className="mb-24">
+            <div className="flex items-center justify-between mb-12">
               <h2 className="text-3xl font-serif font-bold text-heading">Featured Stories</h2>
             </div>
             <HorizontalScroll
@@ -126,10 +126,10 @@ export default function Home() {
                     }`}
                   >
                     <div className={`grid grid-cols-1 ${displayedFeatured.length > featuredConfig.stories.scrollThreshold ? 'md:grid-cols-1 lg:grid-cols-12' : 'md:grid-cols-12'} gap-8 items-center`}>
-                      <Link href={`/posts/${post.slug}`} className={`${displayedFeatured.length > featuredConfig.stories.scrollThreshold ? 'lg:col-span-7' : 'md:col-span-7'} relative aspect-[16/9] overflow-hidden rounded-2xl bg-muted/10 block`}>
+                      <Link href={`/posts/${post.slug}`} className={`${displayedFeatured.length > featuredConfig.stories.scrollThreshold ? 'lg:col-span-7' : 'md:col-span-7'} relative aspect-[16/9] overflow-hidden rounded-2xl bg-muted/10 block focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-background`}>
                         <img
                           src={post.coverImage || `https://images.unsplash.com/photo-1493612276216-9c59019558f7?auto=format&fit=crop&w=800&q=80`}
-                          alt={post.title}
+                          alt={`${post.title} cover image`}
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
@@ -141,7 +141,7 @@ export default function Home() {
                           <span>{post.readingTime}</span>
                         </div>
                         <h3 className="text-3xl md:text-4xl font-serif font-bold text-heading mb-6 leading-tight group-hover:text-accent transition-colors">
-                          <Link href={`/posts/${post.slug}`} className="no-underline">
+                          <Link href={`/posts/${post.slug}`} className="no-underline focus:outline-none focus:text-accent">
                             {post.title}
                           </Link>
                         </h3>
@@ -164,7 +164,7 @@ export default function Home() {
         <section>
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-serif font-bold text-heading">Latest Writing</h2>
-            <Link href="/posts" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline">
+            <Link href="/posts" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline focus:outline-none focus:text-accent">
               View All →
             </Link>
           </div>
@@ -177,7 +177,7 @@ export default function Home() {
                     {post.date}
                   </div>
                   <h3 className="text-xl font-serif font-bold text-heading mb-3 group-hover:text-accent transition-colors leading-tight">
-                    <Link href={`/posts/${post.slug}`} className="no-underline">
+                    <Link href={`/posts/${post.slug}`} className="no-underline focus:outline-none focus:text-accent">
                       {post.title}
                     </Link>
                   </h3>
@@ -190,10 +190,10 @@ export default function Home() {
                     <span>{post.readingTime}</span>
                   </div>
                 </div>
-                <Link href={`/posts/${post.slug}`} className="w-20 h-20 md:w-32 md:h-24 shrink-0 rounded-lg overflow-hidden bg-muted/10 block ml-4">
-                  <img 
-                    src={post.coverImage || `https://images.unsplash.com/photo-1493612276216-9c59019558f7?auto=format&fit=crop&w=800&q=80`} 
-                    alt={post.title}
+                <Link href={`/posts/${post.slug}`} className="w-24 h-24 md:w-32 md:h-24 shrink-0 rounded-lg overflow-hidden bg-muted/10 block ml-4 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-background">
+                  <img
+                    src={post.coverImage || `https://images.unsplash.com/photo-1493612276216-9c59019558f7?auto=format&fit=crop&w=800&q=80`}
+                    alt={`${post.title} thumbnail`}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </Link>
