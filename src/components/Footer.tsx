@@ -98,7 +98,7 @@ export default function Footer() {
              <span className="opacity-20">|</span>
              <Link href="/privacy" className="hover:text-foreground transition-colors no-underline">Privacy</Link>
              <span className="opacity-20">|</span>
-             <a href="https://github.com/vercel/next.js" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors no-underline">
+             <a href="https://github.com/hutusi/amytis" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors no-underline">
                Built with Amytis
              </a>
           </div>
