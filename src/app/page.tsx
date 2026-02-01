@@ -123,13 +123,8 @@ export default function Home() {
                     <p className="text-muted text-lg leading-relaxed mb-8 line-clamp-3">
                       {post.excerpt}
                     </p>
-                    <div className="flex items-center gap-4">
-                      <Link 
-                        href={`/posts/${post.slug}`} 
-                        className="text-sm font-bold uppercase tracking-widest text-heading hover:text-accent underline decoration-1 underline-offset-4 decoration-muted/30 hover:decoration-accent transition-all"
-                      >
-                        Read Story
-                      </Link>
+                    <div className="flex items-center gap-4 text-xs font-mono text-muted/60">
+                      <span>{post.date}</span>
                     </div>
                   </div>
                 </div>
