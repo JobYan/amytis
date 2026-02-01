@@ -168,7 +168,7 @@ export default function Home() {
                     <span>{post.readingTime}</span>
                   </div>
                 </div>
-                <Link href={`/posts/${post.slug}`} className="w-full md:w-48 aspect-[3/2] md:aspect-[4/3] shrink-0 rounded-xl overflow-hidden bg-muted/10 block order-first md:order-last">
+                <Link href={`/posts/${post.slug}`} className="w-20 h-20 md:w-32 md:h-24 shrink-0 rounded-lg overflow-hidden bg-muted/10 block ml-4">
                   <img 
                     src={post.coverImage || `https://images.unsplash.com/photo-1493612276216-9c59019558f7?auto=format&fit=crop&w=800&q=80`} 
                     alt={post.title}
