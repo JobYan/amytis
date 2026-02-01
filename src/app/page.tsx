@@ -123,7 +123,7 @@ export default function Home() {
                     <p className="text-muted text-lg leading-relaxed mb-8 line-clamp-3">
                       {post.excerpt}
                     </p>
-                    <div className="flex items-center gap-4 text-xs font-mono text-muted/60">
+                    <div className="flex items-center gap-4 text-xs font-mono text-muted/80">
                       <span>{post.date}</span>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export default function Home() {
                   <p className="text-muted text-sm leading-relaxed line-clamp-2 mb-4">
                     {post.excerpt}
                   </p>
-                  <div className="mt-auto flex items-center gap-3 text-xs font-mono text-muted/40">
+                  <div className="mt-auto flex items-center gap-3 text-xs font-mono text-muted/70">
                     <span className="uppercase tracking-wider">{post.category}</span>
                     <span>•</span>
                     <span>{post.readingTime}</span>
