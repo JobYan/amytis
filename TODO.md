@@ -17,12 +17,12 @@
 - [x] **Section Spacing**: Standardize homepage section margins (`mb-24` vs `mb-32`)
 
 ### Medium Priority
-- [ ] **Responsive Grids**: Use `lg:` breakpoints consistently for sidebar layouts
-- [ ] **Archive Timeline**: Replace magic number positioning with proper CSS utilities
-- [ ] **Footer Layout**: Change to `lg:grid-cols-4` for better tablet display
-- [ ] **Tag Component**: Create unified tag styling component for consistency
-- [ ] **HorizontalScroll**: Add keyboard navigation (arrow keys) and improve disabled state visibility
-- [ ] **Series Dropdown**: Fix positioning to prevent cutoff on small screens
+- [x] **Responsive Grids**: Use `lg:` breakpoints consistently for sidebar layouts
+- [x] **Archive Timeline**: Replace magic number positioning with proper CSS utilities
+- [x] **Footer Layout**: Change to `lg:grid-cols-4` for better tablet display
+- [x] **Tag Component**: Create unified tag styling component for consistency
+- [x] **HorizontalScroll**: Add keyboard navigation (arrow keys) and improve disabled state visibility
+- [x] **Series Dropdown**: Fix positioning to prevent cutoff on small screens
 
 ### Polish & Enhancements
 - [ ] **Thumbnails**: Increase Latest Writing thumbnail size on mobile (`w-24 h-24`)
