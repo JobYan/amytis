@@ -48,10 +48,10 @@ export const siteConfig = {
     locales: ['en', 'zh'],
   },
   analytics: {
-    provider: null, // 'umami' | 'plausible' | 'google' | null
+    provider: 'umami', // 'umami' | 'plausible' | 'google' | null
     umami: {
-      websiteId: '', // Your Umami Website ID
-      src: 'https://us.umami.is/script.js', // Default or self-hosted URL
+      websiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || '', // Your Umami Website ID
+      src: process.env.NEXT_PUBLIC_UMAMI_URL || 'https://us.umami.is/script.js', // Default or self-hosted URL
     },
     plausible: {
       domain: '', // Your domain
