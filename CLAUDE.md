@@ -32,6 +32,9 @@ bun run new "Title" --prefix weekly   # Create with prefix (e.g., weekly-title)
 bun run new "Title" --template custom # Use custom template from templates/
 bun run new "Title" --md              # Create as .md instead of .mdx
 bun run new-series "Series Name"      # Create new series with cover image
+bun run new-from-pdf doc.pdf          # Create post from PDF (converts pages to images)
+bun run new-from-pdf doc.pdf --title "My Document"  # With custom title
+bun run new-from-pdf doc.pdf --scale 3.0            # Higher resolution (default: 2.0)
 ```
 
 ## Architecture
