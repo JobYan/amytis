@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import HorizontalScroll from '@/components/HorizontalScroll';
 import CoverImage from '@/components/CoverImage';
 import Pagination from '@/components/Pagination';
+import PostList from '@/components/PostList';
 
 export default function Home() {
   const allPosts = getAllPosts();
@@ -166,48 +167,17 @@ export default function Home() {
 
         {/* Latest Writing Section */}
         <section>
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-serif font-bold text-heading">Latest Writing</h2>
             <Link href="/posts" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline focus:outline-none focus:text-accent">
               View All →
             </Link>
           </div>
-          
-          <div className="flex flex-col border-t border-muted/10">
-            {posts.map(post => (
-              <div key={post.slug} className="group py-8 border-b border-muted/10 flex flex-col md:flex-row gap-8 items-start transition-colors hover:bg-muted/5 -mx-4 px-4 rounded-xl">
-                <div className="flex-1 flex flex-col h-full">
-                  <div className="font-mono text-xs text-muted/60 mb-2">
-                    {post.date}
-                  </div>
-                  <h3 className="text-xl font-serif font-bold text-heading mb-3 group-hover:text-accent transition-colors leading-tight">
-                    <Link href={`/posts/${post.slug}`} className="no-underline focus:outline-none focus:text-accent">
-                      {post.title}
-                    </Link>
-                  </h3>
-                  <p className="text-muted text-sm leading-relaxed line-clamp-2 mb-4">
-                    {post.excerpt}
-                  </p>
-                  <div className="mt-auto flex items-center gap-3 text-xs font-mono text-muted/70">
-                    <span className="uppercase tracking-wider">{post.category}</span>
-                    <span>•</span>
-                    <span>{post.readingTime}</span>
-                  </div>
-                </div>
-                <Link href={`/posts/${post.slug}`} className="w-24 h-24 md:w-32 md:h-24 shrink-0 rounded-lg overflow-hidden bg-muted/10 block ml-4 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-background">
-                  <CoverImage
-                    src={post.coverImage}
-                    title={post.title}
-                    slug={post.slug}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </Link>
-              </div>
-            ))}
-          </div>
-          
+
+          <PostList posts={posts} showTags={false} />
+
           {totalPages > 1 && (
-            <div className="mt-16 flex justify-center">
+            <div className="mt-12 flex justify-center">
                <Pagination currentPage={1} totalPages={totalPages} />
             </div>
           )}

@@ -1,60 +1,104 @@
 import Link from 'next/link';
 import { PostData } from '@/lib/markdown';
-import Tag from '@/components/Tag';
+import CoverImage from './CoverImage';
 
 interface PostListProps {
   posts: PostData[];
+  showExcerpt?: boolean;
+  showTags?: boolean;
 }
 
-export default function PostList({ posts }: PostListProps) {
-  return (
-    <ul className="space-y-16">
-      {posts.map((post) => (
-        <li key={post.slug} className="group">
-          <div className="flex items-center gap-3 text-xs font-sans text-muted mb-3">
-            {post.draft && (
-              <span className="text-[10px] font-bold text-red-500 bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded tracking-wider">
-                DRAFT
-              </span>
-            )}
-            <span className="uppercase tracking-widest font-semibold text-accent/80">
-              {post.category}
-            </span>
-            <span className="w-1 h-1 rounded-full bg-muted/30" />
-            <div className="flex items-center gap-1">
-              {post.authors.map((author, index) => (
-                <span key={author} className="flex items-center">
-                  <Link 
-                    href={`/authors/${encodeURIComponent(author)}`}
-                    className="italic hover:text-heading transition-colors duration-200"
-                  >
-                    {author}
-                  </Link>
-                  {index < post.authors.length - 1 && <span className="mr-1">,</span>}
-                </span>
-              ))}
-            </div>
-            <span className="w-1 h-1 rounded-full bg-muted/30" />
-            <time className="font-mono">{post.date}</time>
-          </div>
-          
-          <Link href={`/posts/${post.slug}`} className="block">
-            <h2 className="text-3xl font-serif font-bold text-heading group-hover:text-accent transition-colors duration-200 mb-3">
-              {post.title}
-            </h2>
-          </Link>
-          
-          <p className="text-foreground/90 leading-relaxed line-clamp-2 mb-4 font-serif">
-            {post.excerpt}
-          </p>
+export default function PostList({
+  posts,
+  showExcerpt = true,
+  showTags = true,
+}: PostListProps) {
+  if (posts.length === 0) {
+    return (
+      <div className="text-center py-12 text-muted">
+        No posts found.
+      </div>
+    );
+  }
 
-          <div className="flex items-center gap-2">
-            {post.tags.slice(0, 3).map(tag => (
-              <Tag key={tag} tag={tag} variant="compact" />
-            ))}
-          </div>
-        </li>
+  return (
+    <div className="space-y-6">
+      {posts.map((post) => (
+        <article key={post.slug} className="group relative">
+          <Link
+            href={`/posts/${post.slug}`}
+            className="block no-underline"
+          >
+            {/* Content card */}
+            <div className="rounded-2xl border border-muted/20 bg-muted/5 overflow-hidden transition-all duration-300 group-hover:border-accent/30 group-hover:bg-muted/10 group-hover:shadow-lg group-hover:shadow-accent/5">
+              <div className="flex flex-col sm:flex-row">
+                {/* Thumbnail */}
+                <div className="relative w-full sm:w-48 h-40 sm:h-auto flex-shrink-0 overflow-hidden bg-muted/10">
+                  <CoverImage
+                    src={post.coverImage}
+                    title={post.title}
+                    slug={post.slug}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Draft badge on mobile */}
+                  {post.draft && (
+                    <div className="absolute top-3 left-3 text-[10px] font-bold text-red-500 bg-red-100 dark:bg-red-900/30 px-2 py-0.5 rounded tracking-wider">
+                      DRAFT
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 p-5 sm:p-6 flex flex-col">
+                  {/* Meta info */}
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-muted mb-3">
+                    <span>{post.date}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="text-accent/80">{post.readingTime}</span>
+                    {post.category && (
+                      <>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="uppercase tracking-wider">{post.category}</span>
+                      </>
+                    )}
+                    {post.draft && (
+                      <span className="hidden sm:inline text-[10px] font-bold text-red-500 bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded tracking-wider">
+                        DRAFT
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-serif text-xl font-bold text-heading mb-2 leading-snug group-hover:text-accent transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+
+                  {/* Excerpt */}
+                  {showExcerpt && post.excerpt && (
+                    <p className="text-sm text-muted leading-relaxed line-clamp-2 mb-4">
+                      {post.excerpt}
+                    </p>
+                  )}
+
+                  {/* Tags */}
+                  {showTags && post.tags && post.tags.length > 0 && (
+                    <div className="mt-auto flex flex-wrap gap-2">
+                      {post.tags.slice(0, 3).map(tag => (
+                        <span
+                          key={tag}
+                          className="text-xs px-2 py-0.5 rounded-full bg-muted/10 text-muted/70"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Link>
+        </article>
       ))}
-    </ul>
+    </div>
   );
 }
