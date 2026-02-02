@@ -35,6 +35,10 @@ bun run new-series "Series Name"      # Create new series with cover image
 bun run new-from-pdf doc.pdf          # Create post from PDF (converts pages to images)
 bun run new-from-pdf doc.pdf --title "My Document"  # With custom title
 bun run new-from-pdf doc.pdf --scale 3.0            # Higher resolution (default: 2.0)
+bun run new-from-images ./photos      # Create post from image folder
+bun run new-from-images ./photos --title "My Gallery"  # With custom title
+bun run new-from-images ./photos --sort date           # Sort by date (default: name)
+bun run new-from-images ./photos --no-copy             # Reference images instead of copying
 ```
 
 ## Architecture

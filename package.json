@@ -11,6 +11,7 @@
     "new": "bun scripts/new-post.ts",
     "new-series": "bun scripts/new-series.ts",
     "new-from-pdf": "bun scripts/new-from-pdf.ts",
+    "new-from-images": "bun scripts/new-from-images.ts",
     "start": "next start",
     "lint": "eslint",
     "test": "bun test",
