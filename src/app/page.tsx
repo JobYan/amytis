@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Hero from '@/components/Hero';
 import HorizontalScroll from '@/components/HorizontalScroll';
 import CoverImage from '@/components/CoverImage';
-import Pagination from '@/components/Pagination';
 import PostList from '@/components/PostList';
 
 export default function Home() {
@@ -13,7 +12,6 @@ export default function Home() {
   const featuredPosts = getFeaturedPosts();
   
   const pageSize = siteConfig.pagination.posts;
-  const totalPages = Math.ceil(allPosts.length / pageSize);
   const posts = allPosts.slice(0, pageSize);
 
   // Get series names with configurable limits
@@ -176,9 +174,24 @@ export default function Home() {
 
           <PostList posts={posts} showTags={false} />
 
-          {totalPages > 1 && (
-            <div className="mt-12 flex justify-center">
-               <Pagination currentPage={1} totalPages={totalPages} />
+          {/* View all link */}
+          {allPosts.length > pageSize && (
+            <div className="mt-12 text-center">
+              <Link
+                href="/posts"
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-muted/20 bg-muted/5 text-sm font-medium text-muted hover:text-accent hover:border-accent/30 hover:bg-accent/5 transition-all duration-300 no-underline"
+              >
+                <span>View all {allPosts.length} posts</span>
+                <svg
+                  className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </div>
           )}
         </section>
