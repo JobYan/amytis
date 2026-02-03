@@ -41,7 +41,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
   const seriesData = getSeriesData(slug);
   const allPosts = getSeriesPosts(slug);
 
-  if (!seriesData && allPosts.length === 0) {
+  if ((!seriesData && allPosts.length === 0) || (process.env.NODE_ENV === 'production' && seriesData?.draft)) {
     notFound();
   }
 

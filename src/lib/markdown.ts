@@ -546,8 +546,12 @@ export function getAllSeries(): Record<string, PostData[]> {
     });
   }
 
-  // 3. Fetch posts for each series using the robust getSeriesPosts logic (handles sorting/manual)
+  // 3. Fetch posts for each series, filtering out draft series in production
   seriesSet.forEach(slug => {
+    const seriesData = getSeriesData(slug);
+    if (process.env.NODE_ENV === 'production' && seriesData?.draft) {
+      return; // Skip draft series in production
+    }
     series[slug] = getSeriesPosts(slug);
   });
 
