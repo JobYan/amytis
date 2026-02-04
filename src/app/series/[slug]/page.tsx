@@ -105,7 +105,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
       </header>
 
       {/* Series Catalog */}
-      <SeriesCatalog posts={posts} />
+      <SeriesCatalog posts={posts} totalPosts={allPosts.length} />
 
       {totalPages > 1 && (
         <div className="mt-12">

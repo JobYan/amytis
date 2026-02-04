@@ -5,9 +5,11 @@ import CoverImage from './CoverImage';
 interface SeriesCatalogProps {
   posts: PostData[];
   startIndex?: number;
+  totalPosts?: number;
 }
 
-export default function SeriesCatalog({ posts, startIndex = 0 }: SeriesCatalogProps) {
+export default function SeriesCatalog({ posts, startIndex = 0, totalPosts }: SeriesCatalogProps) {
+  const total = totalPosts ?? posts.length;
   return (
     <div className="relative">
       {/* Timeline connector line */}
@@ -101,8 +103,8 @@ export default function SeriesCatalog({ posts, startIndex = 0 }: SeriesCatalogPr
       {/* Series progress summary */}
       <div className="mt-10 pt-8 border-t border-muted/10 text-center">
         <p className="text-sm text-muted">
-          <span className="font-mono text-accent">{posts.length}</span>
-          {posts.length === 1 ? ' article' : ' articles'} in this series
+          <span className="font-mono text-accent">{total}</span>
+          {total === 1 ? ' article' : ' articles'} in this series
         </p>
       </div>
     </div>

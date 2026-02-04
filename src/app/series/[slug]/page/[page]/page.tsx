@@ -92,7 +92,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
       </header>
 
       {/* Series Catalog */}
-      <SeriesCatalog posts={posts} startIndex={startIndex} />
+      <SeriesCatalog posts={posts} startIndex={startIndex} totalPosts={allPosts.length} />
 
       <div className="mt-12">
         <Pagination currentPage={page} totalPages={totalPages} basePath={`/series/${slug}`} />
