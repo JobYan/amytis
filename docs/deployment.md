@@ -178,24 +178,26 @@ server {
     gzip_types text/plain text/css application/json application/javascript text/xml image/svg+xml;
     gzip_min_length 256;
 
-    # Cache static assets
+    # Cache static assets (JS/CSS bundles are content-hashed, safe to cache long)
     location /_next/static/ {
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
 
-    location /images/ {
+    # Cache post images and optimized images
+    location /posts/ {
         expires 30d;
         add_header Cache-Control "public";
     }
 
-    # Handle client-side routing (clean URLs)
+    # trailingSlash is true, so pages are slug/index.html
+    # Redirect URLs without trailing slash to add one (except files)
     location / {
-        try_files $uri $uri.html $uri/index.html =404;
+        try_files $uri $uri/ =404;
     }
 
     # Custom 404 page
-    error_page 404 /404.html;
+    error_page 404 /404/index.html;
 }
 ```
 
@@ -216,18 +218,18 @@ yourdomain.com {
     root * /var/www/amytis
     file_server
 
-    # Clean URLs
-    try_files {path} {path}.html {path}/index.html
+    # trailingSlash is true, so pages are slug/index.html
+    try_files {path} {path}/ {path}/index.html
 
     # Cache static assets
     @static path /_next/static/*
     header @static Cache-Control "public, max-age=31536000, immutable"
 
-    @images path /images/*
-    header @images Cache-Control "public, max-age=2592000"
+    @postassets path /posts/*
+    header @postassets Cache-Control "public, max-age=2592000"
 
     handle_errors {
-        rewrite * /404.html
+        rewrite * /404/index.html
         file_server
     }
 }

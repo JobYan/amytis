@@ -3,9 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  // Set to false to trim trailing slashes, true to add them
-  // Keep in sync with site.config.ts trailingSlash if using both
-  trailingSlash: false,
+  // Set to true so pages export as slug/index.html, which coexists with
+  // asset directories (slug/images/) and avoids 403 errors on trailing slash
+  trailingSlash: true,
   output: "export",
   images: {
     loader: "custom",
