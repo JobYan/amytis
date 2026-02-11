@@ -84,7 +84,7 @@ export default function ArchivePage() {
                     return (
                       <div key={month} className="relative">
                         {/* Month Marker - positioned relative to border */}
-                        <div className="absolute -left-[calc(2rem+5px)] md:-left-[calc(3rem+5px)] top-1.5 w-3 h-3 rounded-full bg-background border-2 border-accent/50"></div>
+                        <div className="absolute -left-[calc(2rem+1px)] md:-left-[calc(3rem+1px)] -translate-x-1/2 top-1.5 w-3 h-3 rounded-full bg-background border-2 border-accent/50"></div>
                         
                         <h3 className="text-base font-sans font-bold uppercase tracking-widest text-accent mb-8">
                           {month}
