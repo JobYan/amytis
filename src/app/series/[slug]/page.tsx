@@ -1,4 +1,4 @@
-import { getSeriesData, getSeriesPosts, getAllSeries } from '@/lib/markdown';
+import { getSeriesData, getSeriesPosts, getAllSeries, getSeriesAuthors } from '@/lib/markdown';
 import { notFound } from 'next/navigation';
 import SeriesCatalog from '@/components/SeriesCatalog';
 import Pagination from '@/components/Pagination';
@@ -57,9 +57,12 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
   const title = seriesData?.title || slug.charAt(0).toUpperCase() + slug.slice(1);
   const description = seriesData?.excerpt;
   const coverImage = seriesData?.coverImage;
-  // Use configured series authors, or aggregate top authors from posts
-  let authors = seriesData?.authors || [];
-  if (authors.length === 0 && allPosts.length > 0) {
+  // Use explicitly configured series authors, or aggregate top authors from posts
+  const explicitAuthors = getSeriesAuthors(slug);
+  let authors: string[];
+  if (explicitAuthors) {
+    authors = explicitAuthors;
+  } else if (allPosts.length > 0) {
     const counts = new Map<string, number>();
     for (const post of allPosts) {
       for (const author of post.authors) {
@@ -69,6 +72,8 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
     authors = [...counts.entries()]
       .sort((a, b) => b[1] - a[1])
       .map(([name]) => name);
+  } else {
+    authors = [];
   }
 
   return (

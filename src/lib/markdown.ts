@@ -109,10 +109,34 @@ export function getHeadings(content: string): Heading[] {
   return headings;
 }
 
+/**
+ * Read explicitly configured authors from a series index file's frontmatter.
+ * Returns null if no authors are configured (as opposed to the default fallback).
+ */
+export function getSeriesAuthors(seriesSlug: string): string[] | null {
+  if (!fs.existsSync(seriesDirectory)) return null;
+  const indexPathMdx = path.join(seriesDirectory, seriesSlug, 'index.mdx');
+  const indexPathMd = path.join(seriesDirectory, seriesSlug, 'index.md');
+
+  let fullPath = '';
+  if (fs.existsSync(indexPathMdx)) fullPath = indexPathMdx;
+  else if (fs.existsSync(indexPathMd)) fullPath = indexPathMd;
+  else return null;
+
+  const { data } = matter(fs.readFileSync(fullPath, 'utf8'));
+  if (data.authors && Array.isArray(data.authors) && data.authors.length > 0) {
+    return data.authors;
+  }
+  if (data.author && typeof data.author === 'string') {
+    return [data.author];
+  }
+  return null;
+}
+
 function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: string, seriesName?: string): PostData {
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data: rawData, content } = matter(fileContents);
-  
+
   const parsed = PostSchema.safeParse(rawData);
   if (!parsed.success) {
     console.error(`Invalid frontmatter in ${fullPath}:`, parsed.error.format());
@@ -128,7 +152,17 @@ function parseMarkdownFile(fullPath: string, slug: string, dateFromFileName?: st
   } else if (data.author) {
     authors = [data.author];
   } else {
-    authors = ['Amytis'];
+    // Inherit from series if this post belongs to one
+    const seriesSlug = data.series || seriesName;
+    if (seriesSlug) {
+      const seriesAuthors = getSeriesAuthors(seriesSlug);
+      if (seriesAuthors) {
+        authors = seriesAuthors;
+      }
+    }
+    if (authors.length === 0) {
+      authors = ['Amytis'];
+    }
   }
 
   const excerpt = data.excerpt || generateExcerpt(contentWithoutH1);
