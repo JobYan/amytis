@@ -1,25 +1,38 @@
-import { getAllSeries, getSeriesData } from '@/lib/markdown';
+import { getAllSeries, getSeriesData, getSeriesAuthors } from '@/lib/markdown';
 import Link from 'next/link';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
+import CoverImage from '@/components/CoverImage';
+import { translations, Language } from '@/i18n/translations';
+
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
 
 export const metadata: Metadata = {
-  title: `Series | ${siteConfig.title}`,
+  title: `${t('series')} | ${siteConfig.title}`,
   description: 'Curated collections of articles and thoughts.',
 };
 
 export default function SeriesIndexPage() {
   const allSeries = getAllSeries();
-  const seriesSlugs = Object.keys(allSeries).sort();
+
+  // Sort by most recent post date (active series first)
+  const seriesSlugs = Object.keys(allSeries).sort((a, b) => {
+    const latestA = allSeries[a][0]?.date || '';
+    const latestB = allSeries[b][0]?.date || '';
+    return latestB.localeCompare(latestA);
+  });
+
+  const totalSeries = seriesSlugs.length;
 
   return (
     <div className="layout-main">
       <header className="page-header">
         <h1 className="page-title">
-          All Series
+          {t('all_series')}
         </h1>
         <p className="page-subtitle">
-          Curated collections of knowledge.
+          {totalSeries} {totalSeries === 1 ? 'collection' : 'collections'} of curated knowledge.
         </p>
       </header>
 
@@ -30,23 +43,48 @@ export default function SeriesIndexPage() {
           const title = seriesData?.title || slug.charAt(0).toUpperCase() + slug.slice(1);
           const description = seriesData?.excerpt || `${posts.length} articles in this collection.`;
 
+          // Resolve authors: explicit series authors, then aggregate from posts
+          const explicitAuthors = getSeriesAuthors(slug);
+          let authors: string[];
+          if (explicitAuthors) {
+            authors = explicitAuthors;
+          } else if (posts.length > 0) {
+            const counts = new Map<string, number>();
+            for (const post of posts) {
+              for (const author of post.authors) {
+                counts.set(author, (counts.get(author) || 0) + 1);
+              }
+            }
+            authors = [...counts.entries()]
+              .sort((a, b) => b[1] - a[1])
+              .map(([name]) => name);
+          } else {
+            authors = [];
+          }
+
           return (
             <Link key={slug} href={`/series/${slug}`} className="group block no-underline">
               <div className="card-base h-full group flex flex-col p-0 overflow-hidden">
                 <div className="relative h-48 w-full overflow-hidden bg-muted/10">
-                  <img 
-                    src={seriesData?.coverImage || `https://images.unsplash.com/photo-1579783902614-a3fb39279c23?auto=format&fit=crop&w=800&q=80`} 
-                    alt={title}
+                  <CoverImage
+                    src={seriesData?.coverImage}
+                    title={title}
+                    slug={slug}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-8">
-                  <span className="badge-accent">
-                    {posts.length} Posts
+                  <span className="badge-accent mb-4 inline-block">
+                    {posts.length} {t('posts')}
                   </span>
-                  <h2 className="mb-4 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors">
+                  <h2 className="mb-3 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors">
                     {title}
                   </h2>
+                  {authors.length > 0 && (
+                    <p className="text-xs text-muted mb-3">
+                      {t('written_by')} {authors.slice(0, 3).join(', ')}
+                    </p>
+                  )}
                   <p className="text-muted font-serif italic leading-relaxed line-clamp-3">
                     {description}
                   </p>
