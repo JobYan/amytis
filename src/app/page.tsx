@@ -5,6 +5,22 @@ import Hero from '@/components/Hero';
 import PostList from '@/components/PostList';
 import CuratedSeriesSection, { SeriesItem } from '@/components/CuratedSeriesSection';
 import FeaturedStoriesSection, { FeaturedPost } from '@/components/FeaturedStoriesSection';
+import { Metadata } from 'next';
+import { translations, Language } from '@/i18n/translations';
+
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+
+export const metadata: Metadata = {
+  title: siteConfig.title,
+  description: siteConfig.description,
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    siteName: siteConfig.title,
+    type: 'website',
+  },
+};
 
 export default function Home() {
   const allPosts = getAllPosts();
@@ -19,13 +35,14 @@ export default function Home() {
   // Prepare serializable series data for the client component
   const seriesItems: SeriesItem[] = Object.keys(allSeries).map(name => {
     const seriesPosts = allSeries[name];
-    const seriesData = getSeriesData(name.toLowerCase().replace(/ /g, '-'));
+    const slug = name.toLowerCase().replace(/ /g, '-');
+    const seriesData = getSeriesData(slug);
     return {
       name,
       title: seriesData?.title || name,
       excerpt: seriesData?.excerpt || "A growing collection of related thoughts.",
       coverImage: seriesData?.coverImage,
-      url: `/series/${name.toLowerCase().replace(/ /g, '-')}`,
+      url: `/series/${slug}`,
       postCount: seriesPosts.length,
       topPosts: seriesPosts.slice(0, 3).map(p => ({ slug: p.slug, title: p.title })),
     };
@@ -65,10 +82,7 @@ export default function Home() {
         {/* Latest Writing Section */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-serif font-bold text-heading">Latest Writing</h2>
-            <Link href="/posts" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline focus:outline-none focus:text-accent">
-              View All →
-            </Link>
+            <h2 className="text-3xl font-serif font-bold text-heading">{t('latest_writing')}</h2>
           </div>
 
           <PostList posts={posts} showTags={false} />
@@ -80,7 +94,7 @@ export default function Home() {
                 href="/posts"
                 className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-muted/20 bg-muted/5 text-sm font-medium text-muted hover:text-accent hover:border-accent/30 hover:bg-accent/5 transition-all duration-300 no-underline"
               >
-                <span>View all {allPosts.length} posts</span>
+                <span>{t('view_all')} {allPosts.length} {t('posts')}</span>
                 <svg
                   className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform"
                   fill="none"

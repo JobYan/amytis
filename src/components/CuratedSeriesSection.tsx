@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import HorizontalScroll from './HorizontalScroll';
 import CoverImage from './CoverImage';
+import { useLanguage } from './LanguageProvider';
+import { shuffle } from '@/lib/shuffle';
 
 export interface SeriesItem {
   name: string;
@@ -21,16 +23,8 @@ interface CuratedSeriesSectionProps {
   scrollThreshold: number;
 }
 
-function shuffle<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
 export default function CuratedSeriesSection({ allSeries, maxItems, scrollThreshold }: CuratedSeriesSectionProps) {
+  const { t } = useLanguage();
   const [displayed, setDisplayed] = useState(() => shuffle(allSeries).slice(0, maxItems));
 
   const handleShuffle = useCallback(() => {
@@ -42,7 +36,7 @@ export default function CuratedSeriesSection({ allSeries, maxItems, scrollThresh
   return (
     <section className="mb-24">
       <div className="flex items-center justify-between mb-12">
-        <h2 className="text-3xl font-serif font-bold text-heading">Curated Series</h2>
+        <h2 className="text-3xl font-serif font-bold text-heading">{t('curated_series')}</h2>
         <div className="flex items-center gap-4">
           {allSeries.length > maxItems && (
             <button
@@ -57,7 +51,7 @@ export default function CuratedSeriesSection({ allSeries, maxItems, scrollThresh
             </button>
           )}
           <Link href="/series" className="text-sm font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline hover:underline focus:outline-none focus:text-accent">
-            All Series →
+            {t('all_series')} →
           </Link>
         </div>
       </div>

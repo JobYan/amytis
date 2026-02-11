@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import HorizontalScroll from './HorizontalScroll';
 import CoverImage from './CoverImage';
+import { useLanguage } from './LanguageProvider';
+import { shuffle } from '@/lib/shuffle';
 
 export interface FeaturedPost {
   slug: string;
@@ -21,16 +23,8 @@ interface FeaturedStoriesSectionProps {
   scrollThreshold: number;
 }
 
-function shuffle<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
 export default function FeaturedStoriesSection({ allFeatured, maxItems, scrollThreshold }: FeaturedStoriesSectionProps) {
+  const { t } = useLanguage();
   const [displayed, setDisplayed] = useState(() => shuffle(allFeatured).slice(0, maxItems));
 
   const handleShuffle = useCallback(() => {
@@ -42,7 +36,7 @@ export default function FeaturedStoriesSection({ allFeatured, maxItems, scrollTh
   return (
     <section className="mb-24">
       <div className="flex items-center justify-between mb-12">
-        <h2 className="text-3xl font-serif font-bold text-heading">Featured Stories</h2>
+        <h2 className="text-3xl font-serif font-bold text-heading">{t('featured_stories')}</h2>
         {allFeatured.length > maxItems && (
           <button
             onClick={handleShuffle}
