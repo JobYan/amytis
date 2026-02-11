@@ -27,10 +27,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const ogImage = `/icon.svg`; // Default fallback, ideally replace with a real OG image generator
+  const ogImage = post.coverImage && !post.coverImage.startsWith('text:')
+    ? post.coverImage
+    : `/icon.svg`;
 
   return {
-    title: post.title,
+    title: `${post.title} | ${siteConfig.title}`,
     description: post.excerpt,
     openGraph: {
       title: post.title,

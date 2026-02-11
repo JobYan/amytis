@@ -9,6 +9,10 @@ import Comments from '@/components/Comments';
 import ExternalLinks from '@/components/ExternalLinks';
 import Tag from '@/components/Tag';
 import { siteConfig } from '../../site.config';
+import { translations, Language } from '@/i18n/translations';
+
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
 
 interface PostLayoutProps {
   post: PostData;
@@ -68,7 +72,7 @@ export default function PostLayout({ post, relatedPosts, seriesPosts }: PostLayo
             </h1>
 
             <div className="flex items-center gap-2 mb-8 text-sm font-serif italic text-muted">
-              <span>Written by</span>
+              <span>{t('written_by')}</span>
               <div className="flex items-center gap-1">
                 {post.authors.map((author, index) => (
                   <span key={author} className="flex items-center">
