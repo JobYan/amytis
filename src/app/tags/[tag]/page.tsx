@@ -4,10 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { siteConfig } from '../../../../site.config';
 import { Metadata } from 'next';
-import { translations, Language } from '@/i18n/translations';
-
-const t = (key: keyof typeof translations.en) =>
-  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+import { t } from '@/lib/i18n';
 
 export async function generateStaticParams() {
   const tags = getAllTags();
@@ -15,6 +12,8 @@ export async function generateStaticParams() {
     tag: encodeURIComponent(tag),
   }));
 }
+
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
   const { tag } = await params;

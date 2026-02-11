@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/components/LanguageProvider';
 
 interface HeroProps {
   title: string;
@@ -8,6 +9,7 @@ interface HeroProps {
 }
 
 export default function Hero({ title, subtitle }: HeroProps) {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(true);
   const [showTrigger, setShowTrigger] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -69,7 +71,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
           <button 
             className="text-xs font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors"
           >
-            Show Intro ↓
+            {t('show_intro')} ↓
           </button>
         </div>
       </div>

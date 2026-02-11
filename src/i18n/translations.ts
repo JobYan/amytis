@@ -27,6 +27,8 @@ export const translations = {
     posts: "Posts",
     explore: "Explore",
     connect: "Connect",
+    on_this_page: "On this page",
+    back_to_top: "Back to top",
   },
   zh: {
     garden: "花园",
@@ -56,6 +58,8 @@ export const translations = {
     posts: "文章",
     explore: "探索",
     connect: "连接",
+    on_this_page: "本页目录",
+    back_to_top: "返回顶部",
   },
 };
 

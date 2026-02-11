@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getAllPosts, PostData } from '@/lib/markdown';
 import { siteConfig } from '../../../site.config';
+import { t } from '@/lib/i18n';
 
 export const metadata = {
   title: `Archive | ${siteConfig.title}`,
@@ -48,7 +49,7 @@ export default function ArchivePage() {
   return (
     <div className="layout-main">
       <header className="page-header">
-        <h1 className="page-title">Archive</h1>
+        <h1 className="page-title">{t('archive')}</h1>
         <p className="page-subtitle">
           {totalPosts} posts across {years.length} {years.length === 1 ? 'year' : 'years'}.
         </p>

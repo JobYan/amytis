@@ -4,10 +4,7 @@ import Tag from '@/components/Tag';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
-import { translations, Language } from '@/i18n/translations';
-
-const t = (key: keyof typeof translations.en) =>
-  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+import { t } from '@/lib/i18n';
 
 export async function generateStaticParams() {
   const authors = getAllAuthors();
@@ -15,6 +12,8 @@ export async function generateStaticParams() {
     author: encodeURIComponent(author),
   }));
 }
+
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ author: string }> }): Promise<Metadata> {
   const { author } = await params;

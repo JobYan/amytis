@@ -3,6 +3,7 @@ import { siteConfig } from '../../../../site.config';
 import PostCard from '@/components/PostCard';
 import Pagination from '@/components/Pagination';
 import { notFound } from 'next/navigation';
+import { t } from '@/lib/i18n';
 
 export async function generateStaticParams() {
   const allPosts = getAllPosts();
@@ -16,6 +17,8 @@ export async function generateStaticParams() {
   }
   return params;
 }
+
+export const dynamicParams = false;
 
 export default async function PaginatedPage({
   params,
@@ -40,7 +43,7 @@ export default async function PaginatedPage({
     <div className="layout-main">
       <header className="page-header">
         <h1 className="page-title">
-          Latest Writing
+          {t('latest_writing')}
         </h1>
         <p className="page-subtitle">
           Page {currentPage} of {totalPages}

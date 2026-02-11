@@ -9,10 +9,7 @@ import Comments from '@/components/Comments';
 import ExternalLinks from '@/components/ExternalLinks';
 import Tag from '@/components/Tag';
 import { siteConfig } from '../../site.config';
-import { translations, Language } from '@/i18n/translations';
-
-const t = (key: keyof typeof translations.en) =>
-  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+import { t } from '@/lib/i18n';
 
 interface PostLayoutProps {
   post: PostData;

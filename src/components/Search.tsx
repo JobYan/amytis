@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Fuse from 'fuse.js';
+import { useLanguage } from '@/components/LanguageProvider';
 
 interface SearchResult {
   title: string;
@@ -20,6 +21,7 @@ export default function Search() {
   const [posts, setPosts] = useState<SearchResult[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useLanguage();
 
   // Load search index
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function Search() {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Search posts..."
+                placeholder={t('search_placeholder')}
                 className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -132,7 +134,7 @@ export default function Search() {
             
             {query && results.length === 0 && (
               <div className="p-8 text-center text-muted text-sm">
-                No results found.
+                {t('no_results')}
               </div>
             )}
           </div>

@@ -15,14 +15,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4 group no-underline">
-              <svg 
-                viewBox="0 0 32 32" 
+              <svg
+                viewBox="0 0 32 32"
                 className="w-6 h-6 text-accent group-hover:rotate-12 transition-transform duration-300"
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <path d="M16 4 L7 28" />
                 <path d="M16 4 L25 28" />

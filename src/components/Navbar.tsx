@@ -42,14 +42,15 @@ export default function Navbar({ seriesList = [] }: NavbarProps) {
           href="/" 
           className="flex items-center gap-3 text-xl font-serif font-bold text-heading hover:text-accent transition-colors duration-200"
         >
-          <svg 
-            viewBox="0 0 32 32" 
+          <svg
+            viewBox="0 0 32 32"
             className="w-8 h-8 text-accent"
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
             strokeLinejoin="round"
+            aria-hidden="true"
           >
             <path d="M16 4 L7 28" />
             <path d="M16 4 L25 28" />
@@ -94,7 +95,7 @@ export default function Navbar({ seriesList = [] }: NavbarProps) {
                           href="/series" 
                           className="block px-4 py-2 text-xs font-bold uppercase tracking-widest text-muted hover:text-accent hover:bg-muted/5 rounded-lg transition-colors no-underline"
                         >
-                          View All Series →
+                          {t('all_series')} →
                         </Link>
                       </div>
                     </div>

@@ -2,10 +2,7 @@ import { getAllTags } from '@/lib/markdown';
 import Tag from '@/components/Tag';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
-import { translations, Language } from '@/i18n/translations';
-
-const t = (key: keyof typeof translations.en) =>
-  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+import { t } from '@/lib/i18n';
 
 export const metadata: Metadata = {
   title: `${t('tags')} | ${siteConfig.title}`,

@@ -6,10 +6,7 @@ import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
 import CoverImage from '@/components/CoverImage';
 import Link from 'next/link';
-import { translations, Language } from '@/i18n/translations';
-
-const t = (key: keyof typeof translations.en) =>
-  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+import { t } from '@/lib/i18n';
 
 const PAGE_SIZE = siteConfig.pagination.series;
 
@@ -19,6 +16,8 @@ export async function generateStaticParams() {
     slug: encodeURIComponent(slug),
   }));
 }
+
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug: rawSlug } = await params;

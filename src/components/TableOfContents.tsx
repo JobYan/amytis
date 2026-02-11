@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Heading } from '@/lib/markdown';
+import { useLanguage } from '@/components/LanguageProvider';
 
 export default function TableOfContents({ headings }: { headings: Heading[] }) {
+  const { t } = useLanguage();
   const [activeId, setActiveId] = useState<string>('');
   const [readProgress, setReadProgress] = useState(0);
 
@@ -74,7 +76,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
       {/* Header with progress */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-muted/10">
         <h2 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
-          On this page
+          {t('on_this_page')}
         </h2>
         <span className="text-[10px] font-mono text-muted/60">
           {Math.round(readProgress)}%
@@ -143,7 +145,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
-          Back to top
+          {t('back_to_top')}
         </button>
       )}
     </nav>
