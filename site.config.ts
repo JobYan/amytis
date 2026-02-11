@@ -63,12 +63,12 @@ export const siteConfig = {
     },
   },
   comments: {
-    provider: null, // 'giscus' | 'disqus' | null
+    provider: 'giscus', // 'giscus' | 'disqus' | null
     giscus: {
       repo: 'hutusi/amytis', // username/repo
-      repoId: '',
-      category: 'General',
-      categoryId: '',
+      repoId: 'R_kgDOQ1YSwA',
+      category: 'Announcements',
+      categoryId: 'DIC_kwDOQ1YSwM4C2NmL',
     },
     disqus: {
       shortname: '',
