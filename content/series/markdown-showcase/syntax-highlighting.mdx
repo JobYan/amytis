@@ -1,0 +1,30 @@
+---
+title: "Syntax Highlighting"
+date: "2026-02-15"
+category: "Engineering"
+tags: ["code", "typescript"]
+---
+
+Amytis provides beautiful syntax highlighting for dozens of programming languages.
+
+## TypeScript
+
+```typescript
+interface Post {
+  title: string;
+  date: string;
+  featured: boolean;
+}
+
+function getFeatured(posts: Post[]): Post[] {
+  return posts.filter(p => p.featured);
+}
+```
+
+## CSS / Tailwind
+
+```css
+.card-base {
+  @apply relative overflow-hidden rounded-2xl border border-muted/20 bg-muted/5 p-8 transition-all hover:border-accent/30;
+}
+```
