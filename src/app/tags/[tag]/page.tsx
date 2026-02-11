@@ -2,12 +2,29 @@ import { getAllTags, getPostsByTag } from '@/lib/markdown';
 import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { siteConfig } from '../../../../site.config';
+import { Metadata } from 'next';
+import { translations, Language } from '@/i18n/translations';
+
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
 
 export async function generateStaticParams() {
   const tags = getAllTags();
   return Object.keys(tags).map((tag) => ({
     tag: encodeURIComponent(tag),
   }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
+  const { tag } = await params;
+  const decodedTag = decodeURIComponent(tag);
+  const posts = getPostsByTag(decodedTag);
+
+  return {
+    title: `#${decodedTag} | ${siteConfig.title}`,
+    description: `${posts.length} posts tagged with "${decodedTag}".`,
+  };
 }
 
 export default async function TagPage({
@@ -26,11 +43,11 @@ export default async function TagPage({
   return (
     <div className="layout-container">
       <nav className="mb-12 flex justify-center">
-        <Link 
-          href="/tags" 
+        <Link
+          href="/tags"
           className="text-xs font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline"
         >
-          ← All Tags
+          ← {t('tags')}
         </Link>
       </nav>
 
@@ -39,7 +56,7 @@ export default async function TagPage({
           <span className="text-accent/50 mr-2">#</span>{decodedTag}
         </h1>
         <p className="text-lg text-muted font-serif italic">
-          {posts.length} {posts.length === 1 ? 'post' : 'posts'} found.
+          {posts.length} {posts.length === 1 ? 'post' : t('posts').toLowerCase()} found.
         </p>
       </header>
 

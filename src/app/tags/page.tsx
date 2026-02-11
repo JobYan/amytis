@@ -1,21 +1,28 @@
 import { getAllTags } from '@/lib/markdown';
 import Tag from '@/components/Tag';
+import { siteConfig } from '../../../site.config';
+import { Metadata } from 'next';
+import { translations, Language } from '@/i18n/translations';
 
-export const metadata = {
-  title: 'Tags | Amytis',
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+
+export const metadata: Metadata = {
+  title: `${t('tags')} | ${siteConfig.title}`,
   description: 'Explore topics in the garden.',
 };
 
 export default function TagsPage() {
   const tags = getAllTags();
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a]);
+  const totalTags = sortedTags.length;
 
   return (
     <div className="layout-main">
       <header className="page-header">
-        <h1 className="page-title">Tags</h1>
+        <h1 className="page-title">{t('tags')}</h1>
         <p className="page-subtitle">
-          Explore the topics cultivated in this garden.
+          {totalTags} {totalTags === 1 ? 'topic' : 'topics'} cultivated in this garden.
         </p>
       </header>
 
