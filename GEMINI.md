@@ -1,15 +1,16 @@
 # Amytis Project Context
 
 ## Project Overview
-**Amytis** is a Next.js 15+ application (using App Router) designed as a "digital garden" or blog. It focuses on a clean, nature-inspired aesthetic (using emerald color palettes) and dynamically renders Markdown content.
+**Amytis** is a high-performance, elegant digital garden and blog engine built with **Next.js 16 (App Router)**, **React 19**, and **Tailwind CSS v4**. It is designed for cultivating thoughts and sharing knowledge with a focus on typography, readability, and flexible content organization.
 
 ### Main Technologies
-- **Framework**: [Next.js](https://nextjs.org/) (React 19)
-- **Static Generation**: Uses `generateStaticParams` for pre-rendering blog posts at build time.
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with `@tailwindcss/typography` using the `prose-emerald` theme.
-- **Content Parsing**: `gray-matter` for frontmatter and `react-markdown` for rendering Markdown.
-- **Language**: TypeScript
-- **Runtime/Package Manager**: Bun (indicated by `bun.lock`)
+- **Framework**: Next.js 16 (App Router)
+- **Runtime/Package Manager**: [Bun](https://bun.sh/)
+- **Styling**: Tailwind CSS v4 with CSS-variable based themes and `@tailwindcss/typography`.
+- **Content**: Local MDX/Markdown files with Zod-validated frontmatter.
+- **Search**: Client-side fuzzy search using `Fuse.js`.
+- **Diagrams**: Native support for `Mermaid` diagrams.
+- **Math**: LaTeX support via `rehype-katex`.
 
 ## Building and Running
 
@@ -18,58 +19,60 @@
 bun dev
 ```
 
-### Production Build
+### Production Build (Static Export)
 ```bash
 bun run build
-bun run start
 ```
+Generates a fully optimized static site in the `out/` directory.
 
-### Linting
+### Linting & Testing
 ```bash
 bun run lint
+bun test
 ```
 
 ## Project Structure
-- `src/app/`: Contains the Next.js App Router pages and layouts.
-  - `page.tsx`: Home page listing featured series, featured posts, and latest writing.
-  - `posts/`: All posts list and individual post pages (`[slug]`).
-  - `series/`: Series index and individual series pages (`[slug]`).
-  - `archive/`: Archive timeline page.
-  - `tags/`: Tag cloud and tag-specific pages.
-- `src/lib/`: Shared utilities.
-  - `markdown.ts`: Core logic for reading and parsing markdown files from the `content/` directory.
-- `src/components/`: Reusable UI components (Hero, PostCard, Pagination, SeriesSidebar, etc.).
-- `content/`: The source directory for `.md` files. Each file represents a post.
-- `public/`: Static assets like images and SVGs.
+- `src/app/`: Next.js App Router pages and global styles.
+  - `page.tsx`: Homepage with horizontal scrolling featured sections and latest timeline.
+  - `posts/`: Paginated post listing and individual post routes.
+  - `series/`: Series overview and individual series catalog pages with pagination support.
+  - `archive/`: Timeline-based chronological archive grouped by year and month.
+  - `tags/`: Popularity-sorted tag cloud and filtered listings.
+  - `authors/`: Posts filtered by individual authors.
+  - `search.json/`: Static search index generator.
+- `src/lib/`: Core logic and utilities.
+  - `markdown.ts`: Advanced parsing for posts/series, sorting, and metadata inheritance.
+- `src/components/`: Modular UI blocks (Hero, HorizontalScroll, Search, CoverImage, etc.).
+- `content/`: Source Markdown/MDX content.
+- `scripts/`: CLI tools for content management and asset processing.
 
 ## Key Features & Configuration
 
-### Content Management
-- **Posts**: Added to `content/posts/` (file-based).
-- **Series**: Added to `content/series/` (folder-based or file-based).
-  - Supports `index.mdx` for series metadata.
-  - Supports mixed content (files and folders within series).
-  - Configurable sorting (`date-desc`, `date-asc`, `manual`) via frontmatter.
-  - Cross-referencing posts from other series/folders.
-- **Frontmatter**: Standard fields (`title`, `date`, `excerpt`, `coverImage`, `tags`, `featured`).
+### Advanced Content Management
+- **Posts**: Supports both flat files (`.mdx`) and nested folders (`/index.mdx`) with co-located assets.
+- **Series**: 
+  - Robust grouping with folder-based or file-based entries.
+  - Configurable sorting: `date-asc`, `date-desc`, or `manual` (explicit list of slugs).
+  - Cross-referencing: Series can include posts from the general pool or other folders.
+  - Metadata inheritance: Posts can inherit attributes (like authors) from series index files.
+- **Featured Content**: Mark posts or series as `featured` to display them in prominent homepage sections with horizontal scrolling.
+- **Cover Images**: Support for local paths, external URLs, and dynamic desaturated gradients (`text:Label`).
 
-### Layouts & Navigation
-- **Homepage**: Configurable sections for "Curated Series" and "Featured Stories" with horizontal scrolling triggers.
-- **Pagination**: Configurable page sizes for posts and series lists via `site.config.ts`.
-- **Theme**: Light/Dark mode with configurable color palettes.
-- **i18n**: Client-side language switcher (Infrastructure ready).
+### Refined UX & Design
+- **Homepage**: Elegant layout with "Curated Series" and "Featured Stories" sections using horizontal scroll triggers.
+- **Navigation**: Command+K fuzzy search, sticky TOC with progress tracking, and Series Catalog sidebars.
+- **Theming**: Four built-in palettes (`default`, `blue`, `rose`, `amber`) with high-contrast Dark Mode support.
+- **i18n**: Multi-language infrastructure (en, zh) with footer language switcher.
 
-### Configuration (`site.config.ts`)
-- **Navigation**: customizable menu items.
-- **Featured Content**: `homepage.maxFeaturedSeries`, `homepage.maxFeaturedPosts`.
-- **Pagination**: `pagination.posts`, `pagination.series`.
-- **Socials**: Links for footer/contact.
+### Build Pipeline
+- **Asset Mapping**: `scripts/copy-assets.ts` mirrors content assets to the public folder, handling relative path resolution for both flat and nested structures.
+- **Image Optimization**: Fully integrated with `next-image-export-optimizer` for optimized WebP delivery in static exports.
 
 ## Recent Updates
-- Refined homepage layout with distinct styles for Series (cards), Featured (wide cards/carousel), and Latest (timeline).
-- Implemented robust series support with folder-based posts and asset co-location.
-- Added "All Posts" page with pagination.
-- Added Series pagination.
-- Updated `PostCard` design (removed excerpt, simplified layout).
-- Added `HorizontalScroll` component for homepage sections.
-- Refined Archive and Tags pages for better typography and layout.
+- Upgraded to Next.js 16.1.1 and React 19.
+- Implemented robust series sorting and manual selection logic.
+- Refined homepage layout with horizontal scrolling and distinct card styles for Series, Featured, and Latest sections.
+- Added comprehensive CLI tools for PDF and Image-to-post conversions.
+- Unified simple page layouts (About, Tags, Archive) for visual consistency.
+- Resolved text-rendering cover image display issues using stable utility classes.
+- Added pagination to the main posts list and individual series pages.
