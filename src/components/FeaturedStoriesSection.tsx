@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import HorizontalScroll from './HorizontalScroll';
 import CoverImage from './CoverImage';
@@ -25,7 +25,11 @@ interface FeaturedStoriesSectionProps {
 
 export default function FeaturedStoriesSection({ allFeatured, maxItems, scrollThreshold }: FeaturedStoriesSectionProps) {
   const { t } = useLanguage();
-  const [displayed, setDisplayed] = useState(() => shuffle(allFeatured).slice(0, maxItems));
+  const [displayed, setDisplayed] = useState(() => allFeatured.slice(0, maxItems));
+
+  useEffect(() => {
+    setDisplayed(shuffle(allFeatured).slice(0, maxItems));
+  }, [allFeatured, maxItems]);
 
   const handleShuffle = useCallback(() => {
     setDisplayed(shuffle(allFeatured).slice(0, maxItems));

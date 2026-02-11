@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import HorizontalScroll from './HorizontalScroll';
 import CoverImage from './CoverImage';
@@ -25,7 +25,11 @@ interface CuratedSeriesSectionProps {
 
 export default function CuratedSeriesSection({ allSeries, maxItems, scrollThreshold }: CuratedSeriesSectionProps) {
   const { t } = useLanguage();
-  const [displayed, setDisplayed] = useState(() => shuffle(allSeries).slice(0, maxItems));
+  const [displayed, setDisplayed] = useState(() => allSeries.slice(0, maxItems));
+
+  useEffect(() => {
+    setDisplayed(shuffle(allSeries).slice(0, maxItems));
+  }, [allSeries, maxItems]);
 
   const handleShuffle = useCallback(() => {
     setDisplayed(shuffle(allSeries).slice(0, maxItems));
