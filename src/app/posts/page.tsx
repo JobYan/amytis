@@ -2,25 +2,31 @@ import { getAllPosts } from '@/lib/markdown';
 import PostList from '@/components/PostList';
 import Pagination from '@/components/Pagination';
 import { siteConfig } from '../../../site.config';
+import { Metadata } from 'next';
+import { translations, Language } from '@/i18n/translations';
 
-export const metadata = {
-  title: 'All Posts',
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
+
+const PAGE_SIZE = siteConfig.pagination.posts;
+
+export const metadata: Metadata = {
+  title: `${t('posts')} | ${siteConfig.title}`,
   description: 'Browse the complete archive of articles.',
 };
 
 export default function AllPostsPage() {
   const allPosts = getAllPosts();
   const page = 1;
-  const pageSize = siteConfig.pagination.posts;
-  const totalPages = Math.ceil(allPosts.length / pageSize);
-  const posts = allPosts.slice(0, pageSize);
+  const totalPages = Math.ceil(allPosts.length / PAGE_SIZE);
+  const posts = allPosts.slice(0, PAGE_SIZE);
 
   return (
     <div className="layout-main">
       <header className="page-header mb-12">
-        <h1 className="page-title">All Posts</h1>
+        <h1 className="page-title">{t('posts')}</h1>
         <p className="page-subtitle">
-          A complete collection of {allPosts.length} thoughts and tutorials.
+          {allPosts.length} {t('posts').toLowerCase()} in total.
         </p>
       </header>
 

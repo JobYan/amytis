@@ -2,6 +2,11 @@ import { getAllPosts } from '@/lib/markdown';
 import PostList from '@/components/PostList';
 import Pagination from '@/components/Pagination';
 import { siteConfig } from '../../../../../site.config';
+import { Metadata } from 'next';
+import { translations, Language } from '@/i18n/translations';
+
+const t = (key: keyof typeof translations.en) =>
+  translations[siteConfig.i18n.defaultLocale as Language]?.[key] || translations.en[key];
 
 const PAGE_SIZE = siteConfig.pagination.posts;
 
@@ -19,10 +24,10 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: { params: Promise<{ page: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
   const { page } = await params;
   return {
-    title: `All Posts - Page ${page}`,
+    title: `${t('posts')} - ${page} | ${siteConfig.title}`,
   };
 }
 
@@ -39,9 +44,9 @@ export default async function PostsPage({ params }: { params: Promise<{ page: st
   return (
     <div className="layout-main">
       <header className="page-header mb-12">
-        <h1 className="page-title">All Posts</h1>
+        <h1 className="page-title">{t('posts')}</h1>
         <p className="page-subtitle">
-          Page {page} of {totalPages}
+          {page} / {totalPages}
         </p>
       </header>
 
