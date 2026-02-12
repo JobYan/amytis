@@ -1,6 +1,8 @@
-import { getAllAuthors, getAuthorSlug, getPostsByAuthor, resolveAuthorParam } from '@/lib/markdown';
+import { getAllAuthors, getAuthorSlug, getPostsByAuthor, resolveAuthorParam, getSeriesData, getSeriesPosts } from '@/lib/markdown';
 import PostCard from '@/components/PostCard';
 import Tag from '@/components/Tag';
+import CoverImage from '@/components/CoverImage';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
@@ -77,6 +79,19 @@ export default async function AuthorPage({
   const firstYear = new Date(dates[0]).getFullYear();
   const lastYear = new Date(dates[dates.length - 1]).getFullYear();
 
+  // Collect series the author contributed to
+  const seriesSlugs = [...new Set(
+    posts.filter(p => p.series).map(p => p.series!)
+  )];
+  const authorSeries = seriesSlugs
+    .map(slug => {
+      const data = getSeriesData(slug);
+      const seriesPosts = getSeriesPosts(slug);
+      if (!data) return null;
+      return { slug, data, postCount: seriesPosts.length };
+    })
+    .filter((s): s is NonNullable<typeof s> => s !== null);
+
   // Author initial for avatar
   const initial = resolvedAuthor.charAt(0).toUpperCase();
 
@@ -97,6 +112,12 @@ export default async function AuthorPage({
         {/* Stats */}
         <div className="flex items-center justify-center gap-4 text-sm text-muted font-mono">
           <span>{posts.length} {t('posts').toLowerCase()}</span>
+          {authorSeries.length > 0 && (
+            <>
+              <span className="h-1 w-1 rounded-full bg-muted/30" />
+              <span>{authorSeries.length} {t('series').toLowerCase()}</span>
+            </>
+          )}
           <span className="h-1 w-1 rounded-full bg-muted/30" />
           <span>{categories.size} {t('categories').toLowerCase()}</span>
           {firstYear !== lastYear && (
@@ -116,6 +137,42 @@ export default async function AuthorPage({
           </div>
         )}
       </header>
+
+      {/* Series contributions */}
+      {authorSeries.length > 0 && (
+        <section className="mb-16">
+          <h2 className="text-2xl font-serif font-bold text-heading mb-8">{t('series')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {authorSeries.map(({ slug, data, postCount }) => (
+              <Link key={slug} href={`/series/${slug}`} className="group block no-underline">
+                <div className="card-base h-full group flex flex-col p-0 overflow-hidden">
+                  <div className="relative h-40 w-full overflow-hidden bg-muted/10">
+                    <CoverImage
+                      src={data.coverImage}
+                      title={data.title}
+                      slug={slug}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <span className="badge-accent mb-3 inline-block">
+                      {postCount} {t('parts')}
+                    </span>
+                    <h3 className="mb-2 font-serif text-xl font-bold text-heading group-hover:text-accent transition-colors">
+                      {data.title}
+                    </h3>
+                    {data.excerpt && (
+                      <p className="text-sm text-muted font-serif italic leading-relaxed line-clamp-2">
+                        {data.excerpt}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map(post => (
