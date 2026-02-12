@@ -11,7 +11,7 @@ import { siteConfig } from '../../../site.config';
 export async function generateStaticParams() {
   const pages = getAllPages();
   return pages.map((page) => ({
-    slug: encodeURIComponent(page.slug),
+    slug: page.slug,
   }));
 }
 

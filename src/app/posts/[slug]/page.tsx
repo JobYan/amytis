@@ -12,7 +12,7 @@ import { siteConfig } from '../../../../site.config';
 export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({
-    slug: encodeURIComponent(post.slug),
+    slug: post.slug,
   }));
 }
 

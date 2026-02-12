@@ -19,7 +19,7 @@ export async function generateStaticParams() {
     const totalPages = Math.ceil(posts.length / PAGE_SIZE);
     if (totalPages > 1) {
         for (let i = 2; i <= totalPages; i++) {
-            params.push({ slug: encodeURIComponent(slug), page: i.toString() });
+            params.push({ slug, page: i.toString() });
         }
     }
   });

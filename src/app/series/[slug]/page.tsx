@@ -13,7 +13,7 @@ const PAGE_SIZE = siteConfig.pagination.series;
 export async function generateStaticParams() {
   const allSeries = getAllSeries();
   return Object.keys(allSeries).map((slug) => ({
-    slug: encodeURIComponent(slug),
+    slug,
   }));
 }
 

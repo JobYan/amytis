@@ -9,7 +9,7 @@ import { t } from '@/lib/i18n';
 export async function generateStaticParams() {
   const tags = getAllTags();
   return Object.keys(tags).map((tag) => ({
-    tag: encodeURIComponent(tag),
+    tag,
   }));
 }
 
