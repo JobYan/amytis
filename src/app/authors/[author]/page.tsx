@@ -174,12 +174,10 @@ export default async function AuthorPage({
         </section>
       )}
 
-      {authorSeries.length > 0 && (
-        <hr className="border-muted/20 mb-16" />
-      )}
-
       <section>
-        <h2 className="text-2xl font-serif font-bold text-heading mb-8">{t('posts')}</h2>
+        {authorSeries.length > 0 && (
+          <h2 className="text-2xl font-serif font-bold text-heading mb-8">{t('posts')}</h2>
+        )}
         <PostList posts={posts} />
       </section>
     </div>
