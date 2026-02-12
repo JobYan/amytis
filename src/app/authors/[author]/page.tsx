@@ -74,11 +74,6 @@ export default async function AuthorPage({
     .slice(0, 8)
     .map(([name]) => name);
 
-  // Year range
-  const dates = posts.map(p => p.date).sort();
-  const firstYear = new Date(dates[0]).getFullYear();
-  const lastYear = new Date(dates[dates.length - 1]).getFullYear();
-
   // Collect series the author contributed to
   const seriesSlugs = [...new Set(
     posts.filter(p => p.series).map(p => p.series!)
@@ -120,12 +115,6 @@ export default async function AuthorPage({
           )}
           <span className="h-1 w-1 rounded-full bg-muted/30" />
           <span>{categories.size} {t('categories').toLowerCase()}</span>
-          {firstYear !== lastYear && (
-            <>
-              <span className="h-1 w-1 rounded-full bg-muted/30" />
-              <span>{firstYear} — {lastYear}</span>
-            </>
-          )}
         </div>
 
         {/* Top tags */}
