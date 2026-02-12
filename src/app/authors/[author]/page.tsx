@@ -1,5 +1,5 @@
 import { getAllAuthors, getAuthorSlug, getPostsByAuthor, resolveAuthorParam, getSeriesData, getSeriesPosts } from '@/lib/markdown';
-import PostCard from '@/components/PostCard';
+import PostList from '@/components/PostList';
 import Tag from '@/components/Tag';
 import CoverImage from '@/components/CoverImage';
 import Link from 'next/link';
@@ -174,11 +174,14 @@ export default async function AuthorPage({
         </section>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map(post => (
-          <PostCard key={post.slug} post={post} />
-        ))}
-      </div>
+      {authorSeries.length > 0 && (
+        <hr className="border-muted/20 mb-16" />
+      )}
+
+      <section>
+        <h2 className="text-2xl font-serif font-bold text-heading mb-8">{t('posts')}</h2>
+        <PostList posts={posts} />
+      </section>
     </div>
   );
 }
