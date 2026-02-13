@@ -85,7 +85,7 @@ export default function CuratedSeriesSection({ allSeries, maxItems, scrollThresh
               <div className="p-8 flex flex-col flex-1 relative z-10">
                 <div className="mb-4">
                   <span className="badge-accent">
-                    {series.postCount} Parts
+                    {series.postCount} {t('parts')}
                   </span>
                 </div>
                 <h3 className="mb-3 font-serif text-2xl font-bold text-heading group-hover:text-accent transition-colors line-clamp-2">

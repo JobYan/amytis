@@ -1,12 +1,11 @@
 import { getAllPosts, getAllSeries, getSeriesData, getFeaturedPosts } from '@/lib/markdown';
 import { siteConfig } from '../../site.config';
-import Link from 'next/link';
 import Hero from '@/components/Hero';
-import PostList from '@/components/PostList';
 import CuratedSeriesSection, { SeriesItem } from '@/components/CuratedSeriesSection';
 import FeaturedStoriesSection, { FeaturedPost } from '@/components/FeaturedStoriesSection';
+import LatestWritingSection from '@/components/LatestWritingSection';
 import { Metadata } from 'next';
-import { t, resolveLocale } from '@/lib/i18n';
+import { resolveLocale } from '@/lib/i18n';
 
 export const metadata: Metadata = {
   title: resolveLocale(siteConfig.title),
@@ -77,35 +76,7 @@ export default function Home() {
           scrollThreshold={featuredConfig.stories.scrollThreshold}
         />
 
-        {/* Latest Writing Section */}
-        <section>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-serif font-bold text-heading">{t('latest_writing')}</h2>
-          </div>
-
-          <PostList posts={posts} showTags={false} />
-
-          {/* View all link */}
-          {allPosts.length > pageSize && (
-            <div className="mt-12 text-center">
-              <Link
-                href="/posts"
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-muted/20 bg-muted/5 text-sm font-medium text-muted hover:text-accent hover:border-accent/30 hover:bg-accent/5 transition-all duration-300 no-underline"
-              >
-                <span>{t('view_all')} {allPosts.length} {t('posts')}</span>
-                <svg
-                  className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
-          )}
-        </section>
+        <LatestWritingSection posts={posts} totalCount={allPosts.length} />
       </div>
     </div>
   );
