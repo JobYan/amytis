@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
 import CoverImage from '@/components/CoverImage';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 export const metadata: Metadata = {
-  title: `${t('series')} | ${siteConfig.title}`,
+  title: `${t('series')} | ${resolveLocale(siteConfig.title)}`,
   description: 'Curated collections of articles and thoughts.',
 };
 

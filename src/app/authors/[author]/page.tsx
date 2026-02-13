@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 export async function generateStaticParams() {
   const authors = getAllAuthors();
@@ -30,13 +30,13 @@ export async function generateMetadata({ params }: { params: Promise<{ author: s
 
   if (!resolvedAuthor) {
     return {
-      title: `Author Not Found | ${siteConfig.title}`,
+      title: `Author Not Found | ${resolveLocale(siteConfig.title)}`,
     };
   }
 
   const posts = getPostsByAuthor(resolvedAuthor);
   return {
-    title: `${resolvedAuthor} | ${siteConfig.title}`,
+    title: `${resolvedAuthor} | ${resolveLocale(siteConfig.title)}`,
     description: `${posts.length} ${t('posts').toLowerCase()} ${t('written_by').toLowerCase()} ${resolvedAuthor}.`,
   };
 }

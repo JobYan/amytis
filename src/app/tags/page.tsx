@@ -2,10 +2,10 @@ import { getAllTags } from '@/lib/markdown';
 import Tag from '@/components/Tag';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 export const metadata: Metadata = {
-  title: `${t('tags')} | ${siteConfig.title}`,
+  title: `${t('tags')} | ${resolveLocale(siteConfig.title)}`,
   description: 'Explore topics in the garden.',
 };
 

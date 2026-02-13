@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
 import CoverImage from '@/components/CoverImage';
 import Link from 'next/link';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 const PAGE_SIZE = siteConfig.pagination.series;
 
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const posts = getSeriesPosts(slug);
     if (posts.length > 0) {
         return {
-            title: `${slug} - ${t('series')} | ${siteConfig.title}`,
+            title: `${slug} - ${t('series')} | ${resolveLocale(siteConfig.title)}`,
             description: `${posts.length} ${t('posts').toLowerCase()} - ${slug}.`,
         }
     }
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${seriesData.title} - ${t('series')} | ${siteConfig.title}`,
+    title: `${seriesData.title} - ${t('series')} | ${resolveLocale(siteConfig.title)}`,
     description: seriesData.excerpt,
   };
 }

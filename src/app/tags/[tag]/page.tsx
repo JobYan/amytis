@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { siteConfig } from '../../../../site.config';
 import { Metadata } from 'next';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 export async function generateStaticParams() {
   const tags = getAllTags();
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ tag: stri
   const posts = getPostsByTag(decodedTag);
 
   return {
-    title: `#${decodedTag} | ${siteConfig.title}`,
+    title: `#${decodedTag} | ${resolveLocale(siteConfig.title)}`,
     description: `${posts.length} posts tagged with "${decodedTag}".`,
   };
 }

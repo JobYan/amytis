@@ -6,15 +6,15 @@ import PostList from '@/components/PostList';
 import CuratedSeriesSection, { SeriesItem } from '@/components/CuratedSeriesSection';
 import FeaturedStoriesSection, { FeaturedPost } from '@/components/FeaturedStoriesSection';
 import { Metadata } from 'next';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
-  description: siteConfig.description,
+  title: resolveLocale(siteConfig.title),
+  description: resolveLocale(siteConfig.description),
   openGraph: {
-    title: siteConfig.title,
-    description: siteConfig.description,
-    siteName: siteConfig.title,
+    title: resolveLocale(siteConfig.title),
+    description: resolveLocale(siteConfig.description),
+    siteName: resolveLocale(siteConfig.title),
     type: 'website',
   },
 };

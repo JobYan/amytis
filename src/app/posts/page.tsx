@@ -3,12 +3,12 @@ import PostList from '@/components/PostList';
 import Pagination from '@/components/Pagination';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 const PAGE_SIZE = siteConfig.pagination.posts;
 
 export const metadata: Metadata = {
-  title: `${t('posts')} | ${siteConfig.title}`,
+  title: `${t('posts')} | ${resolveLocale(siteConfig.title)}`,
   description: 'Browse the complete archive of articles.',
 };
 

@@ -1,8 +1,8 @@
 export const siteConfig = {
-  title: "Amytis",
-  description: "A minimalist digital garden for growing thoughts and sharing knowledge.",
+  title: { en: "Amytis", zh: "Amytis" },
+  description: { en: "A minimalist digital garden for growing thoughts and sharing knowledge.", zh: "一个极简的数字花园，用于培育思想和分享知识。" },
   baseUrl: "https://example.com", // Replace with your actual domain
-  footerText: `© ${new Date().getFullYear()} Amytis. All rights reserved.`,
+  footerText: { en: `© ${new Date().getFullYear()} Amytis. All rights reserved.`, zh: `© ${new Date().getFullYear()} Amytis. 保留所有权利。` },
   nav: [
     { name: "Garden", url: "/", weight: 1 },
     { name: "Series", url: "/series", weight: 1.5 },

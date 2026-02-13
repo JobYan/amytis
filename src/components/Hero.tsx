@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/components/LanguageProvider';
+import { resolveLocaleValue } from '@/lib/i18n';
 
 type LocaleValue = string | Record<string, string>;
 
@@ -11,16 +12,11 @@ interface HeroProps {
   subtitle: LocaleValue;
 }
 
-function resolve(value: LocaleValue, lang: string): string {
-  if (typeof value === 'string') return value;
-  return value[lang] || value.en || Object.values(value)[0] || '';
-}
-
 export default function Hero({ tagline, title, subtitle }: HeroProps) {
   const { language } = useLanguage();
-  const resolvedTagline = resolve(tagline, language);
-  const resolvedTitle = resolve(title, language);
-  const resolvedSubtitle = resolve(subtitle, language);
+  const resolvedTagline = resolveLocaleValue(tagline, language);
+  const resolvedTitle = resolveLocaleValue(title, language);
+  const resolvedSubtitle = resolveLocaleValue(subtitle, language);
   const [isVisible, setIsVisible] = useState<boolean | null>(null);
   const visibleRef = useRef(false);
 

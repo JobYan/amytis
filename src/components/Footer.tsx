@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { siteConfig } from '../../site.config';
 import { useLanguage } from '@/components/LanguageProvider';
+import { resolveLocaleValue } from '@/lib/i18n';
 import LanguageSwitch from './LanguageSwitch';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <footer className="bg-muted/5 border-t border-muted/10 mt-auto">
@@ -30,10 +31,10 @@ export default function Footer() {
                 <path d="M11.5 18 H 20.5" />
                 <path d="M20.5 18 Q 26 14 26 8 Q 23 12 20.5 18" fill="currentColor" stroke="none" />
               </svg>
-              <span className="font-serif font-bold text-lg text-heading">{siteConfig.title}</span>
+              <span className="font-serif font-bold text-lg text-heading">{resolveLocaleValue(siteConfig.title, language)}</span>
             </Link>
             <p className="text-sm text-muted leading-relaxed max-w-sm">
-              {siteConfig.description}
+              {resolveLocaleValue(siteConfig.description, language)}
             </p>
           </div>
           
@@ -93,7 +94,7 @@ export default function Footer() {
         
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-muted/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted">
-          <span>{siteConfig.footerText}</span>
+          <span>{resolveLocaleValue(siteConfig.footerText, language)}</span>
           <div className="flex items-center gap-6">
              <LanguageSwitch />
              <span className="opacity-20">|</span>

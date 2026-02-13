@@ -4,6 +4,7 @@ import PostLayout from '@/layouts/PostLayout';
 import SimpleLayout from '@/layouts/SimpleLayout';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
+import { resolveLocale } from '@/lib/i18n';
 
 function safeDecodeParam(param: string): string {
   try {
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     : `/icon.svg`;
 
   return {
-    title: `${post.title} | ${siteConfig.title}`,
+    title: `${post.title} | ${resolveLocale(siteConfig.title)}`,
     description: post.excerpt,
     openGraph: {
       title: post.title,
@@ -72,7 +73,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
           alt: post.title,
         },
       ],
-      siteName: siteConfig.title,
+      siteName: resolveLocale(siteConfig.title),
     },
     twitter: {
       card: 'summary_large_image',

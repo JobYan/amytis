@@ -3,7 +3,7 @@ import PostList from '@/components/PostList';
 import Pagination from '@/components/Pagination';
 import { siteConfig } from '../../../../../site.config';
 import { Metadata } from 'next';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 const PAGE_SIZE = siteConfig.pagination.posts;
 
@@ -24,7 +24,7 @@ export const dynamicParams = false;
 export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
   const { page } = await params;
   return {
-    title: `${t('posts')} - ${page} | ${siteConfig.title}`,
+    title: `${t('posts')} - ${page} | ${resolveLocale(siteConfig.title)}`,
   };
 }
 

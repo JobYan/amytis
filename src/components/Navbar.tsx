@@ -5,6 +5,7 @@ import { siteConfig } from '../../site.config';
 import ThemeToggle from './ThemeToggle';
 import Search from '@/components/Search';
 import { useLanguage } from '@/components/LanguageProvider';
+import { resolveLocaleValue } from '@/lib/i18n';
 
 interface SeriesItem {
   name: string;
@@ -24,7 +25,7 @@ interface NavbarProps {
  * - Integrated ThemeToggle and LanguageSwitch.
  */
 export default function Navbar({ seriesList = [] }: NavbarProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navItems = [...siteConfig.nav].sort((a, b) => a.weight - b.weight);
 
   const getLabel = (name: string): string => {
@@ -57,7 +58,7 @@ export default function Navbar({ seriesList = [] }: NavbarProps) {
             <path d="M11.5 18 H 20.5" />
             <path d="M20.5 18 Q 26 14 26 8 Q 23 12 20.5 18" fill="currentColor" stroke="none" />
           </svg>
-          <span>{siteConfig.title}</span>
+          <span>{resolveLocaleValue(siteConfig.title, language)}</span>
         </Link>
         
         <div className="flex items-center gap-4 md:gap-6">

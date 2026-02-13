@@ -4,6 +4,7 @@ import PostLayout from '@/layouts/PostLayout';
 import SimpleLayout from '@/layouts/SimpleLayout';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../site.config';
+import { resolveLocale } from '@/lib/i18n';
 
 /**
  * Generates the static paths for all top-level pages at build time.
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${page.title} | ${siteConfig.title}`,
+    title: `${page.title} | ${resolveLocale(siteConfig.title)}`,
     description: page.excerpt,
   };
 }

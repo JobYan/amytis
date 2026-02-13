@@ -7,6 +7,7 @@ import { siteConfig } from "../../site.config";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { getAllSeries } from "@/lib/markdown";
+import { resolveLocale } from "@/lib/i18n";
 import "./globals.css";
 
 const inter = localFont({
@@ -48,8 +49,8 @@ const baskerville = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.baseUrl),
-  title: `${siteConfig.title}`,
-  description: siteConfig.description,
+  title: resolveLocale(siteConfig.title),
+  description: resolveLocale(siteConfig.description),
   icons: {
     icon: "/icon.svg",
   },

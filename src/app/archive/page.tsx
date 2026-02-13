@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { getAllPosts, PostData } from '@/lib/markdown';
 import { siteConfig } from '../../../site.config';
-import { t } from '@/lib/i18n';
+import { t, resolveLocale } from '@/lib/i18n';
 
 export const metadata = {
-  title: `Archive | ${siteConfig.title}`,
+  title: `Archive | ${resolveLocale(siteConfig.title)}`,
   description: 'A complete list of all notes and thoughts.',
 };
 
