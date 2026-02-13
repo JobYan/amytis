@@ -4,6 +4,7 @@ import Pagination from '@/components/Pagination';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
 import { t, resolveLocale } from '@/lib/i18n';
+import PageHeader from '@/components/PageHeader';
 
 const PAGE_SIZE = siteConfig.pagination.posts;
 
@@ -20,12 +21,12 @@ export default function AllPostsPage() {
 
   return (
     <div className="layout-main">
-      <header className="page-header mb-12">
-        <h1 className="page-title">{t('posts')}</h1>
-        <p className="page-subtitle">
-          {allPosts.length} {t('posts').toLowerCase()} in total.
-        </p>
-      </header>
+      <PageHeader
+        titleKey="posts"
+        subtitleKey="posts_subtitle"
+        subtitleParams={{ count: allPosts.length }}
+        className="mb-12"
+      />
 
       <PostList posts={posts} />
 

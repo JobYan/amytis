@@ -4,6 +4,7 @@ import Pagination from '@/components/Pagination';
 import { siteConfig } from '../../../../../site.config';
 import { Metadata } from 'next';
 import { t, resolveLocale } from '@/lib/i18n';
+import PageHeader from '@/components/PageHeader';
 
 const PAGE_SIZE = siteConfig.pagination.posts;
 
@@ -40,12 +41,12 @@ export default async function PostsPage({ params }: { params: Promise<{ page: st
 
   return (
     <div className="layout-main">
-      <header className="page-header mb-12">
-        <h1 className="page-title">{t('posts')}</h1>
-        <p className="page-subtitle">
-          {page} / {totalPages}
-        </p>
-      </header>
+      <PageHeader
+        titleKey="posts"
+        subtitleKey="page_of_total"
+        subtitleParams={{ page, total: totalPages }}
+        className="mb-12"
+      />
 
       <PostList posts={posts} />
 

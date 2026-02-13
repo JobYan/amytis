@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { getAllPosts, PostData } from '@/lib/markdown';
 import { siteConfig } from '../../../site.config';
-import { t, resolveLocale } from '@/lib/i18n';
+import { resolveLocale } from '@/lib/i18n';
+import PageHeader from '@/components/PageHeader';
 
 export const metadata = {
   title: `Archive | ${resolveLocale(siteConfig.title)}`,
@@ -48,12 +49,13 @@ export default function ArchivePage() {
 
   return (
     <div className="layout-main">
-      <header className="page-header">
-        <h1 className="page-title">{t('archive')}</h1>
-        <p className="page-subtitle">
-          {totalPosts} posts across {years.length} {years.length === 1 ? 'year' : 'years'}.
-        </p>
-      </header>
+      <PageHeader
+        titleKey="archive"
+        subtitleKey="archive_subtitle"
+        subtitleOneKey="archive_subtitle_one"
+        count={years.length}
+        subtitleParams={{ count: totalPosts, years: years.length }}
+      />
 
       <main className="max-w-4xl mx-auto">
         <div className="space-y-24">

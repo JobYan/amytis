@@ -8,6 +8,7 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: TranslationKey) => string;
+  tWith: (key: TranslationKey, params: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -39,8 +40,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return translations[language][key] || key;
   };
 
+  const tWith = (key: TranslationKey, params: Record<string, string | number>) => {
+    let result = translations[language][key] || key;
+    for (const [name, value] of Object.entries(params)) {
+      result = result.replace(new RegExp(`\\{${name}\\}`, 'g'), String(value));
+    }
+    return result;
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, tWith }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -7,6 +7,8 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '../../../../site.config';
 import { t, resolveLocale } from '@/lib/i18n';
+import AuthorStats from '@/components/AuthorStats';
+import TranslatedText from '@/components/TranslatedText';
 
 export async function generateStaticParams() {
   const authors = getAllAuthors();
@@ -105,17 +107,11 @@ export default async function AuthorPage({
         </h1>
 
         {/* Stats */}
-        <div className="flex items-center justify-center gap-4 text-sm text-muted font-mono">
-          <span>{posts.length} {t('posts').toLowerCase()}</span>
-          {authorSeries.length > 0 && (
-            <>
-              <span className="h-1 w-1 rounded-full bg-muted/30" />
-              <span>{authorSeries.length} {t('series').toLowerCase()}</span>
-            </>
-          )}
-          <span className="h-1 w-1 rounded-full bg-muted/30" />
-          <span>{categories.size} {t('categories').toLowerCase()}</span>
-        </div>
+        <AuthorStats
+          postCount={posts.length}
+          seriesCount={authorSeries.length}
+          categoryCount={categories.size}
+        />
 
         {/* Top tags */}
         {topTags.length > 0 && (
@@ -130,7 +126,7 @@ export default async function AuthorPage({
       {/* Series contributions */}
       {authorSeries.length > 0 && (
         <section className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-heading mb-8">{t('series')}</h2>
+          <h2 className="text-2xl font-serif font-bold text-heading mb-8"><TranslatedText translationKey="series" /></h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {authorSeries.map(({ slug, data, postCount }) => (
               <Link key={slug} href={`/series/${slug}`} className="group block no-underline">
@@ -165,7 +161,7 @@ export default async function AuthorPage({
 
       <section>
         {authorSeries.length > 0 && (
-          <h2 className="text-2xl font-serif font-bold text-heading mb-8">{t('posts')}</h2>
+          <h2 className="text-2xl font-serif font-bold text-heading mb-8"><TranslatedText translationKey="posts" /></h2>
         )}
         <PostList posts={posts} />
       </section>

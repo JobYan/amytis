@@ -4,6 +4,7 @@ import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
 import CoverImage from '@/components/CoverImage';
 import { t, resolveLocale } from '@/lib/i18n';
+import PageHeader from '@/components/PageHeader';
 
 export const metadata: Metadata = {
   title: `${t('series')} | ${resolveLocale(siteConfig.title)}`,
@@ -24,14 +25,13 @@ export default function SeriesIndexPage() {
 
   return (
     <div className="layout-main">
-      <header className="page-header">
-        <h1 className="page-title">
-          {t('all_series')}
-        </h1>
-        <p className="page-subtitle">
-          {totalSeries} {totalSeries === 1 ? 'collection' : 'collections'} of curated knowledge.
-        </p>
-      </header>
+      <PageHeader
+        titleKey="all_series"
+        subtitleKey="series_subtitle"
+        subtitleOneKey="series_subtitle_one"
+        count={totalSeries}
+        subtitleParams={{ count: totalSeries }}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {seriesSlugs.map(slug => {

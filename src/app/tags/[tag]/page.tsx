@@ -1,10 +1,10 @@
 import { getAllTags, getPostsByTag } from '@/lib/markdown';
 import PostCard from '@/components/PostCard';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { siteConfig } from '../../../../site.config';
 import { Metadata } from 'next';
-import { t, resolveLocale } from '@/lib/i18n';
+import { resolveLocale } from '@/lib/i18n';
+import TagPageHeader from '@/components/TagPageHeader';
 
 export async function generateStaticParams() {
   const tags = getAllTags();
@@ -41,23 +41,7 @@ export default async function TagPage({
 
   return (
     <div className="layout-container">
-      <nav className="mb-12 flex justify-center">
-        <Link
-          href="/tags"
-          className="text-xs font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors no-underline"
-        >
-          ← {t('tags')}
-        </Link>
-      </nav>
-
-      <header className="mb-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-serif font-bold text-heading mb-6 capitalize">
-          <span className="text-accent/50 mr-2">#</span>{decodedTag}
-        </h1>
-        <p className="text-lg text-muted font-serif italic">
-          {posts.length} {posts.length === 1 ? 'post' : t('posts').toLowerCase()} found.
-        </p>
-      </header>
+      <TagPageHeader tag={decodedTag} postCount={posts.length} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map(post => (

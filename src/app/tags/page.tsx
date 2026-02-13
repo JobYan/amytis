@@ -3,6 +3,7 @@ import Tag from '@/components/Tag';
 import { siteConfig } from '../../../site.config';
 import { Metadata } from 'next';
 import { t, resolveLocale } from '@/lib/i18n';
+import PageHeader from '@/components/PageHeader';
 
 export const metadata: Metadata = {
   title: `${t('tags')} | ${resolveLocale(siteConfig.title)}`,
@@ -16,12 +17,13 @@ export default function TagsPage() {
 
   return (
     <div className="layout-main">
-      <header className="page-header">
-        <h1 className="page-title">{t('tags')}</h1>
-        <p className="page-subtitle">
-          {totalTags} {totalTags === 1 ? 'topic' : 'topics'} cultivated in this garden.
-        </p>
-      </header>
+      <PageHeader
+        titleKey="tags"
+        subtitleKey="tags_subtitle"
+        subtitleOneKey="tags_subtitle_one"
+        count={totalTags}
+        subtitleParams={{ count: totalTags }}
+      />
 
       <main>
         <div className="flex flex-wrap justify-center gap-3 md:gap-4">
