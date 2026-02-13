@@ -1,13 +1,26 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '@/components/LanguageProvider';
+
+type LocaleValue = string | Record<string, string>;
 
 interface HeroProps {
-  title: string;
-  subtitle: string;
+  tagline: LocaleValue;
+  title: LocaleValue;
+  subtitle: LocaleValue;
 }
 
-export default function Hero({ title, subtitle }: HeroProps) {
+function resolve(value: LocaleValue, lang: string): string {
+  if (typeof value === 'string') return value;
+  return value[lang] || value.en || Object.values(value)[0] || '';
+}
+
+export default function Hero({ tagline, title, subtitle }: HeroProps) {
+  const { language } = useLanguage();
+  const resolvedTagline = resolve(tagline, language);
+  const resolvedTitle = resolve(title, language);
+  const resolvedSubtitle = resolve(subtitle, language);
   const [isVisible, setIsVisible] = useState<boolean | null>(null);
   const visibleRef = useRef(false);
 
@@ -66,7 +79,7 @@ export default function Hero({ title, subtitle }: HeroProps) {
         >
           <span className="h-px w-12 bg-muted/20 group-hover:bg-accent/40 transition-colors" />
           <span className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-muted/40 group-hover:text-accent/80 transition-colors">
-            Digital Garden
+            {resolvedTagline}
           </span>
           <span className="h-px w-12 bg-muted/20 group-hover:bg-accent/40 transition-colors" />
         </button>
@@ -78,16 +91,16 @@ export default function Hero({ title, subtitle }: HeroProps) {
     <header className="relative py-24 md:py-40 flex flex-col items-center justify-center text-center max-w-4xl mx-auto min-h-[60vh] px-6">
       <div className="mb-8 flex items-center justify-center animate-fade-in">
          <span className="h-px w-12 bg-accent/30 mr-4"></span>
-         <span className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-accent/80">Digital Garden</span>
+         <span className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-accent/80">{resolvedTagline}</span>
          <span className="h-px w-12 bg-accent/30 ml-4"></span>
       </div>
 
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-heading leading-[1.1] tracking-tight mb-10 text-balance animate-slide-up">
-        {title}
+        {resolvedTitle}
       </h1>
 
       <p className="text-muted font-sans text-sm md:text-base max-w-xl mx-auto leading-relaxed opacity-80 animate-slide-up animation-delay-200">
-        {subtitle}
+        {resolvedSubtitle}
       </p>
 
       {/* Collapse button */}

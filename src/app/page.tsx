@@ -59,6 +59,7 @@ export default function Home() {
   return (
     <div>
       <Hero
+        tagline={siteConfig.hero.tagline}
         title={siteConfig.hero.title}
         subtitle={siteConfig.hero.subtitle}
       />

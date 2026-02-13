@@ -31,8 +31,9 @@ export const siteConfig = {
   toc: true,
   themeColor: 'default', // 'default' | 'blue' | 'rose' | 'amber'
   hero: {
-    title: "Cultivating Digital Knowledge",
-    subtitle: "A minimalist digital garden for growing thoughts and sharing knowledge.",
+    tagline: { en: "Digital Garden", zh: "数字花园" },
+    title: { en: "Cultivating Digital Knowledge", zh: "培育数字知识" },
+    subtitle: { en: "A minimalist digital garden for growing thoughts and sharing knowledge.", zh: "一个极简的数字花园，用于培育思想和分享知识。" },
   },
   featured: {
     series: {
