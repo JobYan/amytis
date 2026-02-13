@@ -20,6 +20,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const savedLang = localStorage.getItem('amytis-language') as Language;
     if (savedLang && translations[savedLang]) {
       setLanguageState(savedLang);
+    } else {
+      // Detect browser language and match against supported locales
+      const browserLang = navigator.language.split('-')[0] as Language;
+      if (translations[browserLang]) {
+        setLanguageState(browserLang);
+      }
     }
     setMounted(true);
   }, []);
