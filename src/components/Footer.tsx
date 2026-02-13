@@ -42,26 +42,17 @@ export default function Footer() {
           <div>
             <h4 className="font-sans font-bold text-xs uppercase tracking-widest text-muted/80 mb-6">{t('explore')}</h4>
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/" className="text-foreground/80 hover:text-accent transition-colors no-underline">
-                  {t('garden')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/series" className="text-foreground/80 hover:text-accent transition-colors no-underline">
-                  {t('series')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/archive" className="text-foreground/80 hover:text-accent transition-colors no-underline">
-                  {t('archive')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-foreground/80 hover:text-accent transition-colors no-underline">
-                  {t('about')}
-                </Link>
-              </li>
+              {[...siteConfig.nav].sort((a, b) => a.weight - b.weight).map((item) => {
+                const key = item.name.toLowerCase() as any;
+                const label = t(key) !== key ? t(key) : item.name;
+                return (
+                  <li key={item.url}>
+                    <Link href={item.url} className="text-foreground/80 hover:text-accent transition-colors no-underline">
+                      {label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
