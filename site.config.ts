@@ -4,7 +4,7 @@ export const siteConfig = {
   baseUrl: "https://example.com", // Replace with your actual domain
   footerText: { en: `© ${new Date().getFullYear()} Amytis. All rights reserved.`, zh: `© ${new Date().getFullYear()} Amytis. 保留所有权利。` },
   nav: [
-    { name: "Garden", url: "/", weight: 1 },
+    { name: "Home", url: "/", weight: 1 },
     { name: "Series", url: "/series", weight: 1.5 },
     { name: "Archive", url: "/archive", weight: 2 },
     { name: "Tags", url: "/tags", weight: 3 },

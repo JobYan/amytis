@@ -1,5 +1,6 @@
 export const translations = {
   en: {
+    home: "Home",
     garden: "Garden",
     archive: "Archive",
     tags: "Tags",
@@ -30,6 +31,7 @@ export const translations = {
     back_to_top: "Back to top",
   },
   zh: {
+    home: "首页",
     garden: "花园",
     archive: "归档",
     tags: "标签",
