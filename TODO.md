@@ -3,8 +3,8 @@
 ## 🚀 High Priority (Next Steps)
 
 - [ ] **User Experience (UX)**
-  - [ ] **Code Blocks**: Add a "Copy to Clipboard" button.
-  - [ ] **Images**: Implement a Lightbox or Zoom-on-click feature.
+  - [x] **Code Blocks**: Add a "Copy to Clipboard" button.
+  - [x] **Images**: Implement a Lightbox or Zoom-on-click feature.
   - [ ] **Navigation**: Add Breadcrumbs (e.g., `Home > Category > Post`).
   - [ ] **Navigation**: Add Previous/Next post links at the bottom of articles.
 

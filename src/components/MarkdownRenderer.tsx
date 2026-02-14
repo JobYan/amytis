@@ -1,6 +1,8 @@
 import ReactMarkdown from 'react-markdown';
+import { useMemo } from 'react';
 import Mermaid from '@/components/Mermaid';
 import CodeBlock from '@/components/CodeBlock';
+import ImageWithLightbox from '@/components/ImageWithLightbox';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math';
@@ -16,6 +18,20 @@ interface MarkdownRendererProps {
 }
 
 export default function MarkdownRenderer({ content, latex = false, slug }: MarkdownRendererProps) {
+  const { images, altTexts } = useMemo(() => {
+    const imgRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    const foundImages: string[] = [];
+    const foundAlts: string[] = [];
+    let match;
+
+    while ((match = imgRegex.exec(content)) !== null) {
+      foundImages.push(match[2]);
+      foundAlts.push(match[1] || '');
+    }
+
+    return { images: foundImages, altTexts: foundAlts };
+  }, [content]);
+
   const remarkPlugins: any[] = [remarkGfm];
   const rehypePlugins: any[] = [rehypeRaw, rehypeSlug, [rehypeImageMetadata, { slug }]];
 
@@ -85,19 +101,20 @@ export default function MarkdownRenderer({ content, latex = false, slug }: Markd
           // In development mode, use unoptimized images since WebP versions don't exist yet
           img: (props: any) => {
             const isDev = process.env.NODE_ENV === 'development';
-            if (props.width && props.height) {
-              return (
-                <ExportedImage
-                  src={props.src}
-                  alt={props.alt || ''}
-                  width={props.width}
-                  height={props.height}
-                  className="max-w-full h-auto rounded-lg my-4"
-                  unoptimized={isDev}
-                />
-              );
-            }
-            return <img {...props} className="max-w-full h-auto rounded-lg my-4" />;
+            const imgSrc = props.src;
+            const imgAlt = props.alt || '';
+
+            return (
+              <ImageWithLightbox
+                src={imgSrc}
+                alt={imgAlt}
+                width={props.width}
+                height={props.height}
+                unoptimized={isDev}
+                allImages={images}
+                allAlts={altTexts}
+              />
+            );
           },
         }}
       >
